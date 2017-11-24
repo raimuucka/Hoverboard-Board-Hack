@@ -24,9 +24,10 @@ build/main.d: Src/main.c Inc/main.h \
  Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h \
  Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h \
  Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h \
- Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h Inc/motor_L.h \
- Inc/motor_R.h Inc/varie.h Inc/ADC_L.h Inc/ADC_R.h Inc/delay.h Inc/pid.h \
- Inc/application.h Inc/telemetry.h
+ Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h Inc/eeprom.h \
+ Inc/motor_L.h Inc/motor_R.h Inc/varie.h Inc/ADC_L.h Inc/ADC_R.h \
+ Inc/delay.h Inc/pid.h Inc/application.h Inc/telemetry.h Inc/hd44780.h \
+ Inc/pcf8574.h
 
 Inc/main.h:
 
@@ -88,6 +89,8 @@ Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h:
 
 Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h:
 
+Inc/eeprom.h:
+
 Inc/motor_L.h:
 
 Inc/motor_R.h:
@@ -105,3 +108,7 @@ Inc/pid.h:
 Inc/application.h:
 
 Inc/telemetry.h:
+
+Inc/hd44780.h:
+
+Inc/pcf8574.h:
