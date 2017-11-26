@@ -224,13 +224,17 @@ int main(void)
       }
     }
 
+    #define VEL_P     0.9
+
     if ((sinValue) % (250) == 0) {
       uint16_t distance = CLAMP(((int)ADC_PA3()) - 180, 0, 4095);
       int16_t steering = ADC_PA2() - 2048;
       int speedL, speedR;
 
-      speedL = -CLAMP((distance - (int)(setDistance * 1345)) +  CLAMP((steering / 10.0), -50, 50), -800, 800);
-      speedR = -CLAMP((distance - (int)(setDistance * 1345)) -  CLAMP((steering / 10.0), -50, 50), -800, 800);
+      float vel_scale = get_powerMax(GET_BatteryAverage()) * VEL_P;
+
+      speedL = -CLAMP(((distance - (int)(setDistance * 1345)) * vel_scale) +  CLAMP((steering / 10.0), -50, 50), -800, 800);
+      speedR = -CLAMP(((distance - (int)(setDistance * 1345)) * vel_scale) -  CLAMP((steering / 10.0), -50, 50), -800, 800);
 
       if ((speedL < lastSpeedL + 50 && speedL > lastSpeedL - 50) && (speedR < lastSpeedR + 50 && speedR > lastSpeedR - 50)) {
         if (distance - (int)(setDistance * 1345) > -200) {
@@ -241,7 +245,7 @@ int main(void)
           MotorR_pwm(0);
         }
       }
-      if (distance > 3000 && lastDistance > 3000) { // Error, robot too far away!
+      if ((distance / 1345.0) - setDistance > 0.7 && (lastDistance / 1345.0) - setDistance > 0.7) { // Error, robot too far away!
         MotorL_pwm(0);
         MotorR_pwm(0);
         Buzzer_OneLongBeep();
