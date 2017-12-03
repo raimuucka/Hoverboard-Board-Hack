@@ -93,6 +93,7 @@ volatile __IO int16_t speed = 0;
 extern struct TELEMETRY_dati telemetry;
 //extern struct COMMAND_data commandsequence;
 
+
 volatile __IO uint32_t counterTemp,counterTempTT;
 LCD_PCF8574_HandleTypeDef lcd;
 extern I2C_HandleTypeDef hi2c2;

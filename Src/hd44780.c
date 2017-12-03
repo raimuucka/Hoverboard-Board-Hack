@@ -215,6 +215,7 @@ LCD_RESULT LCD_WriteDATA(LCD_PCF8574_HandleTypeDef* handle, uint8_t data) {
 
 LCD_RESULT LCD_SetLocation(LCD_PCF8574_HandleTypeDef* handle, uint8_t x,
 		uint8_t y) {
+	if (LCDerrorFlag) {return;}
 
 	uint8_t add = 0x40 * y + x;
 	uint8_t cmd = 1 << 7;
@@ -224,6 +225,7 @@ LCD_RESULT LCD_SetLocation(LCD_PCF8574_HandleTypeDef* handle, uint8_t x,
 }
 
 LCD_RESULT LCD_WriteString(LCD_PCF8574_HandleTypeDef* handle, char *s) {
+	if (LCDerrorFlag) {return;}
 	int i = 0;
 
 	if (s != 0) {
@@ -238,6 +240,7 @@ LCD_RESULT LCD_WriteString(LCD_PCF8574_HandleTypeDef* handle, char *s) {
 }
 
 LCD_RESULT LCD_ClearDisplay(LCD_PCF8574_HandleTypeDef* handle) {
+	if (LCDerrorFlag) {return;}
 	return LCD_WriteCMD(handle, 1);
 }
 
@@ -322,7 +325,7 @@ LCD_RESULT LCD_ShiftDisplay(LCD_PCF8574_HandleTypeDef* handle,
 
 LCD_RESULT LCD_WriteNumber(LCD_PCF8574_HandleTypeDef* handle, unsigned long n,
 		uint8_t base) {
-
+	if (LCDerrorFlag) {return;}
 	char buf[8 * sizeof(long) + 1]; // Assumes 8-bit chars plus zero byte.
 	char *str = &buf[sizeof(buf) - 1];
 
@@ -343,6 +346,7 @@ LCD_RESULT LCD_WriteNumber(LCD_PCF8574_HandleTypeDef* handle, unsigned long n,
 
 LCD_RESULT LCD_WriteFloat(LCD_PCF8574_HandleTypeDef* handle, double number,
 		uint8_t digits) {
+	if (LCDerrorFlag) {return;}
 	// Handle negative numbers
 	if (number < 0.0) {
 		LCD_WriteString(handle,"-");
@@ -390,6 +394,7 @@ LCD_RESULT LCD_EntryModeSet(LCD_PCF8574_HandleTypeDef* handle,
 
 LCD_RESULT LCD_CustomChar(LCD_PCF8574_HandleTypeDef* handle, uint8_t *pattern,
 		uint8_t address) {
+	if (LCDerrorFlag) {return;}
 	uint8_t a = 0;
 	int i = 0;
 	a = 8 * address;
