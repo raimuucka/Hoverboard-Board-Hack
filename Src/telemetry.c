@@ -19,8 +19,7 @@ volatile __IO uint32_t leftToTransfer;
 
 void Telemetry_init(void){
   MX_USART3_UART_Init();
-  HAL_UART_Receive_DMA(&huart3, (uint8_t *)&commandsequence, 8);
-
+  //HAL_UART_Receive_DMA(&huart3, (uint8_t *)&commandsequence, 8);
 }
 
 int16_t getMotorL() {

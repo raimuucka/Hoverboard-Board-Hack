@@ -16,6 +16,8 @@ void MX_USART3_UART_Init(void)
 {
   __HAL_RCC_USART3_CLK_ENABLE();
   /* DMA1_Channel6_IRQn interrupt configuration */
+  //HAL_NVIC_SetPriority(DMA1_Channel6_IRQn, 5, 6);
+  //HAL_NVIC_EnableIRQ(DMA1_Channel6_IRQn);
   HAL_NVIC_SetPriority(DMA1_Channel2_IRQn, 5, 6);
   HAL_NVIC_EnableIRQ(DMA1_Channel2_IRQn);
   /* DMA1_Channel7_IRQn interrupt configuration */

@@ -122,6 +122,19 @@ void DebugPin_init(void){
 
 }
 
+void Timer_init(void){
+  GPIO_InitTypeDef GPIO_InitStruct;
+  /*Configure GPIO pin : PA3 */
+  GPIO_InitStruct.Pin = GPIO_PIN_3;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI3_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI3_IRQn);
+}
 void Button_init(void){
   GPIO_InitTypeDef GPIO_InitStruct;
   __HAL_RCC_GPIOA_CLK_ENABLE();
@@ -139,6 +152,7 @@ void Button_init(void){
 //  tu32 = (uint32_t)GPIO_PIN_5 << 16;
 
 }
+
 void DebugPin4_ON(void){
   GPIOC->BSRR = GPIO_PIN_4;
 }

@@ -62,7 +62,7 @@ extern TIM_HandleTypeDef Tim3PID;
 extern ADC_HandleTypeDef hadc1;
 extern ADC_HandleTypeDef hadc3;
 extern DMA_HandleTypeDef hdma_adc3;
-
+//extern TIM_HandleTypeDef htim2;
 /**
 * @brief This function handles Non maskable interrupt.
 */
@@ -297,6 +297,12 @@ void EXTI15_10_IRQHandler(void)
     __HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_12);
   }
 }
+
+/*void EXTI3_IRQHandler(void)
+{
+    PPM_ISR_Callback();
+    __HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_3);
+}*/
 
 /**
 * @brief This function handles TIM1 capture compare interrupt.

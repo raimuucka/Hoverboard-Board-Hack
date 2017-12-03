@@ -219,7 +219,7 @@ void HAL_I2C_MasterRxCpltCallback(I2C_HandleTypeDef *hi2c){
 }
 void HAL_I2C_ErrorCallback(I2C_HandleTypeDef *hi2c)
 {
-  if(hi2c->Instance == I2C2){
+  /*if(hi2c->Instance == I2C2){
     wii_JOYdati.I2CERROR = 1;
-  }
+  }*/
 }
