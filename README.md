@@ -6,7 +6,7 @@ the firmware you can find here allows you to use your Hoverboard Hardware (like 
 ---
 
 #### Hardware
-![otter](https://raw.githubusercontent.com/NiklasFauth/Hoverboard-Board-Hack/master/schema.jpg)
+![otter](pinout.png?raw=true)
 
 The original Hardware supports two 4-pin cables that originally were connected to the two sensor boards. They break out GND, 12/15V and USART2&3 of the Hoverboard mainboard.
 Both USART2 & 3 can be used for UART and I2C, PA2&3 can be used as 12bit ADCs.
@@ -32,7 +32,15 @@ Simply connect a USB-USART adapter to GND; PA2 and PA3 and give it a try.
 
 ##### PPM
 
-PPM allows you to connect a radio control with PPM sum signal output and use it to directly control and steer the motors. Channel 0 is used for motor current scaling, Ch 1&2 for speed / direction. You can change that as you want in the main.c fiile.
+PPM allows you to connect a radio control with PPM sum signal output and use it to directly control and steer the motors. 
+
+Channel Mapping (You can change that as you want in the main.c fiile.)
+
+Channel | Signal
+------- | ------
+1 | Steering
+2 | Throttle
+3 | Speed Limit
 
 Connect your RC receiver to GND and 12V (if is supports 12V input voltage, else use a separate voltage regulator or use the hall sensors rail) and the PPM sum signal to PA3. The firmware also streams out the received channel values on USART3 / 115200 baud for debugging reasons.
 
