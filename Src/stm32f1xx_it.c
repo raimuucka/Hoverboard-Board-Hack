@@ -49,8 +49,9 @@ extern DMA_HandleTypeDef hdma_adc3;
 extern I2C_HandleTypeDef hi2c2;
 extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim8;
-extern DMA_HandleTypeDef hdma_usart3_rx;
-extern DMA_HandleTypeDef hdma_usart3_tx;
+extern DMA_HandleTypeDef hdma_usart2_rx;
+extern DMA_HandleTypeDef hdma_usart2_tx;
+
 extern void PWM_L_ISR_Callback(void);
 extern void HALL_L_ISR_Callback(void);
 extern void PWM_R_ISR_Callback(void);
@@ -239,12 +240,12 @@ void I2C1_ER_IRQHandler(void)
 /**
 * @brief This function handles DMA1 channel6 global interrupt.
 */
-void DMA1_Channel3_IRQHandler(void)
+void DMA1_Channel6_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA1_Channel6_IRQn 0 */
 
   /* USER CODE END DMA1_Channel6_IRQn 0 */
-  HAL_DMA_IRQHandler(&hdma_usart3_rx);
+  HAL_DMA_IRQHandler(&hdma_usart2_rx);
   /* USER CODE BEGIN DMA1_Channel6_IRQn 1 */
 
   /* USER CODE END DMA1_Channel6_IRQn 1 */
@@ -253,12 +254,12 @@ void DMA1_Channel3_IRQHandler(void)
 /**
 * @brief This function handles DMA1 channel7 global interrupt.
 */
-void DMA1_Channel2_IRQHandler(void)
+void DMA1_Channel7_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA1_Channel7_IRQn 0 */
 
   /* USER CODE END DMA1_Channel7_IRQn 0 */
-  HAL_DMA_IRQHandler(&hdma_usart3_tx);
+  HAL_DMA_IRQHandler(&hdma_usart2_tx);
   /* USER CODE BEGIN DMA1_Channel7_IRQn 1 */
 
   /* USER CODE END DMA1_Channel7_IRQn 1 */

@@ -1,4 +1,4 @@
-ARM GAS  /tmp/ccoHTaxt.s 			page 1
+ARM GAS  /tmp/cc8NmdXc.s 			page 1
 
 
    1              		.syntax unified
@@ -58,7 +58,7 @@ ARM GAS  /tmp/ccoHTaxt.s 			page 1
   29:./Src/stm32f1xx_hal_msp.c ****   * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
   30:./Src/stm32f1xx_hal_msp.c ****   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   31:./Src/stm32f1xx_hal_msp.c ****   *
-ARM GAS  /tmp/ccoHTaxt.s 			page 2
+ARM GAS  /tmp/cc8NmdXc.s 			page 2
 
 
   32:./Src/stm32f1xx_hal_msp.c ****   ******************************************************************************
@@ -72,9 +72,9 @@ ARM GAS  /tmp/ccoHTaxt.s 			page 1
   40:./Src/stm32f1xx_hal_msp.c **** 
   41:./Src/stm32f1xx_hal_msp.c **** extern DMA_HandleTypeDef hdma_i2c2_tx;
   42:./Src/stm32f1xx_hal_msp.c **** 
-  43:./Src/stm32f1xx_hal_msp.c **** extern DMA_HandleTypeDef hdma_usart3_rx;
+  43:./Src/stm32f1xx_hal_msp.c **** extern DMA_HandleTypeDef hdma_usart2_rx;
   44:./Src/stm32f1xx_hal_msp.c **** 
-  45:./Src/stm32f1xx_hal_msp.c **** extern DMA_HandleTypeDef hdma_usart3_tx;
+  45:./Src/stm32f1xx_hal_msp.c **** extern DMA_HandleTypeDef hdma_usart2_tx;
   46:./Src/stm32f1xx_hal_msp.c **** 
   47:./Src/stm32f1xx_hal_msp.c **** extern void Error_Handler(void);
   48:./Src/stm32f1xx_hal_msp.c **** /* USER CODE BEGIN 0 */
@@ -118,7 +118,7 @@ ARM GAS  /tmp/ccoHTaxt.s 			page 1
   51 0018 0320     		movs	r0, #3
   52 001a FFF7FEFF 		bl	HAL_NVIC_SetPriorityGrouping
   53              	.LVL0:
-ARM GAS  /tmp/ccoHTaxt.s 			page 3
+ARM GAS  /tmp/cc8NmdXc.s 			page 3
 
 
   63:./Src/stm32f1xx_hal_msp.c **** 
@@ -178,7 +178,7 @@ ARM GAS  /tmp/ccoHTaxt.s 			page 1
   92 0068 1146     		mov	r1, r2
   93 006a 4FF0FF30 		mov	r0, #-1
   94 006e FFF7FEFF 		bl	HAL_NVIC_SetPriority
-ARM GAS  /tmp/ccoHTaxt.s 			page 4
+ARM GAS  /tmp/cc8NmdXc.s 			page 4
 
 
   95              	.LVL7:
@@ -238,7 +238,7 @@ ARM GAS  /tmp/ccoHTaxt.s 			page 1
  136 000c 32D1     		bne	.L6
  137              	.LBB3:
   94:./Src/stm32f1xx_hal_msp.c ****   {
-ARM GAS  /tmp/ccoHTaxt.s 			page 5
+ARM GAS  /tmp/cc8NmdXc.s 			page 5
 
 
   95:./Src/stm32f1xx_hal_msp.c ****   /* USER CODE BEGIN ADC1_MspInit 0 */
@@ -298,7 +298,7 @@ ARM GAS  /tmp/ccoHTaxt.s 			page 1
  170              		.loc 1 116 0
  171 0040 2848     		ldr	r0, .L11+16
  172 0042 294B     		ldr	r3, .L11+20
-ARM GAS  /tmp/ccoHTaxt.s 			page 6
+ARM GAS  /tmp/cc8NmdXc.s 			page 6
 
 
  173 0044 0360     		str	r3, [r0]
@@ -358,7 +358,7 @@ ARM GAS  /tmp/ccoHTaxt.s 			page 1
  208              		.loc 1 135 0
  209 0074 1D4A     		ldr	r2, .L11+24
  210 0076 9342     		cmp	r3, r2
-ARM GAS  /tmp/ccoHTaxt.s 			page 7
+ARM GAS  /tmp/cc8NmdXc.s 			page 7
 
 
  211 0078 2AD1     		bne	.L5
@@ -418,7 +418,7 @@ ARM GAS  /tmp/ccoHTaxt.s 			page 1
  245 00aa 8022     		movs	r2, #128
  246 00ac C260     		str	r2, [r0, #12]
  156:./Src/stm32f1xx_hal_msp.c ****     hdma_adc3.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
-ARM GAS  /tmp/ccoHTaxt.s 			page 8
+ARM GAS  /tmp/cc8NmdXc.s 			page 8
 
 
  247              		.loc 1 156 0
@@ -478,7 +478,7 @@ ARM GAS  /tmp/ccoHTaxt.s 			page 1
  286 00e8 08000240 		.word	1073872904
  287 00ec 003C0140 		.word	1073822720
  288 00f0 00000000 		.word	hdma_adc3
-ARM GAS  /tmp/ccoHTaxt.s 			page 9
+ARM GAS  /tmp/cc8NmdXc.s 			page 9
 
 
  289 00f4 58040240 		.word	1073874008
@@ -538,7 +538,7 @@ ARM GAS  /tmp/ccoHTaxt.s 			page 1
  326              	.LVL21:
  327 001a FFF7FEFF 		bl	HAL_GPIO_DeInit
  328              	.LVL22:
-ARM GAS  /tmp/ccoHTaxt.s 			page 10
+ARM GAS  /tmp/cc8NmdXc.s 			page 10
 
 
  190:./Src/stm32f1xx_hal_msp.c **** 
@@ -598,7 +598,7 @@ ARM GAS  /tmp/ccoHTaxt.s 			page 1
  368              		.loc 1 201 0
  369 0008 30B5     		push	{r4, r5, lr}
  370              	.LCFI8:
-ARM GAS  /tmp/ccoHTaxt.s 			page 11
+ARM GAS  /tmp/cc8NmdXc.s 			page 11
 
 
  371              		.cfi_def_cfa_offset 12
@@ -658,7 +658,7 @@ ARM GAS  /tmp/ccoHTaxt.s 			page 1
  410 0042 0323     		movs	r3, #3
  411 0044 0793     		str	r3, [sp, #28]
  221:./Src/stm32f1xx_hal_msp.c ****     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-ARM GAS  /tmp/ccoHTaxt.s 			page 12
+ARM GAS  /tmp/cc8NmdXc.s 			page 12
 
 
  412              		.loc 1 221 0
@@ -718,7 +718,7 @@ ARM GAS  /tmp/ccoHTaxt.s 			page 1
  451              	.LVL28:
  452 0080 08B1     		cbz	r0, .L21
  237:./Src/stm32f1xx_hal_msp.c ****     {
-ARM GAS  /tmp/ccoHTaxt.s 			page 13
+ARM GAS  /tmp/cc8NmdXc.s 			page 13
 
 
  238:./Src/stm32f1xx_hal_msp.c ****       Error_Handler();
@@ -778,7 +778,7 @@ ARM GAS  /tmp/ccoHTaxt.s 			page 1
  254:./Src/stm32f1xx_hal_msp.c ****     }
  255:./Src/stm32f1xx_hal_msp.c **** 
  256:./Src/stm32f1xx_hal_msp.c ****     __HAL_LINKDMA(hi2c,hdmatx,hdma_i2c2_tx);
-ARM GAS  /tmp/ccoHTaxt.s 			page 14
+ARM GAS  /tmp/cc8NmdXc.s 			page 14
 
 
  491              		.loc 1 256 0
@@ -838,7 +838,7 @@ ARM GAS  /tmp/ccoHTaxt.s 			page 1
  533 00e4 00100240 		.word	1073876992
  534 00e8 000C0140 		.word	1073810432
  535 00ec 00000000 		.word	hdma_i2c2_rx
-ARM GAS  /tmp/ccoHTaxt.s 			page 15
+ARM GAS  /tmp/cc8NmdXc.s 			page 15
 
 
  536 00f0 58000240 		.word	1073872984
@@ -898,7 +898,7 @@ ARM GAS  /tmp/ccoHTaxt.s 			page 1
  574 001a 0948     		ldr	r0, .L31+8
  575              	.LVL38:
  576 001c FFF7FEFF 		bl	HAL_GPIO_DeInit
-ARM GAS  /tmp/ccoHTaxt.s 			page 16
+ARM GAS  /tmp/cc8NmdXc.s 			page 16
 
 
  577              	.LVL39:
@@ -958,7 +958,7 @@ ARM GAS  /tmp/ccoHTaxt.s 			page 1
  304:./Src/stm32f1xx_hal_msp.c **** {
  615              		.loc 1 304 0
  616              		.cfi_startproc
-ARM GAS  /tmp/ccoHTaxt.s 			page 17
+ARM GAS  /tmp/cc8NmdXc.s 			page 17
 
 
  617              		@ args = 0, pretend = 0, frame = 0
@@ -1018,7 +1018,7 @@ ARM GAS  /tmp/ccoHTaxt.s 			page 1
  648 0024 02F55C42 		add	r2, r2, #56320
  649 0028 9369     		ldr	r3, [r2, #24]
  650 002a 23F40053 		bic	r3, r3, #8192
-ARM GAS  /tmp/ccoHTaxt.s 			page 18
+ARM GAS  /tmp/cc8NmdXc.s 			page 18
 
 
  651 002e 9361     		str	r3, [r2, #24]
@@ -1063,12 +1063,14 @@ ARM GAS  /tmp/ccoHTaxt.s 			page 1
  679              	.LVL50:
  341:./Src/stm32f1xx_hal_msp.c **** 
  342:./Src/stm32f1xx_hal_msp.c ****   GPIO_InitTypeDef GPIO_InitStruct;
- 343:./Src/stm32f1xx_hal_msp.c ****   if(huart->Instance==USART3)
- 680              		.loc 1 343 0
+ 343:./Src/stm32f1xx_hal_msp.c ****   
+ 344:./Src/stm32f1xx_hal_msp.c **** 
+ 345:./Src/stm32f1xx_hal_msp.c ****   if(huart->Instance==USART2)
+ 680              		.loc 1 345 0
  681 0000 0268     		ldr	r2, [r0]
- 682 0002 334B     		ldr	r3, .L45
+ 682 0002 324B     		ldr	r3, .L45
  683 0004 9A42     		cmp	r2, r3
- 684 0006 61D1     		bne	.L44
+ 684 0006 5FD1     		bne	.L44
  340:./Src/stm32f1xx_hal_msp.c **** 
  685              		.loc 1 340 0
  686 0008 70B5     		push	{r4, r5, r6, lr}
@@ -1076,20 +1078,20 @@ ARM GAS  /tmp/ccoHTaxt.s 			page 1
  688              		.cfi_def_cfa_offset 16
  689              		.cfi_offset 4, -16
  690              		.cfi_offset 5, -12
+ARM GAS  /tmp/cc8NmdXc.s 			page 19
+
+
  691              		.cfi_offset 6, -8
  692              		.cfi_offset 14, -4
-ARM GAS  /tmp/ccoHTaxt.s 			page 19
-
-
  693 000a 88B0     		sub	sp, sp, #32
  694              	.LCFI16:
  695              		.cfi_def_cfa_offset 48
  696 000c 0446     		mov	r4, r0
  697              	.LBB8:
- 344:./Src/stm32f1xx_hal_msp.c ****   {
- 345:./Src/stm32f1xx_hal_msp.c ****      __HAL_RCC_DMA1_CLK_ENABLE();
- 698              		.loc 1 345 0
- 699 000e 03F5E433 		add	r3, r3, #116736
+ 346:./Src/stm32f1xx_hal_msp.c ****   {
+ 347:./Src/stm32f1xx_hal_msp.c ****      __HAL_RCC_DMA1_CLK_ENABLE();
+ 698              		.loc 1 347 0
+ 699 000e 03F5E633 		add	r3, r3, #117760
  700 0012 5A69     		ldr	r2, [r3, #20]
  701 0014 42F00102 		orr	r2, r2, #1
  702 0018 5A61     		str	r2, [r3, #20]
@@ -1099,186 +1101,185 @@ ARM GAS  /tmp/ccoHTaxt.s 			page 1
  706 0022 019A     		ldr	r2, [sp, #4]
  707              	.LBE8:
  708              	.LBB9:
- 346:./Src/stm32f1xx_hal_msp.c ****   /* USER CODE BEGIN USART2_MspInit 0 */
- 347:./Src/stm32f1xx_hal_msp.c ****     __HAL_RCC_GPIOB_CLK_ENABLE();
- 709              		.loc 1 347 0
+ 348:./Src/stm32f1xx_hal_msp.c ****   /* USER CODE BEGIN USART2_MspInit 0 */
+ 349:./Src/stm32f1xx_hal_msp.c ****     __HAL_RCC_GPIOA_CLK_ENABLE();
+ 709              		.loc 1 349 0
  710 0024 9A69     		ldr	r2, [r3, #24]
- 711 0026 42F00802 		orr	r2, r2, #8
+ 711 0026 42F00402 		orr	r2, r2, #4
  712 002a 9A61     		str	r2, [r3, #24]
  713 002c 9A69     		ldr	r2, [r3, #24]
- 714 002e 02F00802 		and	r2, r2, #8
+ 714 002e 02F00402 		and	r2, r2, #4
  715 0032 0292     		str	r2, [sp, #8]
  716 0034 029A     		ldr	r2, [sp, #8]
  717              	.LBE9:
  718              	.LBB10:
- 348:./Src/stm32f1xx_hal_msp.c ****   /* USER CODE END USART2_MspInit 0 */
- 349:./Src/stm32f1xx_hal_msp.c ****     /* Peripheral clock enable */
- 350:./Src/stm32f1xx_hal_msp.c ****     __HAL_RCC_USART3_CLK_ENABLE();
- 719              		.loc 1 350 0
+ 350:./Src/stm32f1xx_hal_msp.c ****   /* USER CODE END USART2_MspInit 0 */
+ 351:./Src/stm32f1xx_hal_msp.c ****     /* Peripheral clock enable */
+ 352:./Src/stm32f1xx_hal_msp.c ****     __HAL_RCC_USART2_CLK_ENABLE();
+ 719              		.loc 1 352 0
  720 0036 DA69     		ldr	r2, [r3, #28]
- 721 0038 42F48022 		orr	r2, r2, #262144
+ 721 0038 42F40032 		orr	r2, r2, #131072
  722 003c DA61     		str	r2, [r3, #28]
  723 003e DB69     		ldr	r3, [r3, #28]
- 724 0040 03F48023 		and	r3, r3, #262144
+ 724 0040 03F40033 		and	r3, r3, #131072
  725 0044 0393     		str	r3, [sp, #12]
  726 0046 039B     		ldr	r3, [sp, #12]
  727              	.LBE10:
- 351:./Src/stm32f1xx_hal_msp.c **** 
- 352:./Src/stm32f1xx_hal_msp.c ****     GPIO_InitStruct.Pull = GPIO_PULLUP; //GPIO_NOPULL;
- 728              		.loc 1 352 0
+ 353:./Src/stm32f1xx_hal_msp.c **** 
+ 354:./Src/stm32f1xx_hal_msp.c ****     GPIO_InitStruct.Pull = GPIO_PULLUP; //GPIO_NOPULL;
+ 728              		.loc 1 354 0
  729 0048 0123     		movs	r3, #1
  730 004a 0693     		str	r3, [sp, #24]
- 353:./Src/stm32f1xx_hal_msp.c ****     GPIO_InitStruct.Pin = GPIO_PIN_10;
- 731              		.loc 1 353 0
- 732 004c 4FF48063 		mov	r3, #1024
- 733 0050 0493     		str	r3, [sp, #16]
- 354:./Src/stm32f1xx_hal_msp.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
- 734              		.loc 1 354 0
- 735 0052 0223     		movs	r3, #2
- 736 0054 0593     		str	r3, [sp, #20]
- 355:./Src/stm32f1xx_hal_msp.c ****     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
- 737              		.loc 1 355 0
-ARM GAS  /tmp/ccoHTaxt.s 			page 20
+ 355:./Src/stm32f1xx_hal_msp.c ****     GPIO_InitStruct.Pin = GPIO_PIN_2;
+ 731              		.loc 1 355 0
+ 732 004c 0423     		movs	r3, #4
+ 733 004e 0493     		str	r3, [sp, #16]
+ 356:./Src/stm32f1xx_hal_msp.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 734              		.loc 1 356 0
+ 735 0050 0223     		movs	r3, #2
+ 736 0052 0593     		str	r3, [sp, #20]
+ARM GAS  /tmp/cc8NmdXc.s 			page 20
 
 
- 738 0056 0323     		movs	r3, #3
- 739 0058 0793     		str	r3, [sp, #28]
- 356:./Src/stm32f1xx_hal_msp.c ****     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
- 740              		.loc 1 356 0
- 741 005a 1E4E     		ldr	r6, .L45+4
- 742 005c 04A9     		add	r1, sp, #16
- 743 005e 3046     		mov	r0, r6
+ 357:./Src/stm32f1xx_hal_msp.c ****     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+ 737              		.loc 1 357 0
+ 738 0054 0323     		movs	r3, #3
+ 739 0056 0793     		str	r3, [sp, #28]
+ 358:./Src/stm32f1xx_hal_msp.c ****     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+ 740              		.loc 1 358 0
+ 741 0058 1D4E     		ldr	r6, .L45+4
+ 742 005a 04A9     		add	r1, sp, #16
+ 743 005c 3046     		mov	r0, r6
  744              	.LVL51:
- 745 0060 FFF7FEFF 		bl	HAL_GPIO_Init
+ 745 005e FFF7FEFF 		bl	HAL_GPIO_Init
  746              	.LVL52:
- 357:./Src/stm32f1xx_hal_msp.c **** 
- 358:./Src/stm32f1xx_hal_msp.c ****     GPIO_InitStruct.Pin = GPIO_PIN_11;
- 747              		.loc 1 358 0
- 748 0064 4FF40063 		mov	r3, #2048
- 749 0068 0493     		str	r3, [sp, #16]
- 359:./Src/stm32f1xx_hal_msp.c ****     GPIO_InitStruct.Mode = GPIO_MODE_INPUT; //GPIO_MODE_AF_PP;
- 750              		.loc 1 359 0
- 751 006a 0025     		movs	r5, #0
- 752 006c 0595     		str	r5, [sp, #20]
- 360:./Src/stm32f1xx_hal_msp.c ****    // GPIO_InitStruct.Pull = GPIO_NOPULL;
- 361:./Src/stm32f1xx_hal_msp.c ****     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
- 753              		.loc 1 361 0
- 754 006e 04A9     		add	r1, sp, #16
- 755 0070 3046     		mov	r0, r6
- 756 0072 FFF7FEFF 		bl	HAL_GPIO_Init
+ 359:./Src/stm32f1xx_hal_msp.c **** 
+ 360:./Src/stm32f1xx_hal_msp.c ****     GPIO_InitStruct.Pin = GPIO_PIN_3;
+ 747              		.loc 1 360 0
+ 748 0062 0823     		movs	r3, #8
+ 749 0064 0493     		str	r3, [sp, #16]
+ 361:./Src/stm32f1xx_hal_msp.c ****     GPIO_InitStruct.Mode = GPIO_MODE_INPUT; //GPIO_MODE_AF_PP;
+ 750              		.loc 1 361 0
+ 751 0066 0025     		movs	r5, #0
+ 752 0068 0595     		str	r5, [sp, #20]
+ 362:./Src/stm32f1xx_hal_msp.c ****    // GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 363:./Src/stm32f1xx_hal_msp.c ****     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+ 753              		.loc 1 363 0
+ 754 006a 04A9     		add	r1, sp, #16
+ 755 006c 3046     		mov	r0, r6
+ 756 006e FFF7FEFF 		bl	HAL_GPIO_Init
  757              	.LVL53:
- 362:./Src/stm32f1xx_hal_msp.c **** 
- 363:./Src/stm32f1xx_hal_msp.c ****     /* Peripheral DMA init*/
  364:./Src/stm32f1xx_hal_msp.c **** 
- 365:./Src/stm32f1xx_hal_msp.c ****     hdma_usart3_rx.Instance = DMA1_Channel3;
- 758              		.loc 1 365 0
- 759 0076 1848     		ldr	r0, .L45+8
- 760 0078 184B     		ldr	r3, .L45+12
- 761 007a 0360     		str	r3, [r0]
- 366:./Src/stm32f1xx_hal_msp.c ****     hdma_usart3_rx.Init.Direction = DMA_PERIPH_TO_MEMORY;
- 762              		.loc 1 366 0
- 763 007c 4560     		str	r5, [r0, #4]
- 367:./Src/stm32f1xx_hal_msp.c ****     hdma_usart3_rx.Init.PeriphInc = DMA_PINC_DISABLE;
- 764              		.loc 1 367 0
- 765 007e 8560     		str	r5, [r0, #8]
- 368:./Src/stm32f1xx_hal_msp.c ****     hdma_usart3_rx.Init.MemInc = DMA_MINC_ENABLE;
- 766              		.loc 1 368 0
- 767 0080 8023     		movs	r3, #128
- 768 0082 C360     		str	r3, [r0, #12]
- 369:./Src/stm32f1xx_hal_msp.c ****     hdma_usart3_rx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
- 769              		.loc 1 369 0
- 770 0084 0561     		str	r5, [r0, #16]
- 370:./Src/stm32f1xx_hal_msp.c ****     hdma_usart3_rx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
- 771              		.loc 1 370 0
- 772 0086 4561     		str	r5, [r0, #20]
- 371:./Src/stm32f1xx_hal_msp.c ****     hdma_usart3_rx.Init.Mode = DMA_CIRCULAR; //DMA_NORMAL;
- 773              		.loc 1 371 0
- 774 0088 2023     		movs	r3, #32
- 775 008a 8361     		str	r3, [r0, #24]
- 372:./Src/stm32f1xx_hal_msp.c ****     hdma_usart3_rx.Init.Priority = DMA_PRIORITY_LOW;
- 776              		.loc 1 372 0
- 777 008c C561     		str	r5, [r0, #28]
-ARM GAS  /tmp/ccoHTaxt.s 			page 21
+ 365:./Src/stm32f1xx_hal_msp.c ****     /* Peripheral DMA init*/
+ 366:./Src/stm32f1xx_hal_msp.c **** 
+ 367:./Src/stm32f1xx_hal_msp.c ****     hdma_usart2_rx.Instance = DMA1_Channel6;
+ 758              		.loc 1 367 0
+ 759 0072 1848     		ldr	r0, .L45+8
+ 760 0074 184B     		ldr	r3, .L45+12
+ 761 0076 0360     		str	r3, [r0]
+ 368:./Src/stm32f1xx_hal_msp.c ****     hdma_usart2_rx.Init.Direction = DMA_PERIPH_TO_MEMORY;
+ 762              		.loc 1 368 0
+ 763 0078 4560     		str	r5, [r0, #4]
+ 369:./Src/stm32f1xx_hal_msp.c ****     hdma_usart2_rx.Init.PeriphInc = DMA_PINC_DISABLE;
+ 764              		.loc 1 369 0
+ 765 007a 8560     		str	r5, [r0, #8]
+ 370:./Src/stm32f1xx_hal_msp.c ****     hdma_usart2_rx.Init.MemInc = DMA_MINC_ENABLE;
+ 766              		.loc 1 370 0
+ 767 007c 8023     		movs	r3, #128
+ 768 007e C360     		str	r3, [r0, #12]
+ 371:./Src/stm32f1xx_hal_msp.c ****     hdma_usart2_rx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+ 769              		.loc 1 371 0
+ 770 0080 0561     		str	r5, [r0, #16]
+ 372:./Src/stm32f1xx_hal_msp.c ****     hdma_usart2_rx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+ 771              		.loc 1 372 0
+ 772 0082 4561     		str	r5, [r0, #20]
+ 373:./Src/stm32f1xx_hal_msp.c ****     hdma_usart2_rx.Init.Mode = DMA_CIRCULAR; //DMA_NORMAL;
+ 773              		.loc 1 373 0
+ 774 0084 2023     		movs	r3, #32
+ 775 0086 8361     		str	r3, [r0, #24]
+ 374:./Src/stm32f1xx_hal_msp.c ****     hdma_usart2_rx.Init.Priority = DMA_PRIORITY_LOW;
+ARM GAS  /tmp/cc8NmdXc.s 			page 21
 
 
- 373:./Src/stm32f1xx_hal_msp.c ****     if (HAL_DMA_Init(&hdma_usart3_rx) != HAL_OK)
- 778              		.loc 1 373 0
- 779 008e FFF7FEFF 		bl	HAL_DMA_Init
+ 776              		.loc 1 374 0
+ 777 0088 C561     		str	r5, [r0, #28]
+ 375:./Src/stm32f1xx_hal_msp.c ****     if (HAL_DMA_Init(&hdma_usart2_rx) != HAL_OK)
+ 778              		.loc 1 375 0
+ 779 008a FFF7FEFF 		bl	HAL_DMA_Init
  780              	.LVL54:
- 781 0092 08B1     		cbz	r0, .L41
- 374:./Src/stm32f1xx_hal_msp.c ****     {
- 375:./Src/stm32f1xx_hal_msp.c ****       Error_Handler();
- 782              		.loc 1 375 0
- 783 0094 FFF7FEFF 		bl	Error_Handler
+ 781 008e 08B1     		cbz	r0, .L41
+ 376:./Src/stm32f1xx_hal_msp.c ****     {
+ 377:./Src/stm32f1xx_hal_msp.c ****       Error_Handler();
+ 782              		.loc 1 377 0
+ 783 0090 FFF7FEFF 		bl	Error_Handler
  784              	.LVL55:
  785              	.L41:
- 376:./Src/stm32f1xx_hal_msp.c ****     }
- 377:./Src/stm32f1xx_hal_msp.c **** 
- 378:./Src/stm32f1xx_hal_msp.c ****     __HAL_LINKDMA(huart,hdmarx,hdma_usart3_rx);
- 786              		.loc 1 378 0
- 787 0098 0F4B     		ldr	r3, .L45+8
- 788 009a 6363     		str	r3, [r4, #52]
- 789 009c 5C62     		str	r4, [r3, #36]
+ 378:./Src/stm32f1xx_hal_msp.c ****     }
  379:./Src/stm32f1xx_hal_msp.c **** 
- 380:./Src/stm32f1xx_hal_msp.c ****     hdma_usart3_tx.Instance = DMA1_Channel2;
- 790              		.loc 1 380 0
- 791 009e 1048     		ldr	r0, .L45+16
- 792 00a0 104B     		ldr	r3, .L45+20
- 793 00a2 0360     		str	r3, [r0]
- 381:./Src/stm32f1xx_hal_msp.c ****     hdma_usart3_tx.Init.Direction = DMA_MEMORY_TO_PERIPH;
- 794              		.loc 1 381 0
- 795 00a4 1023     		movs	r3, #16
- 796 00a6 4360     		str	r3, [r0, #4]
- 382:./Src/stm32f1xx_hal_msp.c ****     hdma_usart3_tx.Init.PeriphInc = DMA_PINC_DISABLE;
- 797              		.loc 1 382 0
- 798 00a8 0023     		movs	r3, #0
- 799 00aa 8360     		str	r3, [r0, #8]
- 383:./Src/stm32f1xx_hal_msp.c ****     hdma_usart3_tx.Init.MemInc = DMA_MINC_ENABLE;
- 800              		.loc 1 383 0
- 801 00ac 8022     		movs	r2, #128
- 802 00ae C260     		str	r2, [r0, #12]
- 384:./Src/stm32f1xx_hal_msp.c ****     hdma_usart3_tx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
- 803              		.loc 1 384 0
- 804 00b0 0361     		str	r3, [r0, #16]
- 385:./Src/stm32f1xx_hal_msp.c ****     hdma_usart3_tx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
- 805              		.loc 1 385 0
- 806 00b2 4361     		str	r3, [r0, #20]
- 386:./Src/stm32f1xx_hal_msp.c ****     hdma_usart3_tx.Init.Mode = DMA_NORMAL;
- 807              		.loc 1 386 0
- 808 00b4 8361     		str	r3, [r0, #24]
- 387:./Src/stm32f1xx_hal_msp.c ****     hdma_usart3_tx.Init.Priority = DMA_PRIORITY_LOW;
- 809              		.loc 1 387 0
- 810 00b6 C361     		str	r3, [r0, #28]
- 388:./Src/stm32f1xx_hal_msp.c ****     if (HAL_DMA_Init(&hdma_usart3_tx) != HAL_OK)
- 811              		.loc 1 388 0
- 812 00b8 FFF7FEFF 		bl	HAL_DMA_Init
+ 380:./Src/stm32f1xx_hal_msp.c ****     __HAL_LINKDMA(huart,hdmarx,hdma_usart2_rx);
+ 786              		.loc 1 380 0
+ 787 0094 0F4B     		ldr	r3, .L45+8
+ 788 0096 6363     		str	r3, [r4, #52]
+ 789 0098 5C62     		str	r4, [r3, #36]
+ 381:./Src/stm32f1xx_hal_msp.c **** 
+ 382:./Src/stm32f1xx_hal_msp.c ****     hdma_usart2_tx.Instance = DMA1_Channel7;
+ 790              		.loc 1 382 0
+ 791 009a 1048     		ldr	r0, .L45+16
+ 792 009c 104B     		ldr	r3, .L45+20
+ 793 009e 0360     		str	r3, [r0]
+ 383:./Src/stm32f1xx_hal_msp.c ****     hdma_usart2_tx.Init.Direction = DMA_MEMORY_TO_PERIPH;
+ 794              		.loc 1 383 0
+ 795 00a0 1023     		movs	r3, #16
+ 796 00a2 4360     		str	r3, [r0, #4]
+ 384:./Src/stm32f1xx_hal_msp.c ****     hdma_usart2_tx.Init.PeriphInc = DMA_PINC_DISABLE;
+ 797              		.loc 1 384 0
+ 798 00a4 0023     		movs	r3, #0
+ 799 00a6 8360     		str	r3, [r0, #8]
+ 385:./Src/stm32f1xx_hal_msp.c ****     hdma_usart2_tx.Init.MemInc = DMA_MINC_ENABLE;
+ 800              		.loc 1 385 0
+ 801 00a8 8022     		movs	r2, #128
+ 802 00aa C260     		str	r2, [r0, #12]
+ 386:./Src/stm32f1xx_hal_msp.c ****     hdma_usart2_tx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+ 803              		.loc 1 386 0
+ 804 00ac 0361     		str	r3, [r0, #16]
+ 387:./Src/stm32f1xx_hal_msp.c ****     hdma_usart2_tx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+ 805              		.loc 1 387 0
+ 806 00ae 4361     		str	r3, [r0, #20]
+ 388:./Src/stm32f1xx_hal_msp.c ****     hdma_usart2_tx.Init.Mode = DMA_NORMAL;
+ 807              		.loc 1 388 0
+ 808 00b0 8361     		str	r3, [r0, #24]
+ 389:./Src/stm32f1xx_hal_msp.c ****     hdma_usart2_tx.Init.Priority = DMA_PRIORITY_LOW;
+ 809              		.loc 1 389 0
+ 810 00b2 C361     		str	r3, [r0, #28]
+ 390:./Src/stm32f1xx_hal_msp.c ****     if (HAL_DMA_Init(&hdma_usart2_tx) != HAL_OK)
+ 811              		.loc 1 390 0
+ 812 00b4 FFF7FEFF 		bl	HAL_DMA_Init
  813              	.LVL56:
- 814 00bc 08B1     		cbz	r0, .L42
- 389:./Src/stm32f1xx_hal_msp.c ****     {
- 390:./Src/stm32f1xx_hal_msp.c ****       Error_Handler();
- 815              		.loc 1 390 0
- 816 00be FFF7FEFF 		bl	Error_Handler
-ARM GAS  /tmp/ccoHTaxt.s 			page 22
+ 814 00b8 08B1     		cbz	r0, .L42
+ 391:./Src/stm32f1xx_hal_msp.c ****     {
+ 392:./Src/stm32f1xx_hal_msp.c ****       Error_Handler();
+ARM GAS  /tmp/cc8NmdXc.s 			page 22
 
 
+ 815              		.loc 1 392 0
+ 816 00ba FFF7FEFF 		bl	Error_Handler
  817              	.LVL57:
  818              	.L42:
- 391:./Src/stm32f1xx_hal_msp.c ****     }
- 392:./Src/stm32f1xx_hal_msp.c **** 
- 393:./Src/stm32f1xx_hal_msp.c ****     __HAL_LINKDMA(huart,hdmatx,hdma_usart3_tx);
- 819              		.loc 1 393 0
- 820 00c2 074B     		ldr	r3, .L45+16
- 821 00c4 2363     		str	r3, [r4, #48]
- 822 00c6 5C62     		str	r4, [r3, #36]
- 394:./Src/stm32f1xx_hal_msp.c ****   }
- 395:./Src/stm32f1xx_hal_msp.c **** 
- 396:./Src/stm32f1xx_hal_msp.c **** }
- 823              		.loc 1 396 0
- 824 00c8 08B0     		add	sp, sp, #32
+ 393:./Src/stm32f1xx_hal_msp.c ****     }
+ 394:./Src/stm32f1xx_hal_msp.c **** 
+ 395:./Src/stm32f1xx_hal_msp.c ****     __HAL_LINKDMA(huart,hdmatx,hdma_usart2_tx);
+ 819              		.loc 1 395 0
+ 820 00be 074B     		ldr	r3, .L45+16
+ 821 00c0 2363     		str	r3, [r4, #48]
+ 822 00c2 5C62     		str	r4, [r3, #36]
+ 396:./Src/stm32f1xx_hal_msp.c ****   }
+ 397:./Src/stm32f1xx_hal_msp.c **** }
+ 823              		.loc 1 397 0
+ 824 00c4 08B0     		add	sp, sp, #32
  825              	.LCFI17:
  826              		.cfi_def_cfa_offset 16
  827              		@ sp needed
- 828 00ca 70BD     		pop	{r4, r5, r6, pc}
+ 828 00c6 70BD     		pop	{r4, r5, r6, pc}
  829              	.LVL58:
  830              	.L44:
  831              	.LCFI18:
@@ -1287,16 +1288,16 @@ ARM GAS  /tmp/ccoHTaxt.s 			page 1
  834              		.cfi_restore 5
  835              		.cfi_restore 6
  836              		.cfi_restore 14
- 837 00cc 7047     		bx	lr
+ 837 00c8 7047     		bx	lr
  838              	.L46:
- 839 00ce 00BF     		.align	2
+ 839 00ca 00BF     		.align	2
  840              	.L45:
- 841 00d0 00480040 		.word	1073760256
- 842 00d4 000C0140 		.word	1073810432
- 843 00d8 00000000 		.word	hdma_usart3_rx
- 844 00dc 30000240 		.word	1073872944
- 845 00e0 00000000 		.word	hdma_usart3_tx
- 846 00e4 1C000240 		.word	1073872924
+ 841 00cc 00440040 		.word	1073759232
+ 842 00d0 00080140 		.word	1073809408
+ 843 00d4 00000000 		.word	hdma_usart2_rx
+ 844 00d8 6C000240 		.word	1073873004
+ 845 00dc 00000000 		.word	hdma_usart2_tx
+ 846 00e0 80000240 		.word	1073873024
  847              		.cfi_endproc
  848              	.LFE70:
  850              		.section	.text.HAL_UART_MspDeInit,"ax",%progbits
@@ -1306,130 +1307,176 @@ ARM GAS  /tmp/ccoHTaxt.s 			page 1
  854              		.thumb_func
  856              	HAL_UART_MspDeInit:
  857              	.LFB71:
- 397:./Src/stm32f1xx_hal_msp.c **** 
- 398:./Src/stm32f1xx_hal_msp.c **** void HAL_UART_MspDeInit(UART_HandleTypeDef* huart)
- 399:./Src/stm32f1xx_hal_msp.c **** {
- 858              		.loc 1 399 0
+ 398:./Src/stm32f1xx_hal_msp.c **** 
+ 399:./Src/stm32f1xx_hal_msp.c **** void HAL_UART_MspDeInit(UART_HandleTypeDef* huart)
+ 400:./Src/stm32f1xx_hal_msp.c **** {
+ 858              		.loc 1 400 0
  859              		.cfi_startproc
  860              		@ args = 0, pretend = 0, frame = 0
  861              		@ frame_needed = 0, uses_anonymous_args = 0
  862              	.LVL59:
- 400:./Src/stm32f1xx_hal_msp.c **** 
- 401:./Src/stm32f1xx_hal_msp.c ****   if(huart->Instance==USART3)
- 863              		.loc 1 401 0
- 864 0000 0268     		ldr	r2, [r0]
-ARM GAS  /tmp/ccoHTaxt.s 			page 23
+ 863 0000 10B5     		push	{r4, lr}
+ 864              	.LCFI19:
+ 865              		.cfi_def_cfa_offset 8
+ARM GAS  /tmp/cc8NmdXc.s 			page 23
 
 
- 865 0002 0B4B     		ldr	r3, .L51
- 866 0004 9A42     		cmp	r2, r3
- 867 0006 12D1     		bne	.L50
- 399:./Src/stm32f1xx_hal_msp.c **** 
- 868              		.loc 1 399 0
- 869 0008 10B5     		push	{r4, lr}
- 870              	.LCFI19:
- 871              		.cfi_def_cfa_offset 8
- 872              		.cfi_offset 4, -8
- 873              		.cfi_offset 14, -4
- 874 000a 0446     		mov	r4, r0
- 402:./Src/stm32f1xx_hal_msp.c ****   {
- 403:./Src/stm32f1xx_hal_msp.c ****   /* USER CODE BEGIN USART2_MspDeInit 0 */
- 404:./Src/stm32f1xx_hal_msp.c **** 
- 405:./Src/stm32f1xx_hal_msp.c ****   /* USER CODE END USART2_MspDeInit 0 */
- 406:./Src/stm32f1xx_hal_msp.c ****     /* Peripheral clock disable */
- 407:./Src/stm32f1xx_hal_msp.c **** 
- 408:./Src/stm32f1xx_hal_msp.c ****     __HAL_RCC_USART3_CLK_DISABLE();
- 875              		.loc 1 408 0
- 876 000c 094A     		ldr	r2, .L51+4
- 877 000e D369     		ldr	r3, [r2, #28]
- 878 0010 23F48023 		bic	r3, r3, #262144
- 879 0014 D361     		str	r3, [r2, #28]
- 409:./Src/stm32f1xx_hal_msp.c **** 
- 410:./Src/stm32f1xx_hal_msp.c ****     /**USART2 GPIO Configuration
- 411:./Src/stm32f1xx_hal_msp.c ****     PA2     ------> USART2_TX
- 412:./Src/stm32f1xx_hal_msp.c ****     PA3     ------> USART2_RX
- 413:./Src/stm32f1xx_hal_msp.c ****     */
- 414:./Src/stm32f1xx_hal_msp.c ****     HAL_GPIO_DeInit(GPIOB, GPIO_PIN_10|GPIO_PIN_11);
- 880              		.loc 1 414 0
- 881 0016 4FF44061 		mov	r1, #3072
- 882 001a 0748     		ldr	r0, .L51+8
- 883              	.LVL60:
- 884 001c FFF7FEFF 		bl	HAL_GPIO_DeInit
- 885              	.LVL61:
- 415:./Src/stm32f1xx_hal_msp.c **** 
- 416:./Src/stm32f1xx_hal_msp.c ****     /* Peripheral DMA DeInit*/
- 417:./Src/stm32f1xx_hal_msp.c ****     HAL_DMA_DeInit(huart->hdmarx);
- 886              		.loc 1 417 0
- 887 0020 606B     		ldr	r0, [r4, #52]
- 888 0022 FFF7FEFF 		bl	HAL_DMA_DeInit
- 889              	.LVL62:
- 418:./Src/stm32f1xx_hal_msp.c ****     HAL_DMA_DeInit(huart->hdmatx);
- 890              		.loc 1 418 0
- 891 0026 206B     		ldr	r0, [r4, #48]
- 892 0028 FFF7FEFF 		bl	HAL_DMA_DeInit
- 893              	.LVL63:
- 894 002c 10BD     		pop	{r4, pc}
- 895              	.LVL64:
- 896              	.L50:
- 897              	.LCFI20:
- 898              		.cfi_def_cfa_offset 0
- 899              		.cfi_restore 4
- 900              		.cfi_restore 14
- 901 002e 7047     		bx	lr
- 902              	.L52:
- 903              		.align	2
-ARM GAS  /tmp/ccoHTaxt.s 			page 24
+ 866              		.cfi_offset 4, -8
+ 867              		.cfi_offset 14, -4
+ 868 0002 0446     		mov	r4, r0
+ 401:./Src/stm32f1xx_hal_msp.c **** 
+ 402:./Src/stm32f1xx_hal_msp.c ****   if(huart->Instance==USART3)
+ 869              		.loc 1 402 0
+ 870 0004 0268     		ldr	r2, [r0]
+ 871 0006 134B     		ldr	r3, .L51
+ 872 0008 9A42     		cmp	r2, r3
+ 873 000a 0FD1     		bne	.L48
+ 403:./Src/stm32f1xx_hal_msp.c ****   {
+ 404:./Src/stm32f1xx_hal_msp.c ****   /* USER CODE BEGIN USART2_MspDeInit 0 */
+ 405:./Src/stm32f1xx_hal_msp.c **** 
+ 406:./Src/stm32f1xx_hal_msp.c ****   /* USER CODE END USART2_MspDeInit 0 */
+ 407:./Src/stm32f1xx_hal_msp.c ****     /* Peripheral clock disable */
+ 408:./Src/stm32f1xx_hal_msp.c **** 
+ 409:./Src/stm32f1xx_hal_msp.c ****     __HAL_RCC_USART3_CLK_DISABLE();
+ 874              		.loc 1 409 0
+ 875 000c 124A     		ldr	r2, .L51+4
+ 876 000e D369     		ldr	r3, [r2, #28]
+ 877 0010 23F48023 		bic	r3, r3, #262144
+ 878 0014 D361     		str	r3, [r2, #28]
+ 410:./Src/stm32f1xx_hal_msp.c **** 
+ 411:./Src/stm32f1xx_hal_msp.c ****     /**USART2 GPIO Configuration
+ 412:./Src/stm32f1xx_hal_msp.c ****     PA2     ------> USART2_TX
+ 413:./Src/stm32f1xx_hal_msp.c ****     PA3     ------> USART2_RX
+ 414:./Src/stm32f1xx_hal_msp.c ****     */
+ 415:./Src/stm32f1xx_hal_msp.c ****     HAL_GPIO_DeInit(GPIOB, GPIO_PIN_10|GPIO_PIN_11);
+ 879              		.loc 1 415 0
+ 880 0016 4FF44061 		mov	r1, #3072
+ 881 001a 1048     		ldr	r0, .L51+8
+ 882              	.LVL60:
+ 883 001c FFF7FEFF 		bl	HAL_GPIO_DeInit
+ 884              	.LVL61:
+ 416:./Src/stm32f1xx_hal_msp.c **** 
+ 417:./Src/stm32f1xx_hal_msp.c ****     /* Peripheral DMA DeInit*/
+ 418:./Src/stm32f1xx_hal_msp.c ****     HAL_DMA_DeInit(huart->hdmarx);
+ 885              		.loc 1 418 0
+ 886 0020 606B     		ldr	r0, [r4, #52]
+ 887 0022 FFF7FEFF 		bl	HAL_DMA_DeInit
+ 888              	.LVL62:
+ 419:./Src/stm32f1xx_hal_msp.c ****     HAL_DMA_DeInit(huart->hdmatx);
+ 889              		.loc 1 419 0
+ 890 0026 206B     		ldr	r0, [r4, #48]
+ 891 0028 FFF7FEFF 		bl	HAL_DMA_DeInit
+ 892              	.LVL63:
+ 893              	.L48:
+ 420:./Src/stm32f1xx_hal_msp.c ****   }
+ 421:./Src/stm32f1xx_hal_msp.c ****   /* USER CODE BEGIN USART2_MspDeInit 1 */
+ 422:./Src/stm32f1xx_hal_msp.c **** 
+ 423:./Src/stm32f1xx_hal_msp.c ****   /* USER CODE END USART2_MspDeInit 1 */
+ 424:./Src/stm32f1xx_hal_msp.c **** 
+ 425:./Src/stm32f1xx_hal_msp.c **** 
+ 426:./Src/stm32f1xx_hal_msp.c ****   if(huart->Instance==USART2)
+ 894              		.loc 1 426 0
+ 895 002c 2268     		ldr	r2, [r4]
+ 896 002e 0C4B     		ldr	r3, .L51+12
+ARM GAS  /tmp/cc8NmdXc.s 			page 24
 
 
- 904              	.L51:
- 905 0030 00480040 		.word	1073760256
- 906 0034 00100240 		.word	1073876992
- 907 0038 000C0140 		.word	1073810432
- 908              		.cfi_endproc
- 909              	.LFE71:
- 911              		.text
- 912              	.Letext0:
- 913              		.file 2 "/home/niklas/gcc-arm-none-eabi-5_4-2016q3/arm-none-eabi/include/machine/_default_types.h"
- 914              		.file 3 "/home/niklas/gcc-arm-none-eabi-5_4-2016q3/arm-none-eabi/include/sys/_stdint.h"
- 915              		.file 4 "./Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xe.h"
- 916              		.file 5 "./Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h"
- 917              		.file 6 "./Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio.h"
- 918              		.file 7 "./Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_dma.h"
- 919              		.file 8 "./Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_adc.h"
- 920              		.file 9 "./Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_i2c.h"
- 921              		.file 10 "./Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h"
- 922              		.file 11 "./Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h"
- 923              		.file 12 "./Drivers/CMSIS/Include/core_cm3.h"
- 924              		.file 13 "./Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_cortex.h"
-ARM GAS  /tmp/ccoHTaxt.s 			page 25
+ 897 0030 9A42     		cmp	r2, r3
+ 898 0032 0ED1     		bne	.L47
+ 427:./Src/stm32f1xx_hal_msp.c ****   {
+ 428:./Src/stm32f1xx_hal_msp.c ****   /* USER CODE BEGIN USART2_MspDeInit 0 */
+ 429:./Src/stm32f1xx_hal_msp.c **** 
+ 430:./Src/stm32f1xx_hal_msp.c ****   /* USER CODE END USART2_MspDeInit 0 */
+ 431:./Src/stm32f1xx_hal_msp.c ****     /* Peripheral clock disable */
+ 432:./Src/stm32f1xx_hal_msp.c **** 
+ 433:./Src/stm32f1xx_hal_msp.c ****     __HAL_RCC_USART2_CLK_DISABLE();
+ 899              		.loc 1 433 0
+ 900 0034 084A     		ldr	r2, .L51+4
+ 901 0036 D369     		ldr	r3, [r2, #28]
+ 902 0038 23F40033 		bic	r3, r3, #131072
+ 903 003c D361     		str	r3, [r2, #28]
+ 434:./Src/stm32f1xx_hal_msp.c **** 
+ 435:./Src/stm32f1xx_hal_msp.c ****     /**USART2 GPIO Configuration
+ 436:./Src/stm32f1xx_hal_msp.c ****     PA2     ------> USART2_TX
+ 437:./Src/stm32f1xx_hal_msp.c ****     PA3     ------> USART2_RX
+ 438:./Src/stm32f1xx_hal_msp.c ****     */
+ 439:./Src/stm32f1xx_hal_msp.c ****     HAL_GPIO_DeInit(GPIOA, GPIO_PIN_2|GPIO_PIN_3);
+ 904              		.loc 1 439 0
+ 905 003e 0C21     		movs	r1, #12
+ 906 0040 0848     		ldr	r0, .L51+16
+ 907 0042 FFF7FEFF 		bl	HAL_GPIO_DeInit
+ 908              	.LVL64:
+ 440:./Src/stm32f1xx_hal_msp.c **** 
+ 441:./Src/stm32f1xx_hal_msp.c ****     /* Peripheral DMA DeInit*/
+ 442:./Src/stm32f1xx_hal_msp.c ****     HAL_DMA_DeInit(huart->hdmarx);
+ 909              		.loc 1 442 0
+ 910 0046 606B     		ldr	r0, [r4, #52]
+ 911 0048 FFF7FEFF 		bl	HAL_DMA_DeInit
+ 912              	.LVL65:
+ 443:./Src/stm32f1xx_hal_msp.c ****     HAL_DMA_DeInit(huart->hdmatx);
+ 913              		.loc 1 443 0
+ 914 004c 206B     		ldr	r0, [r4, #48]
+ 915 004e FFF7FEFF 		bl	HAL_DMA_DeInit
+ 916              	.LVL66:
+ 917              	.L47:
+ 918 0052 10BD     		pop	{r4, pc}
+ 919              	.LVL67:
+ 920              	.L52:
+ 921              		.align	2
+ 922              	.L51:
+ 923 0054 00480040 		.word	1073760256
+ 924 0058 00100240 		.word	1073876992
+ 925 005c 000C0140 		.word	1073810432
+ 926 0060 00440040 		.word	1073759232
+ 927 0064 00080140 		.word	1073809408
+ 928              		.cfi_endproc
+ 929              	.LFE71:
+ 931              		.text
+ 932              	.Letext0:
+ 933              		.file 2 "/home/niklas/gcc-arm-none-eabi-5_4-2016q3/arm-none-eabi/include/machine/_default_types.h"
+ 934              		.file 3 "/home/niklas/gcc-arm-none-eabi-5_4-2016q3/arm-none-eabi/include/sys/_stdint.h"
+ 935              		.file 4 "./Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xe.h"
+ 936              		.file 5 "./Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h"
+ 937              		.file 6 "./Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio.h"
+ARM GAS  /tmp/cc8NmdXc.s 			page 25
+
+
+ 938              		.file 7 "./Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_dma.h"
+ 939              		.file 8 "./Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_adc.h"
+ 940              		.file 9 "./Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_i2c.h"
+ 941              		.file 10 "./Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h"
+ 942              		.file 11 "./Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h"
+ 943              		.file 12 "./Drivers/CMSIS/Include/core_cm3.h"
+ 944              		.file 13 "./Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_cortex.h"
+ARM GAS  /tmp/cc8NmdXc.s 			page 26
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 stm32f1xx_hal_msp.c
-     /tmp/ccoHTaxt.s:20     .text.HAL_MspInit:00000000 $t
-     /tmp/ccoHTaxt.s:25     .text.HAL_MspInit:00000000 HAL_MspInit
-     /tmp/ccoHTaxt.s:105    .text.HAL_MspInit:00000078 $d
-     /tmp/ccoHTaxt.s:110    .text.HAL_ADC_MspInit:00000000 $t
-     /tmp/ccoHTaxt.s:115    .text.HAL_ADC_MspInit:00000000 HAL_ADC_MspInit
-     /tmp/ccoHTaxt.s:281    .text.HAL_ADC_MspInit:000000d4 $d
-     /tmp/ccoHTaxt.s:294    .text.HAL_ADC_MspDeInit:00000000 $t
-     /tmp/ccoHTaxt.s:299    .text.HAL_ADC_MspDeInit:00000000 HAL_ADC_MspDeInit
-     /tmp/ccoHTaxt.s:344    .text.HAL_ADC_MspDeInit:00000028 $d
-     /tmp/ccoHTaxt.s:351    .text.HAL_I2C_MspInit:00000000 $t
-     /tmp/ccoHTaxt.s:356    .text.HAL_I2C_MspInit:00000000 HAL_I2C_MspInit
-     /tmp/ccoHTaxt.s:532    .text.HAL_I2C_MspInit:000000e0 $d
-     /tmp/ccoHTaxt.s:543    .text.HAL_I2C_MspDeInit:00000000 $t
-     /tmp/ccoHTaxt.s:548    .text.HAL_I2C_MspDeInit:00000000 HAL_I2C_MspDeInit
-     /tmp/ccoHTaxt.s:601    .text.HAL_I2C_MspDeInit:00000038 $d
-     /tmp/ccoHTaxt.s:608    .text.HAL_TIM_PWM_MspDeInit:00000000 $t
-     /tmp/ccoHTaxt.s:613    .text.HAL_TIM_PWM_MspDeInit:00000000 HAL_TIM_PWM_MspDeInit
-     /tmp/ccoHTaxt.s:662    .text.HAL_TIM_PWM_MspDeInit:00000038 $d
-     /tmp/ccoHTaxt.s:668    .text.HAL_UART_MspInit:00000000 $t
-     /tmp/ccoHTaxt.s:673    .text.HAL_UART_MspInit:00000000 HAL_UART_MspInit
-     /tmp/ccoHTaxt.s:841    .text.HAL_UART_MspInit:000000d0 $d
-     /tmp/ccoHTaxt.s:851    .text.HAL_UART_MspDeInit:00000000 $t
-     /tmp/ccoHTaxt.s:856    .text.HAL_UART_MspDeInit:00000000 HAL_UART_MspDeInit
-     /tmp/ccoHTaxt.s:905    .text.HAL_UART_MspDeInit:00000030 $d
+     /tmp/cc8NmdXc.s:20     .text.HAL_MspInit:00000000 $t
+     /tmp/cc8NmdXc.s:25     .text.HAL_MspInit:00000000 HAL_MspInit
+     /tmp/cc8NmdXc.s:105    .text.HAL_MspInit:00000078 $d
+     /tmp/cc8NmdXc.s:110    .text.HAL_ADC_MspInit:00000000 $t
+     /tmp/cc8NmdXc.s:115    .text.HAL_ADC_MspInit:00000000 HAL_ADC_MspInit
+     /tmp/cc8NmdXc.s:281    .text.HAL_ADC_MspInit:000000d4 $d
+     /tmp/cc8NmdXc.s:294    .text.HAL_ADC_MspDeInit:00000000 $t
+     /tmp/cc8NmdXc.s:299    .text.HAL_ADC_MspDeInit:00000000 HAL_ADC_MspDeInit
+     /tmp/cc8NmdXc.s:344    .text.HAL_ADC_MspDeInit:00000028 $d
+     /tmp/cc8NmdXc.s:351    .text.HAL_I2C_MspInit:00000000 $t
+     /tmp/cc8NmdXc.s:356    .text.HAL_I2C_MspInit:00000000 HAL_I2C_MspInit
+     /tmp/cc8NmdXc.s:532    .text.HAL_I2C_MspInit:000000e0 $d
+     /tmp/cc8NmdXc.s:543    .text.HAL_I2C_MspDeInit:00000000 $t
+     /tmp/cc8NmdXc.s:548    .text.HAL_I2C_MspDeInit:00000000 HAL_I2C_MspDeInit
+     /tmp/cc8NmdXc.s:601    .text.HAL_I2C_MspDeInit:00000038 $d
+     /tmp/cc8NmdXc.s:608    .text.HAL_TIM_PWM_MspDeInit:00000000 $t
+     /tmp/cc8NmdXc.s:613    .text.HAL_TIM_PWM_MspDeInit:00000000 HAL_TIM_PWM_MspDeInit
+     /tmp/cc8NmdXc.s:662    .text.HAL_TIM_PWM_MspDeInit:00000038 $d
+     /tmp/cc8NmdXc.s:668    .text.HAL_UART_MspInit:00000000 $t
+     /tmp/cc8NmdXc.s:673    .text.HAL_UART_MspInit:00000000 HAL_UART_MspInit
+     /tmp/cc8NmdXc.s:841    .text.HAL_UART_MspInit:000000cc $d
+     /tmp/cc8NmdXc.s:851    .text.HAL_UART_MspDeInit:00000000 $t
+     /tmp/cc8NmdXc.s:856    .text.HAL_UART_MspDeInit:00000000 HAL_UART_MspDeInit
+     /tmp/cc8NmdXc.s:923    .text.HAL_UART_MspDeInit:00000054 $d
                      .debug_frame:00000010 $d
 
 UNDEFINED SYMBOLS
@@ -1446,5 +1493,5 @@ HAL_NVIC_EnableIRQ
 hdma_i2c2_rx
 hdma_i2c2_tx
 HAL_NVIC_DisableIRQ
-hdma_usart3_rx
-hdma_usart3_tx
+hdma_usart2_rx
+hdma_usart2_tx

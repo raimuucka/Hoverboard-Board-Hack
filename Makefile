@@ -99,7 +99,7 @@ PERIFLIB_SOURCES =
 # binaries
 #######################################
 #BINPATH = ${BINPATH}
-PREFIX = arm-none-eabi-
+PREFIX = /home/niklas/gcc-arm-none-eabi-5_4-2016q3/bin/arm-none-eabi-
 CC = ${BINPATH}/$(PREFIX)gcc
 AS = ${BINPATH}/$(PREFIX)gcc -x assembler-with-cpp
 CP = ${BINPATH}/$(PREFIX)objcopy
