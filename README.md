@@ -6,7 +6,7 @@ the firmware you can find here allows you to use your Hoverboard Hardware (like 
 ---
 
 #### Hardware
-![otter](pinout.png?raw=true)
+![otter](https://raw.githubusercontent.com/NiklasFauth/Hoverboard-Board-Hack/master/pinout.png)
 
 The original Hardware supports two 4-pin cables that originally were connected to the two sensor boards. They break out GND, 12/15V and USART2&3 of the Hoverboard mainboard.
 Both USART2 & 3 can be used for UART and I2C, PA2&3 can be used as 12bit ADCs.
@@ -34,6 +34,7 @@ st-flash write build/hoverboard.bin 0x8000000
 First, check that power is connected and voltage is > 36V.
 If the board draws more than 100mA in idle, it's probably broken.
 
+If the motors do something, but don't rotate smooth and quietly, try to use the alternative phase mapping in the picture above. Some hoverboards have a different layout then others, and this might be the reason your motor isn't spinning.
 
 ---
 
@@ -50,15 +51,7 @@ Simply connect a USB-USART adapter to GND; PA2 and PA3 and give it a try.
 
 ##### PPM
 
-PPM allows you to connect a radio control with PPM sum signal output and use it to directly control and steer the motors. 
-
-Channel Mapping (You can change that as you want in the main.c fiile.)
-
-Channel | Signal
-------- | ------
-1 | Steering
-2 | Throttle
-3 | Speed Limit
+PPM allows you to connect a radio control with PPM sum signal output and use it to directly control and steer the motors. Channel 0 is used for motor current scaling, Ch 1&2 for speed / direction. You can change that as you want in the main.c fiile.
 
 Connect your RC receiver to GND and 12V (if is supports 12V input voltage, else use a separate voltage regulator or use the hall sensors rail) and the PPM sum signal to PA3. The firmware also streams out the received channel values on USART3 / 115200 baud for debugging reasons.
 
