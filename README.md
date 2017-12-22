@@ -18,7 +18,8 @@ To build the firmware, just type "make". Make sure you have specified your gcc-a
 
 Make sure you hold the powerbutton or connect a jumper to the power button pins while flashing the firmware, as the STM might release the power latch and switches itself off during flashing.
 
-To flash the STM32, use the ST-Flash utility (https://github.com/texane/stlink)
+To flash the STM32, use the ST-Flash utility (https://github.com/texane/stlink).
+
 If you never flashed your mainboard before, the STM is probably locked. To unlock the flash, use the following OpenOCD command:
 
 ```
