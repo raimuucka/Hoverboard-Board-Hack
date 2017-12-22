@@ -1,4 +1,4 @@
-ARM GAS  /tmp/ccEIq7ZR.s 			page 1
+ARM GAS  /tmp/cckqBGja.s 			page 1
 
 
    1              		.syntax unified
@@ -19,14 +19,15 @@ ARM GAS  /tmp/ccEIq7ZR.s 			page 1
   16              		.text
   17              	.Ltext0:
   18              		.cfi_sections	.debug_frame
-  19              		.section	.text.saveConfig,"ax",%progbits
-  20              		.align	2
-  21              		.global	saveConfig
-  22              		.thumb
-  23              		.thumb_func
-  25              	saveConfig:
-  26              	.LFB65:
-  27              		.file 1 "./Src/main.c"
+  19              		.global	__aeabi_fcmplt
+  20              		.section	.text.checkRemoteStatus,"ax",%progbits
+  21              		.align	2
+  22              		.global	checkRemoteStatus
+  23              		.thumb
+  24              		.thumb_func
+  26              	checkRemoteStatus:
+  27              	.LFB65:
+  28              		.file 1 "./Src/main.c"
    1:./Src/main.c  **** /*                              ------ hacking hoverboard -------
    2:./Src/main.c  **** MOTOR LEFT
    3:./Src/main.c  ****             HALL_A = PB5
@@ -57,10 +58,10 @@ ARM GAS  /tmp/ccEIq7ZR.s 			page 1
   28:./Src/main.c  ****             B-VOLTAGE_PHASE_A_BACK_EMF = PC5    [Analog]  -- {NOT USE}
   29:./Src/main.c  **** 
   30:./Src/main.c  **** VARIE
+ARM GAS  /tmp/cckqBGja.s 			page 2
+
+
   31:./Src/main.c  ****             LED = PB2
-ARM GAS  /tmp/ccEIq7ZR.s 			page 2
-
-
   32:./Src/main.c  ****             BUZZER = PA4
   33:./Src/main.c  ****             FRONT_LEFT[connettore 4 poli] = +15V ; PA2 ; PA3 ; MASSA    -- {NOT USE}
   34:./Src/main.c  ****             FRONT_RIGHT[connettore 4 poli] = +15V ; PB10 ; PB11 ; MASSA -- {USE x JOYSTICK}
@@ -117,10 +118,10 @@ ARM GAS  /tmp/ccEIq7ZR.s 			page 1
   85:./Src/main.c  **** /* Private function prototypes -----------------------------------------------*/
   86:./Src/main.c  **** void SystemClock_Config(void);
   87:./Src/main.c  **** void Error_Handler(void);
+ARM GAS  /tmp/cckqBGja.s 			page 3
+
+
   88:./Src/main.c  **** //extern struct PID_dati pid_R_;
-ARM GAS  /tmp/ccEIq7ZR.s 			page 3
-
-
   89:./Src/main.c  **** static void MX_IWDG_Init(void);
   90:./Src/main.c  **** IWDG_HandleTypeDef hiwdg;
   91:./Src/main.c  **** 
@@ -133,1797 +134,2274 @@ ARM GAS  /tmp/ccEIq7ZR.s 			page 1
   98:./Src/main.c  **** LCD_PCF8574_HandleTypeDef lcd;
   99:./Src/main.c  **** extern I2C_HandleTypeDef hi2c2;
  100:./Src/main.c  **** uint16_t saveValue = 0;
- 101:./Src/main.c  **** 
- 102:./Src/main.c  **** #define SAFETYREMOTE
- 103:./Src/main.c  **** 
- 104:./Src/main.c  **** int main(void)
- 105:./Src/main.c  **** {
- 106:./Src/main.c  ****   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
- 107:./Src/main.c  ****   HAL_Init();
- 108:./Src/main.c  **** 
- 109:./Src/main.c  ****   /* Configure the system clock */
- 110:./Src/main.c  ****   SystemClock_Config();
- 111:./Src/main.c  **** 
- 112:./Src/main.c  ****   Button_init();
- 113:./Src/main.c  **** 
- 114:./Src/main.c  ****   Power_Set(1);
- 115:./Src/main.c  **** 
+ 101:./Src/main.c  **** uint8_t motorsArmed = 1;
+ 102:./Src/main.c  **** 
+ 103:./Src/main.c  **** #define SAFETYREMOTE
+ 104:./Src/main.c  **** 
+ 105:./Src/main.c  **** int main(void)
+ 106:./Src/main.c  **** {
+ 107:./Src/main.c  ****   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+ 108:./Src/main.c  ****   HAL_Init();
+ 109:./Src/main.c  **** 
+ 110:./Src/main.c  ****   /* Configure the system clock */
+ 111:./Src/main.c  ****   SystemClock_Config();
+ 112:./Src/main.c  **** 
+ 113:./Src/main.c  ****   Button_init();
+ 114:./Src/main.c  **** 
+ 115:./Src/main.c  ****   Power_Set(1);
  116:./Src/main.c  **** 
- 117:./Src/main.c  ****   //Telemetry_init();
- 118:./Src/main.c  ****   MX_I2C2_Init();
- 119:./Src/main.c  **** 
- 120:./Src/main.c  ****   /* Unlock the Flash Program Erase controller */
- 121:./Src/main.c  ****   HAL_FLASH_Unlock();
- 122:./Src/main.c  **** 
- 123:./Src/main.c  ****   /* EEPROM Init */
- 124:./Src/main.c  ****   EE_Init();
- 125:./Src/main.c  **** 
+ 117:./Src/main.c  **** 
+ 118:./Src/main.c  ****   //Telemetry_init();
+ 119:./Src/main.c  ****   MX_I2C2_Init();
+ 120:./Src/main.c  **** 
+ 121:./Src/main.c  ****   /* Unlock the Flash Program Erase controller */
+ 122:./Src/main.c  ****   HAL_FLASH_Unlock();
+ 123:./Src/main.c  **** 
+ 124:./Src/main.c  ****   /* EEPROM Init */
+ 125:./Src/main.c  ****   EE_Init();
  126:./Src/main.c  **** 
- 127:./Src/main.c  ****   lcd.pcf8574.PCF_I2C_ADDRESS = 0x27;
- 128:./Src/main.c  **** 	lcd.pcf8574.PCF_I2C_TIMEOUT = 1000;
- 129:./Src/main.c  **** 	lcd.pcf8574.i2c = hi2c2;
- 130:./Src/main.c  **** 	lcd.NUMBER_OF_LINES = NUMBER_OF_LINES_2;
- 131:./Src/main.c  **** 	lcd.type = TYPE0;
- 132:./Src/main.c  **** 
- 133:./Src/main.c  **** 	if(LCD_Init(&lcd)!=LCD_OK){
- 134:./Src/main.c  **** 		// error occured
- 135:./Src/main.c  **** 		//while(1);
- 136:./Src/main.c  ****     //TODO
- 137:./Src/main.c  **** 	}
- 138:./Src/main.c  **** 
- 139:./Src/main.c  **** 	LCD_ClearDisplay(&lcd);
- 140:./Src/main.c  ****   LCD_SetLocation(&lcd, 0, 0);
- 141:./Src/main.c  **** 	LCD_WriteString(&lcd, "TranspOtter V1.3");
- 142:./Src/main.c  **** 
- 143:./Src/main.c  ****   #ifdef SAFETYREMOTE
- 144:./Src/main.c  ****     char message[6] = "     ";
- 145:./Src/main.c  ****     HAL_I2C_Master_Receive(&hi2c2, (42), &message, 6, HAL_MAX_DELAY);
-ARM GAS  /tmp/ccEIq7ZR.s 			page 4
+ 127:./Src/main.c  **** 
+ 128:./Src/main.c  ****   lcd.pcf8574.PCF_I2C_ADDRESS = 0x27;
+ 129:./Src/main.c  **** 	lcd.pcf8574.PCF_I2C_TIMEOUT = 1000;
+ 130:./Src/main.c  **** 	lcd.pcf8574.i2c = hi2c2;
+ 131:./Src/main.c  **** 	lcd.NUMBER_OF_LINES = NUMBER_OF_LINES_2;
+ 132:./Src/main.c  **** 	lcd.type = TYPE0;
+ 133:./Src/main.c  **** 
+ 134:./Src/main.c  **** 	if(LCD_Init(&lcd)!=LCD_OK){
+ 135:./Src/main.c  **** 		// error occured
+ 136:./Src/main.c  **** 		//while(1);
+ 137:./Src/main.c  ****     //TODO
+ 138:./Src/main.c  **** 	}
+ 139:./Src/main.c  **** 
+ 140:./Src/main.c  **** 	LCD_ClearDisplay(&lcd);
+ 141:./Src/main.c  ****   LCD_SetLocation(&lcd, 0, 0);
+ 142:./Src/main.c  **** 	LCD_WriteString(&lcd, "TranspOtter V1.3");
+ 143:./Src/main.c  **** 
+ 144:./Src/main.c  **** 
+ARM GAS  /tmp/cckqBGja.s 			page 4
 
 
- 146:./Src/main.c  ****   #endif
- 147:./Src/main.c  **** 
- 148:./Src/main.c  ****   LCD_SetLocation(&lcd, 0, 1);
- 149:./Src/main.c  **** 	LCD_WriteString(&lcd, "Initializing...");
- 150:./Src/main.c  ****   //LCD_WriteString(&lcd, message);
- 151:./Src/main.c  **** 
- 152:./Src/main.c  ****   Buzzer_init();
- 153:./Src/main.c  ****   Led_init();
- 154:./Src/main.c  ****   IS_Charge_init();
- 155:./Src/main.c  **** 
- 156:./Src/main.c  ****   //DebugPin_init();
- 157:./Src/main.c  ****   HAL_Delay(550);
- 158:./Src/main.c  ****   int buttonTimeout = 0;
- 159:./Src/main.c  ****   while(IS_Button()) {
- 160:./Src/main.c  ****     Led_Set(0);
- 161:./Src/main.c  ****   }
- 162:./Src/main.c  **** 
- 163:./Src/main.c  ****   if (0) {
- 164:./Src/main.c  ****     ADC_L_init();
- 165:./Src/main.c  ****     ADC_R_init();
- 166:./Src/main.c  ****     MotorL_init();
- 167:./Src/main.c  ****     MotorR_init();
- 168:./Src/main.c  **** 
- 169:./Src/main.c  ****     EE_ReadVariable(VirtAddVarTab[0], &saveValue);
- 170:./Src/main.c  **** 
- 171:./Src/main.c  **** 
- 172:./Src/main.c  ****     //PID_init(0,900); //pwm limit
- 173:./Src/main.c  ****     //PID_set_L_costant(0.05,0.01,0.0);
- 174:./Src/main.c  ****     //PID_set_R_costant(2.0,0.5,0.0);
- 175:./Src/main.c  **** 
- 176:./Src/main.c  ****     applcation_init();
- 177:./Src/main.c  ****     Battery_TASK();
+ 145:./Src/main.c  **** 
+ 146:./Src/main.c  ****   LCD_SetLocation(&lcd, 0, 1);
+ 147:./Src/main.c  **** 	LCD_WriteString(&lcd, "Initializing...");
+ 148:./Src/main.c  ****   //LCD_WriteString(&lcd, message);
+ 149:./Src/main.c  **** 
+ 150:./Src/main.c  ****   Buzzer_init();
+ 151:./Src/main.c  ****   Led_init();
+ 152:./Src/main.c  ****   IS_Charge_init();
+ 153:./Src/main.c  **** 
+ 154:./Src/main.c  ****   //DebugPin_init();
+ 155:./Src/main.c  ****   HAL_Delay(550);
+ 156:./Src/main.c  ****   int buttonTimeout = 0;
+ 157:./Src/main.c  ****   uint8_t checkRemote = 1;
+ 158:./Src/main.c  ****   while(IS_Button()) {
+ 159:./Src/main.c  ****     buttonTimeout++;
+ 160:./Src/main.c  ****     HAL_Delay(100);
+ 161:./Src/main.c  ****     if(buttonTimeout > 20) {
+ 162:./Src/main.c  ****       LCD_ClearDisplay(&lcd);
+ 163:./Src/main.c  ****       HAL_Delay(5);
+ 164:./Src/main.c  ****       LCD_SetLocation(&lcd, 0, 0);
+ 165:./Src/main.c  ****     	LCD_WriteString(&lcd, "Starting without");
+ 166:./Src/main.c  ****       LCD_SetLocation(&lcd, 0, 1);
+ 167:./Src/main.c  ****     	LCD_WriteString(&lcd, "remote E-off!");
+ 168:./Src/main.c  ****       checkRemote = 0;
+ 169:./Src/main.c  ****       HAL_Delay(2000);
+ 170:./Src/main.c  ****     }
+ 171:./Src/main.c  ****   }
+ 172:./Src/main.c  **** 
+ 173:./Src/main.c  ****   if (0) {
+ 174:./Src/main.c  ****     ADC_L_init();
+ 175:./Src/main.c  ****     ADC_R_init();
+ 176:./Src/main.c  ****     MotorL_init();
+ 177:./Src/main.c  ****     MotorR_init();
  178:./Src/main.c  **** 
- 179:./Src/main.c  ****     MX_IWDG_Init();
+ 179:./Src/main.c  ****     EE_ReadVariable(VirtAddVarTab[0], &saveValue);
  180:./Src/main.c  **** 
- 181:./Src/main.c  ****     Led_Set(1);
- 182:./Src/main.c  ****     Buzzer_TwoBeep();
- 183:./Src/main.c  ****     HAL_Delay(250);
- 184:./Src/main.c  **** 
- 185:./Src/main.c  ****     MotorR_start();
- 186:./Src/main.c  ****     MotorL_start();
- 187:./Src/main.c  ****     //MotorR_pwm(80);
- 188:./Src/main.c  ****     //MotorL_pwm(-200);
- 189:./Src/main.c  **** 
- 190:./Src/main.c  ****     LCD_ClearDisplay(&lcd);
- 191:./Src/main.c  ****     HAL_Delay(5);
- 192:./Src/main.c  ****     LCD_SetLocation(&lcd, 0, 1);
- 193:./Src/main.c  ****   	LCD_WriteString(&lcd, "Bat:");
- 194:./Src/main.c  ****     LCD_SetLocation(&lcd, 8, 1);
- 195:./Src/main.c  ****     LCD_WriteString(&lcd, "V");
- 196:./Src/main.c  **** 
- 197:./Src/main.c  ****     LCD_SetLocation(&lcd, 15, 1);
- 198:./Src/main.c  ****     LCD_WriteString(&lcd, "A");
+ 181:./Src/main.c  **** 
+ 182:./Src/main.c  ****     //PID_init(0,900); //pwm limit
+ 183:./Src/main.c  ****     //PID_set_L_costant(0.05,0.01,0.0);
+ 184:./Src/main.c  ****     //PID_set_R_costant(2.0,0.5,0.0);
+ 185:./Src/main.c  **** 
+ 186:./Src/main.c  ****     applcation_init();
+ 187:./Src/main.c  ****     Battery_TASK();
+ 188:./Src/main.c  **** 
+ 189:./Src/main.c  ****     MX_IWDG_Init();
+ 190:./Src/main.c  **** 
+ 191:./Src/main.c  ****     Led_Set(1);
+ 192:./Src/main.c  ****     Buzzer_TwoBeep();
+ 193:./Src/main.c  ****     HAL_Delay(250);
+ 194:./Src/main.c  **** 
+ 195:./Src/main.c  ****     MotorR_start();
+ 196:./Src/main.c  ****     MotorL_start();
+ 197:./Src/main.c  ****     //MotorR_pwm(80);
+ 198:./Src/main.c  ****     //MotorL_pwm(-200);
  199:./Src/main.c  **** 
- 200:./Src/main.c  ****     LCD_SetLocation(&lcd, 0, 0);
- 201:./Src/main.c  ****   	LCD_WriteString(&lcd, "Len:");
- 202:./Src/main.c  ****     LCD_SetLocation(&lcd, 8, 0);
-ARM GAS  /tmp/ccEIq7ZR.s 			page 5
+ 200:./Src/main.c  ****     LCD_ClearDisplay(&lcd);
+ 201:./Src/main.c  ****     HAL_Delay(5);
+ARM GAS  /tmp/cckqBGja.s 			page 5
 
 
- 203:./Src/main.c  ****     LCD_WriteString(&lcd, "m(");
- 204:./Src/main.c  ****     LCD_SetLocation(&lcd, 14, 0);
- 205:./Src/main.c  ****     LCD_WriteString(&lcd, "m)");
+ 202:./Src/main.c  ****     LCD_SetLocation(&lcd, 0, 1);
+ 203:./Src/main.c  ****   	LCD_WriteString(&lcd, "Bat:");
+ 204:./Src/main.c  ****     LCD_SetLocation(&lcd, 8, 1);
+ 205:./Src/main.c  ****     LCD_WriteString(&lcd, "V");
  206:./Src/main.c  **** 
- 207:./Src/main.c  ****     uint32_t sinValue = 1999;
- 208:./Src/main.c  ****     uint8_t state = 0;
- 209:./Src/main.c  ****     int lastSpeedL = 0, lastSpeedR = 0, lastDistance = 0;
- 210:./Src/main.c  ****     float setDistance = saveValue / 1000.0;
- 211:./Src/main.c  ****     while(1){
- 212:./Src/main.c  ****       sinValue++;
- 213:./Src/main.c  ****       counterTemp = HAL_GetTick();
- 214:./Src/main.c  **** 
- 215:./Src/main.c  ****       if(IS_Button()) {
- 216:./Src/main.c  ****         MotorL_pwm(0);
- 217:./Src/main.c  ****         MotorR_pwm(0);
- 218:./Src/main.c  ****         while(IS_Button()) {
- 219:./Src/main.c  ****           HAL_IWDG_Refresh(&hiwdg);
- 220:./Src/main.c  ****         }
- 221:./Src/main.c  ****         Buzzer_OneBeep();
- 222:./Src/main.c  ****         HAL_Delay(300);
- 223:./Src/main.c  ****         if (IS_Button()) {
- 224:./Src/main.c  ****           while(IS_Button()) {
- 225:./Src/main.c  ****             HAL_IWDG_Refresh(&hiwdg);
- 226:./Src/main.c  ****           }
- 227:./Src/main.c  ****           Buzzer_OneLongBeep();
- 228:./Src/main.c  ****           HAL_Delay(350);
- 229:./Src/main.c  ****           Power_Set(0);
- 230:./Src/main.c  ****         } else {
- 231:./Src/main.c  ****           setDistance += 0.25;
- 232:./Src/main.c  ****           if (setDistance > 2.6) {
- 233:./Src/main.c  ****             setDistance = 0.25;
- 234:./Src/main.c  ****           }
- 235:./Src/main.c  ****           saveValue = setDistance * 1000;
- 236:./Src/main.c  ****           saveConfig();
- 237:./Src/main.c  ****         }
- 238:./Src/main.c  ****       }
- 239:./Src/main.c  **** 
- 240:./Src/main.c  ****       #define VEL_P     0.9
- 241:./Src/main.c  **** 
- 242:./Src/main.c  ****       if ((sinValue) % (250) == 0) {
- 243:./Src/main.c  ****         uint16_t distance = CLAMP(((int)ADC_PA3()) - 180, 0, 4095);
- 244:./Src/main.c  ****         int16_t steering = ADC_PA2() - 2048;
- 245:./Src/main.c  ****         int speedL, speedR;
- 246:./Src/main.c  **** 
- 247:./Src/main.c  ****         float vel_scale = get_powerMax(GET_BatteryAverage()) * VEL_P;
- 248:./Src/main.c  **** 
- 249:./Src/main.c  ****         speedL = -CLAMP(((distance - (int)(setDistance * 1345)) * vel_scale) +  CLAMP((steering / 1
- 250:./Src/main.c  ****         speedR = -CLAMP(((distance - (int)(setDistance * 1345)) * vel_scale) -  CLAMP((steering / 1
+ 207:./Src/main.c  ****     LCD_SetLocation(&lcd, 15, 1);
+ 208:./Src/main.c  ****     LCD_WriteString(&lcd, "A");
+ 209:./Src/main.c  **** 
+ 210:./Src/main.c  ****     LCD_SetLocation(&lcd, 0, 0);
+ 211:./Src/main.c  ****   	LCD_WriteString(&lcd, "Len:");
+ 212:./Src/main.c  ****     LCD_SetLocation(&lcd, 8, 0);
+ 213:./Src/main.c  ****     LCD_WriteString(&lcd, "m(");
+ 214:./Src/main.c  ****     LCD_SetLocation(&lcd, 14, 0);
+ 215:./Src/main.c  ****     LCD_WriteString(&lcd, "m)");
+ 216:./Src/main.c  **** 
+ 217:./Src/main.c  ****     uint32_t sinValue = 1999;
+ 218:./Src/main.c  ****     uint8_t state = 0;
+ 219:./Src/main.c  ****     int lastSpeedL = 0, lastSpeedR = 0, lastDistance = 0;
+ 220:./Src/main.c  ****     float setDistance = saveValue / 1000.0;
+ 221:./Src/main.c  ****     while(1){
+ 222:./Src/main.c  ****       sinValue++;
+ 223:./Src/main.c  ****       counterTemp = HAL_GetTick();
+ 224:./Src/main.c  **** 
+ 225:./Src/main.c  ****       if(IS_Button()) {
+ 226:./Src/main.c  ****         MotorL_pwm(0);
+ 227:./Src/main.c  ****         MotorR_pwm(0);
+ 228:./Src/main.c  ****         while(IS_Button()) {
+ 229:./Src/main.c  ****           HAL_IWDG_Refresh(&hiwdg);
+ 230:./Src/main.c  ****         }
+ 231:./Src/main.c  ****         Buzzer_OneBeep();
+ 232:./Src/main.c  ****         HAL_Delay(300);
+ 233:./Src/main.c  ****         if (IS_Button()) {
+ 234:./Src/main.c  ****           while(IS_Button()) {
+ 235:./Src/main.c  ****             HAL_IWDG_Refresh(&hiwdg);
+ 236:./Src/main.c  ****           }
+ 237:./Src/main.c  ****           Buzzer_OneLongBeep();
+ 238:./Src/main.c  ****           HAL_Delay(350);
+ 239:./Src/main.c  ****           Power_Set(0);
+ 240:./Src/main.c  ****         } else {
+ 241:./Src/main.c  ****           setDistance += 0.25;
+ 242:./Src/main.c  ****           if (setDistance > 2.6) {
+ 243:./Src/main.c  ****             setDistance = 0.25;
+ 244:./Src/main.c  ****           }
+ 245:./Src/main.c  ****           saveValue = setDistance * 1000;
+ 246:./Src/main.c  ****           saveConfig();
+ 247:./Src/main.c  ****         }
+ 248:./Src/main.c  ****       }
+ 249:./Src/main.c  **** 
+ 250:./Src/main.c  ****       #define VEL_P     0.9
  251:./Src/main.c  **** 
- 252:./Src/main.c  ****         if ((speedL < lastSpeedL + 50 && speedL > lastSpeedL - 50) && (speedR < lastSpeedR + 50 && 
- 253:./Src/main.c  ****           if (distance - (int)(setDistance * 1345) > -200) {
- 254:./Src/main.c  ****             MotorL_pwm(speedL);
- 255:./Src/main.c  ****             MotorR_pwm(speedR);
- 256:./Src/main.c  ****           } else {
- 257:./Src/main.c  ****             MotorL_pwm(0);
- 258:./Src/main.c  ****             MotorR_pwm(0);
- 259:./Src/main.c  ****           }
-ARM GAS  /tmp/ccEIq7ZR.s 			page 6
+ 252:./Src/main.c  ****       if ((sinValue) % (250) == 0) {
+ 253:./Src/main.c  ****         uint16_t distance = CLAMP(((int)ADC_PA3()) - 180, 0, 4095);
+ 254:./Src/main.c  ****         int16_t steering = ADC_PA2() - 2048;
+ 255:./Src/main.c  ****         int speedL, speedR;
+ 256:./Src/main.c  **** 
+ 257:./Src/main.c  ****         float vel_scale = get_powerMax(GET_BatteryAverage()) * VEL_P;
+ 258:./Src/main.c  **** 
+ARM GAS  /tmp/cckqBGja.s 			page 6
 
 
- 260:./Src/main.c  ****         }
- 261:./Src/main.c  ****         if ((distance / 1345.0) - setDistance > 0.7 && (lastDistance / 1345.0) - setDistance > 0.7)
- 262:./Src/main.c  ****           MotorL_pwm(0);
- 263:./Src/main.c  ****           MotorR_pwm(0);
- 264:./Src/main.c  ****           Buzzer_OneLongBeep();
- 265:./Src/main.c  ****           LCD_ClearDisplay(&lcd);
- 266:./Src/main.c  ****           HAL_Delay(5);
- 267:./Src/main.c  ****           LCD_SetLocation(&lcd, 0, 0);
- 268:./Src/main.c  ****         	LCD_WriteString(&lcd, "Emergency Off!");
- 269:./Src/main.c  ****           LCD_SetLocation(&lcd, 0, 1);
- 270:./Src/main.c  ****         	LCD_WriteString(&lcd, "Keeper to fast.");
- 271:./Src/main.c  ****           HAL_Delay(500);
- 272:./Src/main.c  ****           HAL_IWDG_Refresh(&hiwdg);
- 273:./Src/main.c  ****           HAL_Delay(500);
- 274:./Src/main.c  ****           Power_Set(0);
- 275:./Src/main.c  ****         }
- 276:./Src/main.c  **** 
- 277:./Src/main.c  ****         if ((sinValue) % (2000) == 0) {
- 278:./Src/main.c  ****           LCD_SetLocation(&lcd, 4, 0);
- 279:./Src/main.c  ****           LCD_WriteFloat(&lcd,distance/1345.0,2);
- 280:./Src/main.c  ****           LCD_SetLocation(&lcd, 10, 0);
- 281:./Src/main.c  ****           LCD_WriteFloat(&lcd,setDistance,2);
- 282:./Src/main.c  ****           LCD_SetLocation(&lcd, 4, 1);
- 283:./Src/main.c  ****           LCD_WriteFloat(&lcd,GET_BatteryAverage(),1);
- 284:./Src/main.c  ****           LCD_SetLocation(&lcd, 11, 1);
- 285:./Src/main.c  ****           LCD_WriteFloat(&lcd,MAX(ABS(getMotorCurrentR() * 0.02), ABS(getMotorCurrentL() * 0.02)),2
- 286:./Src/main.c  ****         }
- 287:./Src/main.c  **** 
- 288:./Src/main.c  **** 
- 289:./Src/main.c  ****         //char str[100];
- 290:./Src/main.c  ****         //memset(&str[0], 0, sizeof(str));
- 291:./Src/main.c  ****         //sprintf(str, "%i;%i\n\r", distance, steering);
- 292:./Src/main.c  ****         //Console_Log(str);
- 293:./Src/main.c  **** 
- 294:./Src/main.c  **** 
- 295:./Src/main.c  ****         lastSpeedL = speedL;
- 296:./Src/main.c  ****         lastSpeedR = speedR;
- 297:./Src/main.c  ****         lastDistance = distance;
- 298:./Src/main.c  ****       }
- 299:./Src/main.c  **** 
- 300:./Src/main.c  **** 
- 301:./Src/main.c  **** 
- 302:./Src/main.c  ****       Battery_TASK();
- 303:./Src/main.c  ****       //Current_Motor_TASK();
- 304:./Src/main.c  ****       //sWiiNunchuck_TASK();
- 305:./Src/main.c  ****       //applcation_TASK();
- 306:./Src/main.c  ****       //Telemetry_TASK();
- 307:./Src/main.c  **** 
- 308:./Src/main.c  ****       //Batteria Scarica?
- 309:./Src/main.c  ****       if(ABS(getMotorCurrentR() * 0.02) > 20.0 || ABS(getMotorCurrentL() * 0.02) > 20.0){
- 310:./Src/main.c  ****         MotorL_pwm(0);
- 311:./Src/main.c  ****         MotorR_pwm(0);
- 312:./Src/main.c  ****         Buzzer_OneLongBeep();
- 313:./Src/main.c  ****         LCD_ClearDisplay(&lcd);
- 314:./Src/main.c  ****         HAL_Delay(5);
- 315:./Src/main.c  ****         LCD_SetLocation(&lcd, 0, 0);
- 316:./Src/main.c  ****         LCD_WriteString(&lcd, "Emergency Off!");
-ARM GAS  /tmp/ccEIq7ZR.s 			page 7
+ 259:./Src/main.c  ****         speedL = -CLAMP(((distance - (int)(setDistance * 1345)) * vel_scale) +  CLAMP((steering / 1
+ 260:./Src/main.c  ****         speedR = -CLAMP(((distance - (int)(setDistance * 1345)) * vel_scale) -  CLAMP((steering / 1
+ 261:./Src/main.c  **** 
+ 262:./Src/main.c  ****         if ((speedL < lastSpeedL + 50 && speedL > lastSpeedL - 50) && (speedR < lastSpeedR + 50 && 
+ 263:./Src/main.c  ****           if (distance - (int)(setDistance * 1345) > -200 && motorsArmed) {
+ 264:./Src/main.c  ****             MotorL_pwm(speedL);
+ 265:./Src/main.c  ****             MotorR_pwm(speedR);
+ 266:./Src/main.c  ****           } else {
+ 267:./Src/main.c  ****             MotorL_pwm(0);
+ 268:./Src/main.c  ****             MotorR_pwm(0);
+ 269:./Src/main.c  ****           }
+ 270:./Src/main.c  ****         }
+ 271:./Src/main.c  ****         if ((distance / 1345.0) - setDistance > 0.7 && (lastDistance / 1345.0) - setDistance > 0.7)
+ 272:./Src/main.c  ****           MotorL_pwm(0);
+ 273:./Src/main.c  ****           MotorR_pwm(0);
+ 274:./Src/main.c  ****           Buzzer_OneLongBeep();
+ 275:./Src/main.c  ****           LCD_ClearDisplay(&lcd);
+ 276:./Src/main.c  ****           HAL_Delay(5);
+ 277:./Src/main.c  ****           LCD_SetLocation(&lcd, 0, 0);
+ 278:./Src/main.c  ****         	LCD_WriteString(&lcd, "Emergency Off!");
+ 279:./Src/main.c  ****           LCD_SetLocation(&lcd, 0, 1);
+ 280:./Src/main.c  ****         	LCD_WriteString(&lcd, "Keeper to fast.");
+ 281:./Src/main.c  ****           HAL_Delay(500);
+ 282:./Src/main.c  ****           HAL_IWDG_Refresh(&hiwdg);
+ 283:./Src/main.c  ****           HAL_Delay(500);
+ 284:./Src/main.c  ****           Power_Set(0);
+ 285:./Src/main.c  ****         }
+ 286:./Src/main.c  **** 
+ 287:./Src/main.c  ****         if ((sinValue) % (2000) == 0) {
+ 288:./Src/main.c  ****           LCD_SetLocation(&lcd, 4, 0);
+ 289:./Src/main.c  ****           LCD_WriteFloat(&lcd,distance/1345.0,2);
+ 290:./Src/main.c  ****           LCD_SetLocation(&lcd, 10, 0);
+ 291:./Src/main.c  ****           LCD_WriteFloat(&lcd,setDistance,2);
+ 292:./Src/main.c  ****           LCD_SetLocation(&lcd, 4, 1);
+ 293:./Src/main.c  ****           LCD_WriteFloat(&lcd,GET_BatteryAverage(),1);
+ 294:./Src/main.c  ****           LCD_SetLocation(&lcd, 11, 1);
+ 295:./Src/main.c  ****           LCD_WriteFloat(&lcd,MAX(ABS(getMotorCurrentR() * 0.02), ABS(getMotorCurrentL() * 0.02)),2
+ 296:./Src/main.c  ****         }
+ 297:./Src/main.c  **** 
+ 298:./Src/main.c  ****         if ((sinValue) % (2000) == 0 && checkRemote) {
+ 299:./Src/main.c  ****           if ((sinValue) % (20000) == 0) {
+ 300:./Src/main.c  ****             checkRemoteStatus(GET_BatteryAverage());
+ 301:./Src/main.c  ****           } else {
+ 302:./Src/main.c  ****             checkRemoteStatus(0);
+ 303:./Src/main.c  ****           }
+ 304:./Src/main.c  ****         }
+ 305:./Src/main.c  **** 
+ 306:./Src/main.c  **** 
+ 307:./Src/main.c  ****         //char str[100];
+ 308:./Src/main.c  ****         //memset(&str[0], 0, sizeof(str));
+ 309:./Src/main.c  ****         //sprintf(str, "%i;%i\n\r", distance, steering);
+ 310:./Src/main.c  ****         //Console_Log(str);
+ 311:./Src/main.c  **** 
+ 312:./Src/main.c  **** 
+ 313:./Src/main.c  ****         lastSpeedL = speedL;
+ 314:./Src/main.c  ****         lastSpeedR = speedR;
+ 315:./Src/main.c  ****         lastDistance = distance;
+ARM GAS  /tmp/cckqBGja.s 			page 7
 
 
- 317:./Src/main.c  ****         LCD_SetLocation(&lcd, 0, 1);
- 318:./Src/main.c  ****         LCD_WriteString(&lcd, "Overcurrent.");
- 319:./Src/main.c  ****         HAL_Delay(500);
- 320:./Src/main.c  ****         HAL_IWDG_Refresh(&hiwdg);
- 321:./Src/main.c  ****         HAL_Delay(500);
- 322:./Src/main.c  ****         Power_Set(0);
- 323:./Src/main.c  ****       }
- 324:./Src/main.c  **** 
- 325:./Src/main.c  ****       if(GET_BatteryAverage() < 31.0){
- 326:./Src/main.c  ****         MotorL_pwm(0);
- 327:./Src/main.c  ****         MotorR_pwm(0);
- 328:./Src/main.c  ****         Buzzer_OneLongBeep();
- 329:./Src/main.c  ****         LCD_ClearDisplay(&lcd);
- 330:./Src/main.c  ****         HAL_Delay(5);
- 331:./Src/main.c  ****         LCD_SetLocation(&lcd, 0, 0);
- 332:./Src/main.c  ****         LCD_WriteString(&lcd, "Emergency Off!");
- 333:./Src/main.c  ****         LCD_SetLocation(&lcd, 0, 1);
- 334:./Src/main.c  ****         LCD_WriteString(&lcd, "Battery low.");
- 335:./Src/main.c  ****         HAL_Delay(500);
- 336:./Src/main.c  ****         HAL_IWDG_Refresh(&hiwdg);
- 337:./Src/main.c  ****         HAL_Delay(500);
- 338:./Src/main.c  ****         Power_Set(0);
- 339:./Src/main.c  ****       }
- 340:./Src/main.c  ****       //In Carica?
- 341:./Src/main.c  ****       /*if(IS_Charge()==0){
- 342:./Src/main.c  ****         WAIT_CHARGE_FINISH();
- 343:./Src/main.c  ****       }*/
+ 316:./Src/main.c  ****       }
+ 317:./Src/main.c  **** 
+ 318:./Src/main.c  ****       safetyChecks();
+ 319:./Src/main.c  **** 
+ 320:./Src/main.c  ****       HAL_IWDG_Refresh(&hiwdg);   //819mS
+ 321:./Src/main.c  **** 
+ 322:./Src/main.c  ****       counterTempTT = HAL_GetTick() - counterTemp;
+ 323:./Src/main.c  ****     }
+ 324:./Src/main.c  ****   } else {
+ 325:./Src/main.c  ****     ADC_L_init();
+ 326:./Src/main.c  ****     ADC_R_init();
+ 327:./Src/main.c  ****     MotorL_init();
+ 328:./Src/main.c  ****     MotorR_init();
+ 329:./Src/main.c  **** 
+ 330:./Src/main.c  ****     HAL_GPIO_DeInit(GPIOA, GPIO_PIN_2|GPIO_PIN_3);
+ 331:./Src/main.c  **** 
+ 332:./Src/main.c  ****     Telemetry_init();
+ 333:./Src/main.c  **** 
+ 334:./Src/main.c  ****     EE_ReadVariable(VirtAddVarTab[0], &saveValue);
+ 335:./Src/main.c  **** 
+ 336:./Src/main.c  ****     //PID_init(0,900); //pwm limit
+ 337:./Src/main.c  ****     //PID_set_L_costant(0.05,0.01,0.0);
+ 338:./Src/main.c  ****     //PID_set_R_costant(2.0,0.5,0.0);
+ 339:./Src/main.c  **** 
+ 340:./Src/main.c  ****     applcation_init();
+ 341:./Src/main.c  ****     Battery_TASK();
+ 342:./Src/main.c  **** 
+ 343:./Src/main.c  ****     MX_IWDG_Init();
  344:./Src/main.c  **** 
- 345:./Src/main.c  ****       HAL_IWDG_Refresh(&hiwdg);   //819mS
- 346:./Src/main.c  **** 
- 347:./Src/main.c  ****       counterTempTT = HAL_GetTick() - counterTemp;
- 348:./Src/main.c  ****     }
- 349:./Src/main.c  ****   } else {
- 350:./Src/main.c  ****     ADC_L_init();
- 351:./Src/main.c  ****     ADC_R_init();
- 352:./Src/main.c  ****     MotorL_init();
- 353:./Src/main.c  ****     MotorR_init();
- 354:./Src/main.c  **** 
- 355:./Src/main.c  ****     HAL_GPIO_DeInit(GPIOA, GPIO_PIN_2|GPIO_PIN_3);
- 356:./Src/main.c  **** 
- 357:./Src/main.c  ****     Telemetry_init();
- 358:./Src/main.c  **** 
- 359:./Src/main.c  ****     EE_ReadVariable(VirtAddVarTab[0], &saveValue);
+ 345:./Src/main.c  ****     Led_Set(1);
+ 346:./Src/main.c  ****     Buzzer_TwoBeep();
+ 347:./Src/main.c  ****     HAL_Delay(250);
+ 348:./Src/main.c  **** 
+ 349:./Src/main.c  ****     MotorR_start();
+ 350:./Src/main.c  ****     MotorL_start();
+ 351:./Src/main.c  ****     //MotorR_pwm(80);
+ 352:./Src/main.c  ****     //MotorL_pwm(-200);
+ 353:./Src/main.c  **** 
+ 354:./Src/main.c  ****     LCD_ClearDisplay(&lcd);
+ 355:./Src/main.c  ****     HAL_Delay(5);
+ 356:./Src/main.c  ****     LCD_SetLocation(&lcd, 0, 1);
+ 357:./Src/main.c  ****   	LCD_WriteString(&lcd, "Bat:");
+ 358:./Src/main.c  ****     LCD_SetLocation(&lcd, 8, 1);
+ 359:./Src/main.c  ****     LCD_WriteString(&lcd, "V");
  360:./Src/main.c  **** 
- 361:./Src/main.c  ****     //PID_init(0,900); //pwm limit
- 362:./Src/main.c  ****     //PID_set_L_costant(0.05,0.01,0.0);
- 363:./Src/main.c  ****     //PID_set_R_costant(2.0,0.5,0.0);
- 364:./Src/main.c  **** 
- 365:./Src/main.c  ****     applcation_init();
- 366:./Src/main.c  ****     Battery_TASK();
+ 361:./Src/main.c  ****     LCD_SetLocation(&lcd, 15, 1);
+ 362:./Src/main.c  ****     LCD_WriteString(&lcd, "A");
+ 363:./Src/main.c  **** 
+ 364:./Src/main.c  ****     LCD_SetLocation(&lcd, 0, 0);
+ 365:./Src/main.c  ****   	LCD_WriteString(&lcd, "Controlled by UART");
+ 366:./Src/main.c  **** 
  367:./Src/main.c  **** 
- 368:./Src/main.c  ****     MX_IWDG_Init();
- 369:./Src/main.c  **** 
- 370:./Src/main.c  ****     Led_Set(1);
- 371:./Src/main.c  ****     Buzzer_TwoBeep();
- 372:./Src/main.c  ****     HAL_Delay(250);
- 373:./Src/main.c  **** 
-ARM GAS  /tmp/ccEIq7ZR.s 			page 8
+ 368:./Src/main.c  ****     uint32_t sinValue = 0;
+ 369:./Src/main.c  ****     int lastSpeedL = 0, lastSpeedR = 0;
+ 370:./Src/main.c  ****     while(1){
+ 371:./Src/main.c  ****       sinValue++;
+ 372:./Src/main.c  ****       if(IS_Button()) {
+ARM GAS  /tmp/cckqBGja.s 			page 8
 
 
- 374:./Src/main.c  ****     MotorR_start();
- 375:./Src/main.c  ****     MotorL_start();
- 376:./Src/main.c  ****     //MotorR_pwm(80);
- 377:./Src/main.c  ****     //MotorL_pwm(-200);
- 378:./Src/main.c  **** 
- 379:./Src/main.c  ****     LCD_ClearDisplay(&lcd);
- 380:./Src/main.c  ****     HAL_Delay(5);
- 381:./Src/main.c  ****     LCD_SetLocation(&lcd, 0, 1);
- 382:./Src/main.c  ****   	LCD_WriteString(&lcd, "Bat:");
- 383:./Src/main.c  ****     LCD_SetLocation(&lcd, 8, 1);
- 384:./Src/main.c  ****     LCD_WriteString(&lcd, "V");
- 385:./Src/main.c  **** 
- 386:./Src/main.c  ****     LCD_SetLocation(&lcd, 15, 1);
- 387:./Src/main.c  ****     LCD_WriteString(&lcd, "A");
- 388:./Src/main.c  **** 
- 389:./Src/main.c  ****     LCD_SetLocation(&lcd, 0, 0);
- 390:./Src/main.c  ****   	LCD_WriteString(&lcd, "Controlled by UART");
- 391:./Src/main.c  **** 
- 392:./Src/main.c  **** 
- 393:./Src/main.c  ****     uint32_t sinValue = 0;
- 394:./Src/main.c  ****     int lastSpeedL = 0, lastSpeedR = 0;
- 395:./Src/main.c  ****     while(1){
- 396:./Src/main.c  ****       sinValue++;
- 397:./Src/main.c  ****       if(IS_Button()) {
- 398:./Src/main.c  ****         while(IS_Button()) {
- 399:./Src/main.c  ****           HAL_IWDG_Refresh(&hiwdg);
- 400:./Src/main.c  ****         }
- 401:./Src/main.c  ****         Buzzer_OneLongBeep();
- 402:./Src/main.c  ****         HAL_Delay(350);
- 403:./Src/main.c  ****         Power_Set(0);
+ 373:./Src/main.c  ****         while(IS_Button()) {
+ 374:./Src/main.c  ****           HAL_IWDG_Refresh(&hiwdg);
+ 375:./Src/main.c  ****         }
+ 376:./Src/main.c  ****         Buzzer_OneLongBeep();
+ 377:./Src/main.c  ****         HAL_Delay(350);
+ 378:./Src/main.c  ****         Power_Set(0);
+ 379:./Src/main.c  ****       }
+ 380:./Src/main.c  **** 
+ 381:./Src/main.c  ****       if ((sinValue) % (200) == 0) {
+ 382:./Src/main.c  ****         int speedL = -CLAMP(getMotorR(), -1000, 1000);
+ 383:./Src/main.c  ****         int speedR = -CLAMP(getMotorL(), -1000, 1000);
+ 384:./Src/main.c  ****         if ((speedL != lastSpeedL || speedR != lastSpeedR) && motorsArmed) {
+ 385:./Src/main.c  ****           MotorL_pwm(speedL);
+ 386:./Src/main.c  ****           MotorR_pwm(speedR);
+ 387:./Src/main.c  ****           lastSpeedL = speedL;
+ 388:./Src/main.c  ****           lastSpeedR = speedR;
+ 389:./Src/main.c  ****         }
+ 390:./Src/main.c  **** 
+ 391:./Src/main.c  ****         char str[100];
+ 392:./Src/main.c  ****         memset(&str[0], 0, sizeof(str));
+ 393:./Src/main.c  ****         sprintf(str, "%i;%i\n\r", speedL, speedR);
+ 394:./Src/main.c  ****         Console_Log(str);
+ 395:./Src/main.c  ****       }
+ 396:./Src/main.c  **** 
+ 397:./Src/main.c  ****       safetyChecks();
+ 398:./Src/main.c  **** 
+ 399:./Src/main.c  ****       if ((sinValue) % (2000) == 0) {
+ 400:./Src/main.c  ****         LCD_SetLocation(&lcd, 4, 1);
+ 401:./Src/main.c  ****         LCD_WriteFloat(&lcd,GET_BatteryAverage(),1);
+ 402:./Src/main.c  ****         LCD_SetLocation(&lcd, 11, 1);
+ 403:./Src/main.c  ****         LCD_WriteFloat(&lcd,MAX(ABS(getMotorCurrentR() * 0.02), ABS(getMotorCurrentL() * 0.02)),2);
  404:./Src/main.c  ****       }
  405:./Src/main.c  **** 
- 406:./Src/main.c  ****       if ((sinValue) % (200) == 0) {
- 407:./Src/main.c  ****         int speedL = -CLAMP(getMotorR(), -1000, 1000);
- 408:./Src/main.c  ****         int speedR = -CLAMP(getMotorL(), -1000, 1000);
- 409:./Src/main.c  ****         if (speedL != lastSpeedL || speedR != lastSpeedR) {
- 410:./Src/main.c  ****           MotorL_pwm(speedL);
- 411:./Src/main.c  ****           MotorR_pwm(speedR);
- 412:./Src/main.c  ****           lastSpeedL = speedL;
- 413:./Src/main.c  ****           lastSpeedR = speedR;
- 414:./Src/main.c  ****         }
- 415:./Src/main.c  **** 
- 416:./Src/main.c  ****         char str[100];
- 417:./Src/main.c  ****         memset(&str[0], 0, sizeof(str));
- 418:./Src/main.c  ****         sprintf(str, "%i;%i\n\r", speedL, speedR);
- 419:./Src/main.c  ****         Console_Log(str);
- 420:./Src/main.c  ****       }
+ 406:./Src/main.c  ****       if ((sinValue) % (2000) == 0 && checkRemote) {
+ 407:./Src/main.c  ****         if ((sinValue) % (20000) == 0) {
+ 408:./Src/main.c  ****           checkRemoteStatus(GET_BatteryAverage());
+ 409:./Src/main.c  ****         } else {
+ 410:./Src/main.c  ****           checkRemoteStatus(0);
+ 411:./Src/main.c  ****         }
+ 412:./Src/main.c  ****       }
+ 413:./Src/main.c  **** 
+ 414:./Src/main.c  **** 
+ 415:./Src/main.c  ****       HAL_IWDG_Refresh(&hiwdg);   //819mS
+ 416:./Src/main.c  **** 
+ 417:./Src/main.c  ****       counterTempTT = HAL_GetTick() - counterTemp;
+ 418:./Src/main.c  ****     }
+ 419:./Src/main.c  ****   }
+ 420:./Src/main.c  **** }
  421:./Src/main.c  **** 
- 422:./Src/main.c  ****       Battery_TASK();
- 423:./Src/main.c  **** 
- 424:./Src/main.c  ****       if(ABS(getMotorCurrentR() * 0.02) > 20.0 || ABS(getMotorCurrentL() * 0.02) > 20.0){
- 425:./Src/main.c  ****         MotorL_pwm(0);
- 426:./Src/main.c  ****         MotorR_pwm(0);
- 427:./Src/main.c  ****         Buzzer_OneLongBeep();
- 428:./Src/main.c  ****         LCD_ClearDisplay(&lcd);
- 429:./Src/main.c  ****         HAL_Delay(5);
- 430:./Src/main.c  ****         LCD_SetLocation(&lcd, 0, 0);
-ARM GAS  /tmp/ccEIq7ZR.s 			page 9
+ 422:./Src/main.c  **** void checkRemoteStatus(float voltage) {
+  29              		.loc 1 422 0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 8
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              	.LVL0:
+  34 0000 10B5     		push	{r4, lr}
+  35              	.LCFI0:
+ARM GAS  /tmp/cckqBGja.s 			page 9
 
 
- 431:./Src/main.c  ****         LCD_WriteString(&lcd, "Emergency Off!");
- 432:./Src/main.c  ****         LCD_SetLocation(&lcd, 0, 1);
- 433:./Src/main.c  ****         LCD_WriteString(&lcd, "Overcurrent.");
- 434:./Src/main.c  ****         HAL_Delay(500);
- 435:./Src/main.c  ****         HAL_IWDG_Refresh(&hiwdg);
- 436:./Src/main.c  ****         HAL_Delay(500);
- 437:./Src/main.c  ****         Power_Set(0);
+  36              		.cfi_def_cfa_offset 8
+  37              		.cfi_offset 4, -8
+  38              		.cfi_offset 14, -4
+  39 0002 84B0     		sub	sp, sp, #16
+  40              	.LCFI1:
+  41              		.cfi_def_cfa_offset 24
+ 423:./Src/main.c  ****   if (voltage < 1.0) {
+  42              		.loc 1 423 0
+  43 0004 4FF07E51 		mov	r1, #1065353216
+  44 0008 FFF7FEFF 		bl	__aeabi_fcmplt
+  45              	.LVL1:
+  46 000c 60B3     		cbz	r0, .L1
+  47              	.LBB2:
+ 424:./Src/main.c  ****     uint8_t message[1] = {0xFF};
+  48              		.loc 1 424 0
+  49 000e 04AA     		add	r2, sp, #16
+  50 0010 FF23     		movs	r3, #255
+  51 0012 02F8043D 		strb	r3, [r2, #-4]!
+ 425:./Src/main.c  ****     #ifdef SAFETYREMOTE
+ 426:./Src/main.c  ****       HAL_I2C_Master_Receive(&hi2c2, (42), &message, 1, HAL_MAX_DELAY);
+  52              		.loc 1 426 0
+  53 0016 4FF0FF33 		mov	r3, #-1
+  54 001a 0093     		str	r3, [sp]
+  55 001c 0123     		movs	r3, #1
+  56 001e 2A21     		movs	r1, #42
+  57 0020 1248     		ldr	r0, .L8
+  58 0022 FFF7FEFF 		bl	HAL_I2C_Master_Receive
+  59              	.LVL2:
+ 427:./Src/main.c  ****     #endif
+ 428:./Src/main.c  **** 
+ 429:./Src/main.c  ****     if (message[0] == 123) {
+  60              		.loc 1 429 0
+  61 0026 9DF80C30 		ldrb	r3, [sp, #12]	@ zero_extendqisi2
+  62 002a 7B2B     		cmp	r3, #123
+  63 002c 03D1     		bne	.L4
+ 430:./Src/main.c  ****       motorsArmed = 1;
+  64              		.loc 1 430 0
+  65 002e 0122     		movs	r2, #1
+  66 0030 0F4B     		ldr	r3, .L8+4
+  67 0032 1A70     		strb	r2, [r3]
+  68 0034 18E0     		b	.L1
+  69              	.L4:
+ 431:./Src/main.c  ****     } else {
+ 432:./Src/main.c  ****       message[0] = 0xFF;
+  70              		.loc 1 432 0
+  71 0036 04AA     		add	r2, sp, #16
+  72 0038 FF23     		movs	r3, #255
+  73 003a 02F8043D 		strb	r3, [r2, #-4]!
+ 433:./Src/main.c  ****       HAL_I2C_Master_Receive(&hi2c2, (42), &message, 1, HAL_MAX_DELAY);
+  74              		.loc 1 433 0
+  75 003e 4FF0FF33 		mov	r3, #-1
+  76 0042 0093     		str	r3, [sp]
+  77 0044 0123     		movs	r3, #1
+  78 0046 2A21     		movs	r1, #42
+  79 0048 0848     		ldr	r0, .L8
+  80 004a FFF7FEFF 		bl	HAL_I2C_Master_Receive
+  81              	.LVL3:
+ARM GAS  /tmp/cckqBGja.s 			page 10
+
+
+ 434:./Src/main.c  ****       if (message[0] != 123) {
+  82              		.loc 1 434 0
+  83 004e 9DF80C30 		ldrb	r3, [sp, #12]	@ zero_extendqisi2
+  84 0052 7B2B     		cmp	r3, #123
+  85 0054 08D0     		beq	.L1
+ 435:./Src/main.c  ****         motorsArmed = 0;
+  86              		.loc 1 435 0
+  87 0056 0024     		movs	r4, #0
+  88 0058 054B     		ldr	r3, .L8+4
+  89 005a 1C70     		strb	r4, [r3]
+ 436:./Src/main.c  ****         MotorL_pwm(0);
+  90              		.loc 1 436 0
+  91 005c 2046     		mov	r0, r4
+  92 005e FFF7FEFF 		bl	MotorL_pwm
+  93              	.LVL4:
+ 437:./Src/main.c  ****         MotorR_pwm(0);
+  94              		.loc 1 437 0
+  95 0062 2046     		mov	r0, r4
+  96 0064 FFF7FEFF 		bl	MotorR_pwm
+  97              	.LVL5:
+  98              	.L1:
+  99              	.LBE2:
  438:./Src/main.c  ****       }
- 439:./Src/main.c  **** 
- 440:./Src/main.c  ****       if(GET_BatteryAverage() < 31.0){
- 441:./Src/main.c  ****         MotorL_pwm(0);
- 442:./Src/main.c  ****         MotorR_pwm(0);
- 443:./Src/main.c  ****         Buzzer_OneLongBeep();
- 444:./Src/main.c  ****         LCD_ClearDisplay(&lcd);
- 445:./Src/main.c  ****         HAL_Delay(5);
- 446:./Src/main.c  ****         LCD_SetLocation(&lcd, 0, 0);
- 447:./Src/main.c  ****         LCD_WriteString(&lcd, "Emergency Off!");
- 448:./Src/main.c  ****         LCD_SetLocation(&lcd, 0, 1);
- 449:./Src/main.c  ****         LCD_WriteString(&lcd, "Battery low.");
- 450:./Src/main.c  ****         HAL_Delay(500);
- 451:./Src/main.c  ****         HAL_IWDG_Refresh(&hiwdg);
- 452:./Src/main.c  ****         HAL_Delay(500);
- 453:./Src/main.c  ****         Power_Set(0);
- 454:./Src/main.c  ****       }
- 455:./Src/main.c  **** 
- 456:./Src/main.c  **** 
- 457:./Src/main.c  ****       HAL_IWDG_Refresh(&hiwdg);   //819mS
- 458:./Src/main.c  **** 
- 459:./Src/main.c  ****       counterTempTT = HAL_GetTick() - counterTemp;
- 460:./Src/main.c  ****     }
- 461:./Src/main.c  ****   }
- 462:./Src/main.c  **** }
- 463:./Src/main.c  **** 
- 464:./Src/main.c  **** void saveConfig() {
-  28              		.loc 1 464 0
-  29              		.cfi_startproc
-  30              		@ args = 0, pretend = 0, frame = 0
-  31              		@ frame_needed = 0, uses_anonymous_args = 0
-  32 0000 08B5     		push	{r3, lr}
-  33              	.LCFI0:
-  34              		.cfi_def_cfa_offset 8
-  35              		.cfi_offset 3, -8
-  36              		.cfi_offset 14, -4
- 465:./Src/main.c  ****   EE_WriteVariable(VirtAddVarTab[0], saveValue);
-  37              		.loc 1 465 0
-  38 0002 034B     		ldr	r3, .L3
-  39 0004 1988     		ldrh	r1, [r3]
-  40 0006 034B     		ldr	r3, .L3+4
-  41 0008 1888     		ldrh	r0, [r3]
-  42 000a FFF7FEFF 		bl	EE_WriteVariable
-  43              	.LVL0:
-  44 000e 08BD     		pop	{r3, pc}
-  45              	.L4:
-  46              		.align	2
-  47              	.L3:
-  48 0010 00000000 		.word	.LANCHOR0
-  49 0014 00000000 		.word	.LANCHOR1
-ARM GAS  /tmp/ccEIq7ZR.s 			page 10
+ 439:./Src/main.c  ****     }
+ 440:./Src/main.c  ****   }
+ 441:./Src/main.c  **** }
+ 100              		.loc 1 441 0
+ 101 0068 04B0     		add	sp, sp, #16
+ 102              	.LCFI2:
+ 103              		.cfi_def_cfa_offset 8
+ 104              		@ sp needed
+ 105 006a 10BD     		pop	{r4, pc}
+ 106              	.L9:
+ 107              		.align	2
+ 108              	.L8:
+ 109 006c 00000000 		.word	hi2c2
+ 110 0070 00000000 		.word	.LANCHOR0
+ 111              		.cfi_endproc
+ 112              	.LFE65:
+ 114              		.global	__aeabi_i2d
+ 115              		.global	__aeabi_dmul
+ 116              		.global	__aeabi_dcmplt
+ 117              		.global	__aeabi_dcmpgt
+ 118              		.section	.text.safetyChecks,"ax",%progbits
+ 119              		.align	2
+ 120              		.global	safetyChecks
+ 121              		.thumb
+ 122              		.thumb_func
+ 124              	safetyChecks:
+ 125              	.LFB66:
+ 442:./Src/main.c  **** 
+ 443:./Src/main.c  **** void safetyChecks() {
+ 126              		.loc 1 443 0
+ 127              		.cfi_startproc
+ 128              		@ args = 0, pretend = 0, frame = 0
+ 129              		@ frame_needed = 0, uses_anonymous_args = 0
+ 130 0000 10B5     		push	{r4, lr}
+ARM GAS  /tmp/cckqBGja.s 			page 11
 
 
-  50              		.cfi_endproc
-  51              	.LFE65:
-  53              		.section	.text.HAL_ADC_ConvCpltCallback,"ax",%progbits
-  54              		.align	2
-  55              		.global	HAL_ADC_ConvCpltCallback
-  56              		.thumb
-  57              		.thumb_func
-  59              	HAL_ADC_ConvCpltCallback:
-  60              	.LFB68:
- 466:./Src/main.c  **** }
- 467:./Src/main.c  **** 
- 468:./Src/main.c  **** /** System Clock Configuration
- 469:./Src/main.c  **** */
- 470:./Src/main.c  **** void SystemClock_Config(void)
- 471:./Src/main.c  **** {
- 472:./Src/main.c  **** 
- 473:./Src/main.c  ****   RCC_OscInitTypeDef RCC_OscInitStruct;
- 474:./Src/main.c  ****   RCC_ClkInitTypeDef RCC_ClkInitStruct;
- 475:./Src/main.c  ****   RCC_PeriphCLKInitTypeDef PeriphClkInit;
- 476:./Src/main.c  **** 
- 477:./Src/main.c  ****     /**Initializes the CPU, AHB and APB busses clocks
- 478:./Src/main.c  ****     */
- 479:./Src/main.c  ****   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
- 480:./Src/main.c  ****   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
- 481:./Src/main.c  ****   RCC_OscInitStruct.HSICalibrationValue = 16;
- 482:./Src/main.c  ****   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
- 483:./Src/main.c  ****   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI_DIV2;
- 484:./Src/main.c  ****   RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL16;
- 485:./Src/main.c  ****   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
- 486:./Src/main.c  ****   {
- 487:./Src/main.c  ****     Error_Handler();
- 488:./Src/main.c  ****   }
- 489:./Src/main.c  **** 
- 490:./Src/main.c  ****     /**Initializes the CPU, AHB and APB busses clocks
- 491:./Src/main.c  ****     */
- 492:./Src/main.c  ****   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
- 493:./Src/main.c  ****                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
- 494:./Src/main.c  ****   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
- 495:./Src/main.c  ****   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
- 496:./Src/main.c  ****   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
- 497:./Src/main.c  ****   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
- 498:./Src/main.c  **** 
- 499:./Src/main.c  ****   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
- 500:./Src/main.c  ****   {
- 501:./Src/main.c  ****     Error_Handler();
- 502:./Src/main.c  ****   }
- 503:./Src/main.c  **** 
- 504:./Src/main.c  ****   PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC;
- 505:./Src/main.c  ****   PeriphClkInit.AdcClockSelection = RCC_ADCPCLK2_DIV8;
- 506:./Src/main.c  ****   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
- 507:./Src/main.c  ****   {
- 508:./Src/main.c  ****     Error_Handler();
- 509:./Src/main.c  ****   }
- 510:./Src/main.c  **** 
- 511:./Src/main.c  ****     /**Configure the Systick interrupt time
- 512:./Src/main.c  ****     */
- 513:./Src/main.c  ****   HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);
-ARM GAS  /tmp/ccEIq7ZR.s 			page 11
+ 131              	.LCFI3:
+ 132              		.cfi_def_cfa_offset 8
+ 133              		.cfi_offset 4, -8
+ 134              		.cfi_offset 14, -4
+ 444:./Src/main.c  ****   Battery_TASK();
+ 135              		.loc 1 444 0
+ 136 0002 FFF7FEFF 		bl	Battery_TASK
+ 137              	.LVL6:
+ 138              	.LBB3:
+ 445:./Src/main.c  **** 
+ 446:./Src/main.c  ****   if(ABS(getMotorCurrentR() * 0.02) > 20.0 || ABS(getMotorCurrentL() * 0.02) > 20.0){
+ 139              		.loc 1 446 0
+ 140 0006 FFF7FEFF 		bl	getMotorCurrentR
+ 141              	.LVL7:
+ 142 000a FFF7FEFF 		bl	__aeabi_i2d
+ 143              	.LVL8:
+ 144 000e 5CA3     		adr	r3, .L27
+ 145 0010 D3E90023 		ldrd	r2, [r3]
+ 146 0014 FFF7FEFF 		bl	__aeabi_dmul
+ 147              	.LVL9:
+ 148 0018 0022     		movs	r2, #0
+ 149 001a 0023     		movs	r3, #0
+ 150 001c FFF7FEFF 		bl	__aeabi_dcmplt
+ 151              	.LVL10:
+ 152 0020 78B1     		cbz	r0, .L24
+ 153              		.loc 1 446 0 is_stmt 0 discriminator 1
+ 154 0022 FFF7FEFF 		bl	getMotorCurrentR
+ 155              	.LVL11:
+ 156 0026 FFF7FEFF 		bl	__aeabi_i2d
+ 157              	.LVL12:
+ 158 002a 55A3     		adr	r3, .L27
+ 159 002c D3E90023 		ldrd	r2, [r3]
+ 160 0030 FFF7FEFF 		bl	__aeabi_dmul
+ 161              	.LVL13:
+ 162 0034 0022     		movs	r2, #0
+ 163 0036 544B     		ldr	r3, .L27+8
+ 164 0038 FFF7FEFF 		bl	__aeabi_dcmplt
+ 165              	.LVL14:
+ 166 003c 0028     		cmp	r0, #0
+ 167 003e 39D1     		bne	.L13
+ 168 0040 0DE0     		b	.L14
+ 169              	.L24:
+ 170              		.loc 1 446 0 discriminator 2
+ 171 0042 FFF7FEFF 		bl	getMotorCurrentR
+ 172              	.LVL15:
+ 173 0046 FFF7FEFF 		bl	__aeabi_i2d
+ 174              	.LVL16:
+ 175 004a 4DA3     		adr	r3, .L27
+ 176 004c D3E90023 		ldrd	r2, [r3]
+ 177 0050 FFF7FEFF 		bl	__aeabi_dmul
+ 178              	.LVL17:
+ 179 0054 0022     		movs	r2, #0
+ 180 0056 4D4B     		ldr	r3, .L27+12
+ 181 0058 FFF7FEFF 		bl	__aeabi_dcmpgt
+ 182              	.LVL18:
+ 183 005c 50BB     		cbnz	r0, .L13
+ 184              	.L14:
+ARM GAS  /tmp/cckqBGja.s 			page 12
 
 
- 514:./Src/main.c  **** 
- 515:./Src/main.c  ****     /**Configure the Systick
- 516:./Src/main.c  ****     */
- 517:./Src/main.c  ****   HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
- 518:./Src/main.c  **** 
- 519:./Src/main.c  ****   /* SysTick_IRQn interrupt configuration */
- 520:./Src/main.c  ****   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
- 521:./Src/main.c  **** }
- 522:./Src/main.c  **** 
- 523:./Src/main.c  **** /* IWDG init function */
- 524:./Src/main.c  **** static void MX_IWDG_Init(void)
- 525:./Src/main.c  **** {
- 526:./Src/main.c  ****   __HAL_RCC_WWDG_CLK_ENABLE();
- 527:./Src/main.c  ****   hiwdg.Instance = IWDG;
- 528:./Src/main.c  ****   hiwdg.Init.Prescaler = IWDG_PRESCALER_8;
- 529:./Src/main.c  ****   hiwdg.Init.Reload = 4095;
- 530:./Src/main.c  ****   if (HAL_IWDG_Init(&hiwdg) != HAL_OK)
- 531:./Src/main.c  ****   {
- 532:./Src/main.c  ****     Error_Handler();
- 533:./Src/main.c  ****   }
- 534:./Src/main.c  ****   HAL_IWDG_Start(&hiwdg);
- 535:./Src/main.c  **** }
- 536:./Src/main.c  **** 
- 537:./Src/main.c  **** 
- 538:./Src/main.c  **** void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc){
-  61              		.loc 1 538 0
-  62              		.cfi_startproc
-  63              		@ args = 0, pretend = 0, frame = 0
-  64              		@ frame_needed = 0, uses_anonymous_args = 0
-  65              	.LVL1:
-  66 0000 10B5     		push	{r4, lr}
-  67              	.LCFI1:
-  68              		.cfi_def_cfa_offset 8
-  69              		.cfi_offset 4, -8
-  70              		.cfi_offset 14, -4
-  71 0002 0446     		mov	r4, r0
- 539:./Src/main.c  ****   if(hadc->Instance == ADC1){
-  72              		.loc 1 539 0
-  73 0004 0268     		ldr	r2, [r0]
-  74 0006 064B     		ldr	r3, .L9
-  75 0008 9A42     		cmp	r2, r3
-  76 000a 01D1     		bne	.L6
- 540:./Src/main.c  ****     ADC_R_callback();
-  77              		.loc 1 540 0
-  78 000c FFF7FEFF 		bl	ADC_R_callback
-  79              	.LVL2:
-  80              	.L6:
- 541:./Src/main.c  ****   }
- 542:./Src/main.c  ****   if(hadc->Instance == ADC3){
-  81              		.loc 1 542 0
-  82 0010 2268     		ldr	r2, [r4]
-  83 0012 044B     		ldr	r3, .L9+4
-  84 0014 9A42     		cmp	r2, r3
-  85 0016 01D1     		bne	.L5
- 543:./Src/main.c  ****     ADC_L_callback();
-  86              		.loc 1 543 0
-  87 0018 FFF7FEFF 		bl	ADC_L_callback
-ARM GAS  /tmp/ccEIq7ZR.s 			page 12
+ 185              		.loc 1 446 0 discriminator 3
+ 186 005e FFF7FEFF 		bl	getMotorCurrentL
+ 187              	.LVL19:
+ 188 0062 FFF7FEFF 		bl	__aeabi_i2d
+ 189              	.LVL20:
+ 190 0066 46A3     		adr	r3, .L27
+ 191 0068 D3E90023 		ldrd	r2, [r3]
+ 192 006c FFF7FEFF 		bl	__aeabi_dmul
+ 193              	.LVL21:
+ 194 0070 0022     		movs	r2, #0
+ 195 0072 0023     		movs	r3, #0
+ 196 0074 FFF7FEFF 		bl	__aeabi_dcmplt
+ 197              	.LVL22:
+ 198 0078 70B1     		cbz	r0, .L25
+ 199              		.loc 1 446 0 discriminator 4
+ 200 007a FFF7FEFF 		bl	getMotorCurrentL
+ 201              	.LVL23:
+ 202 007e FFF7FEFF 		bl	__aeabi_i2d
+ 203              	.LVL24:
+ 204 0082 3FA3     		adr	r3, .L27
+ 205 0084 D3E90023 		ldrd	r2, [r3]
+ 206 0088 FFF7FEFF 		bl	__aeabi_dmul
+ 207              	.LVL25:
+ 208 008c 0022     		movs	r2, #0
+ 209 008e 3E4B     		ldr	r3, .L27+8
+ 210 0090 FFF7FEFF 		bl	__aeabi_dcmplt
+ 211              	.LVL26:
+ 212 0094 70B9     		cbnz	r0, .L13
+ 213 0096 3CE0     		b	.L17
+ 214              	.L25:
+ 215              		.loc 1 446 0 discriminator 5
+ 216 0098 FFF7FEFF 		bl	getMotorCurrentL
+ 217              	.LVL27:
+ 218 009c FFF7FEFF 		bl	__aeabi_i2d
+ 219              	.LVL28:
+ 220 00a0 37A3     		adr	r3, .L27
+ 221 00a2 D3E90023 		ldrd	r2, [r3]
+ 222 00a6 FFF7FEFF 		bl	__aeabi_dmul
+ 223              	.LVL29:
+ 224 00aa 0022     		movs	r2, #0
+ 225 00ac 374B     		ldr	r3, .L27+12
+ 226 00ae FFF7FEFF 		bl	__aeabi_dcmpgt
+ 227              	.LVL30:
+ 228 00b2 70B3     		cbz	r0, .L17
+ 229              	.L13:
+ 230              	.LBB4:
+ 447:./Src/main.c  ****     MotorL_pwm(0);
+ 231              		.loc 1 447 0 is_stmt 1
+ 232 00b4 0020     		movs	r0, #0
+ 233 00b6 FFF7FEFF 		bl	MotorL_pwm
+ 234              	.LVL31:
+ 448:./Src/main.c  ****     MotorR_pwm(0);
+ 235              		.loc 1 448 0
+ 236 00ba 0020     		movs	r0, #0
+ 237 00bc FFF7FEFF 		bl	MotorR_pwm
+ 238              	.LVL32:
+ 449:./Src/main.c  ****     Buzzer_OneLongBeep();
+ARM GAS  /tmp/cckqBGja.s 			page 13
 
 
-  88              	.LVL3:
-  89              	.L5:
-  90 001c 10BD     		pop	{r4, pc}
-  91              	.LVL4:
-  92              	.L10:
-  93 001e 00BF     		.align	2
-  94              	.L9:
-  95 0020 00240140 		.word	1073816576
-  96 0024 003C0140 		.word	1073822720
-  97              		.cfi_endproc
-  98              	.LFE68:
- 100              		.section	.text.Error_Handler,"ax",%progbits
- 101              		.align	2
- 102              		.global	Error_Handler
- 103              		.thumb
- 104              		.thumb_func
- 106              	Error_Handler:
- 107              	.LFB69:
- 544:./Src/main.c  ****   }
- 545:./Src/main.c  **** }
- 546:./Src/main.c  **** 
- 547:./Src/main.c  **** 
- 548:./Src/main.c  **** /**
- 549:./Src/main.c  ****   * @brief  This function is executed in case of error occurrence.
- 550:./Src/main.c  ****   * @param  None
- 551:./Src/main.c  ****   * @retval None
- 552:./Src/main.c  ****   */
- 553:./Src/main.c  **** void Error_Handler(void)
- 554:./Src/main.c  **** {
- 108              		.loc 1 554 0
- 109              		.cfi_startproc
- 110              		@ Volatile: function does not return.
- 111              		@ args = 0, pretend = 0, frame = 0
- 112              		@ frame_needed = 0, uses_anonymous_args = 0
- 113 0000 08B5     		push	{r3, lr}
- 114              	.LCFI2:
- 115              		.cfi_def_cfa_offset 8
- 116              		.cfi_offset 3, -8
- 117              		.cfi_offset 14, -4
- 555:./Src/main.c  ****   /* USER CODE BEGIN Error_Handler */
- 556:./Src/main.c  ****   /* User can add his own implementation to report the HAL error return state */
- 557:./Src/main.c  ****   MotorR_stop();
- 118              		.loc 1 557 0
- 119 0002 FFF7FEFF 		bl	MotorR_stop
- 120              	.LVL5:
- 558:./Src/main.c  ****   MotorL_stop();
- 121              		.loc 1 558 0
- 122 0006 FFF7FEFF 		bl	MotorL_stop
- 123              	.LVL6:
- 124              	.L12:
- 125 000a FEE7     		b	.L12
- 126              		.cfi_endproc
- 127              	.LFE69:
- 129              		.section	.text.MX_IWDG_Init,"ax",%progbits
- 130              		.align	2
- 131              		.thumb
- 132              		.thumb_func
-ARM GAS  /tmp/ccEIq7ZR.s 			page 13
+ 239              		.loc 1 449 0
+ 240 00c0 FFF7FEFF 		bl	Buzzer_OneLongBeep
+ 241              	.LVL33:
+ 450:./Src/main.c  ****     LCD_ClearDisplay(&lcd);
+ 242              		.loc 1 450 0
+ 243 00c4 324C     		ldr	r4, .L27+16
+ 244 00c6 2046     		mov	r0, r4
+ 245 00c8 FFF7FEFF 		bl	LCD_ClearDisplay
+ 246              	.LVL34:
+ 451:./Src/main.c  ****     HAL_Delay(5);
+ 247              		.loc 1 451 0
+ 248 00cc 0520     		movs	r0, #5
+ 249 00ce FFF7FEFF 		bl	HAL_Delay
+ 250              	.LVL35:
+ 452:./Src/main.c  ****     LCD_SetLocation(&lcd, 0, 0);
+ 251              		.loc 1 452 0
+ 252 00d2 0022     		movs	r2, #0
+ 253 00d4 1146     		mov	r1, r2
+ 254 00d6 2046     		mov	r0, r4
+ 255 00d8 FFF7FEFF 		bl	LCD_SetLocation
+ 256              	.LVL36:
+ 453:./Src/main.c  ****     LCD_WriteString(&lcd, "Emergency Off!");
+ 257              		.loc 1 453 0
+ 258 00dc 2D49     		ldr	r1, .L27+20
+ 259 00de 2046     		mov	r0, r4
+ 260 00e0 FFF7FEFF 		bl	LCD_WriteString
+ 261              	.LVL37:
+ 454:./Src/main.c  ****     LCD_SetLocation(&lcd, 0, 1);
+ 262              		.loc 1 454 0
+ 263 00e4 0122     		movs	r2, #1
+ 264 00e6 0021     		movs	r1, #0
+ 265 00e8 2046     		mov	r0, r4
+ 266 00ea FFF7FEFF 		bl	LCD_SetLocation
+ 267              	.LVL38:
+ 455:./Src/main.c  ****     LCD_WriteString(&lcd, "Overcurrent.");
+ 268              		.loc 1 455 0
+ 269 00ee 2A49     		ldr	r1, .L27+24
+ 270 00f0 2046     		mov	r0, r4
+ 271 00f2 FFF7FEFF 		bl	LCD_WriteString
+ 272              	.LVL39:
+ 456:./Src/main.c  ****     HAL_Delay(500);
+ 273              		.loc 1 456 0
+ 274 00f6 4FF4FA70 		mov	r0, #500
+ 275 00fa FFF7FEFF 		bl	HAL_Delay
+ 276              	.LVL40:
+ 457:./Src/main.c  ****     HAL_IWDG_Refresh(&hiwdg);
+ 277              		.loc 1 457 0
+ 278 00fe 2748     		ldr	r0, .L27+28
+ 279 0100 FFF7FEFF 		bl	HAL_IWDG_Refresh
+ 280              	.LVL41:
+ 458:./Src/main.c  ****     HAL_Delay(500);
+ 281              		.loc 1 458 0
+ 282 0104 4FF4FA70 		mov	r0, #500
+ 283 0108 FFF7FEFF 		bl	HAL_Delay
+ 284              	.LVL42:
+ 459:./Src/main.c  ****     Power_Set(0);
+ 285              		.loc 1 459 0
+ARM GAS  /tmp/cckqBGja.s 			page 14
 
 
- 134              	MX_IWDG_Init:
- 135              	.LFB67:
- 525:./Src/main.c  ****   __HAL_RCC_WWDG_CLK_ENABLE();
- 136              		.loc 1 525 0
- 137              		.cfi_startproc
- 138              		@ args = 0, pretend = 0, frame = 8
- 139              		@ frame_needed = 0, uses_anonymous_args = 0
- 140 0000 00B5     		push	{lr}
- 141              	.LCFI3:
- 142              		.cfi_def_cfa_offset 4
- 143              		.cfi_offset 14, -4
- 144 0002 83B0     		sub	sp, sp, #12
- 145              	.LCFI4:
- 146              		.cfi_def_cfa_offset 16
- 147              	.LBB2:
- 526:./Src/main.c  ****   hiwdg.Instance = IWDG;
- 148              		.loc 1 526 0
- 149 0004 0E4B     		ldr	r3, .L17
- 150 0006 DA69     		ldr	r2, [r3, #28]
- 151 0008 42F40062 		orr	r2, r2, #2048
- 152 000c DA61     		str	r2, [r3, #28]
- 153 000e DB69     		ldr	r3, [r3, #28]
- 154 0010 03F40063 		and	r3, r3, #2048
- 155 0014 0193     		str	r3, [sp, #4]
- 156 0016 019B     		ldr	r3, [sp, #4]
- 157              	.LBE2:
- 527:./Src/main.c  ****   hiwdg.Init.Prescaler = IWDG_PRESCALER_8;
- 158              		.loc 1 527 0
- 159 0018 0A48     		ldr	r0, .L17+4
- 160 001a 0B4B     		ldr	r3, .L17+8
- 161 001c 0360     		str	r3, [r0]
- 528:./Src/main.c  ****   hiwdg.Init.Reload = 4095;
- 162              		.loc 1 528 0
- 163 001e 0123     		movs	r3, #1
- 164 0020 4360     		str	r3, [r0, #4]
- 529:./Src/main.c  ****   if (HAL_IWDG_Init(&hiwdg) != HAL_OK)
- 165              		.loc 1 529 0
- 166 0022 40F6FF73 		movw	r3, #4095
- 167 0026 8360     		str	r3, [r0, #8]
- 530:./Src/main.c  ****   {
- 168              		.loc 1 530 0
- 169 0028 FFF7FEFF 		bl	HAL_IWDG_Init
- 170              	.LVL7:
- 171 002c 08B1     		cbz	r0, .L15
- 532:./Src/main.c  ****   }
- 172              		.loc 1 532 0
- 173 002e FFF7FEFF 		bl	Error_Handler
- 174              	.LVL8:
- 175              	.L15:
- 534:./Src/main.c  **** }
- 176              		.loc 1 534 0
- 177 0032 0448     		ldr	r0, .L17+4
- 178 0034 FFF7FEFF 		bl	HAL_IWDG_Start
- 179              	.LVL9:
- 535:./Src/main.c  **** 
- 180              		.loc 1 535 0
- 181 0038 03B0     		add	sp, sp, #12
-ARM GAS  /tmp/ccEIq7ZR.s 			page 14
-
-
- 182              	.LCFI5:
- 183              		.cfi_def_cfa_offset 4
- 184              		@ sp needed
- 185 003a 5DF804FB 		ldr	pc, [sp], #4
- 186              	.L18:
- 187 003e 00BF     		.align	2
- 188              	.L17:
- 189 0040 00100240 		.word	1073876992
- 190 0044 00000000 		.word	hiwdg
- 191 0048 00300040 		.word	1073754112
- 192              		.cfi_endproc
- 193              	.LFE67:
- 195              		.section	.text.SystemClock_Config,"ax",%progbits
- 196              		.align	2
- 197              		.global	SystemClock_Config
- 198              		.thumb
- 199              		.thumb_func
- 201              	SystemClock_Config:
- 202              	.LFB66:
- 471:./Src/main.c  **** 
- 203              		.loc 1 471 0
- 204              		.cfi_startproc
- 205              		@ args = 0, pretend = 0, frame = 88
- 206              		@ frame_needed = 0, uses_anonymous_args = 0
- 207 0000 00B5     		push	{lr}
- 208              	.LCFI6:
- 209              		.cfi_def_cfa_offset 4
- 210              		.cfi_offset 14, -4
- 211 0002 97B0     		sub	sp, sp, #92
- 212              	.LCFI7:
- 213              		.cfi_def_cfa_offset 96
- 479:./Src/main.c  ****   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
- 214              		.loc 1 479 0
- 215 0004 0223     		movs	r3, #2
- 216 0006 0C93     		str	r3, [sp, #48]
- 480:./Src/main.c  ****   RCC_OscInitStruct.HSICalibrationValue = 16;
- 217              		.loc 1 480 0
- 218 0008 0122     		movs	r2, #1
- 219 000a 1092     		str	r2, [sp, #64]
- 481:./Src/main.c  ****   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
- 220              		.loc 1 481 0
- 221 000c 1022     		movs	r2, #16
- 222 000e 1192     		str	r2, [sp, #68]
- 482:./Src/main.c  ****   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI_DIV2;
- 223              		.loc 1 482 0
- 224 0010 1393     		str	r3, [sp, #76]
- 483:./Src/main.c  ****   RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL16;
- 225              		.loc 1 483 0
- 226 0012 0023     		movs	r3, #0
- 227 0014 1493     		str	r3, [sp, #80]
- 484:./Src/main.c  ****   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
- 228              		.loc 1 484 0
- 229 0016 4FF46013 		mov	r3, #3670016
- 230 001a 1593     		str	r3, [sp, #84]
- 485:./Src/main.c  ****   {
- 231              		.loc 1 485 0
- 232 001c 0CA8     		add	r0, sp, #48
-ARM GAS  /tmp/ccEIq7ZR.s 			page 15
-
-
- 233 001e FFF7FEFF 		bl	HAL_RCC_OscConfig
- 234              	.LVL10:
- 235 0022 08B1     		cbz	r0, .L20
- 487:./Src/main.c  ****   }
- 236              		.loc 1 487 0
- 237 0024 FFF7FEFF 		bl	Error_Handler
- 238              	.LVL11:
- 239              	.L20:
- 492:./Src/main.c  ****                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
- 240              		.loc 1 492 0
- 241 0028 0F23     		movs	r3, #15
- 242 002a 0793     		str	r3, [sp, #28]
- 494:./Src/main.c  ****   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
- 243              		.loc 1 494 0
- 244 002c 0221     		movs	r1, #2
- 245 002e 0891     		str	r1, [sp, #32]
- 495:./Src/main.c  ****   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
- 246              		.loc 1 495 0
- 247 0030 0023     		movs	r3, #0
- 248 0032 0993     		str	r3, [sp, #36]
- 496:./Src/main.c  ****   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
- 249              		.loc 1 496 0
- 250 0034 4FF48062 		mov	r2, #1024
- 251 0038 0A92     		str	r2, [sp, #40]
- 497:./Src/main.c  **** 
- 252              		.loc 1 497 0
- 253 003a 0B93     		str	r3, [sp, #44]
- 499:./Src/main.c  ****   {
- 254              		.loc 1 499 0
- 255 003c 07A8     		add	r0, sp, #28
- 256 003e FFF7FEFF 		bl	HAL_RCC_ClockConfig
- 257              	.LVL12:
- 258 0042 08B1     		cbz	r0, .L21
- 501:./Src/main.c  ****   }
- 259              		.loc 1 501 0
- 260 0044 FFF7FEFF 		bl	Error_Handler
- 261              	.LVL13:
- 262              	.L21:
- 504:./Src/main.c  ****   PeriphClkInit.AdcClockSelection = RCC_ADCPCLK2_DIV8;
- 263              		.loc 1 504 0
- 264 0048 0223     		movs	r3, #2
- 265 004a 0193     		str	r3, [sp, #4]
- 505:./Src/main.c  ****   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
- 266              		.loc 1 505 0
- 267 004c 4FF44043 		mov	r3, #49152
- 268 0050 0393     		str	r3, [sp, #12]
- 506:./Src/main.c  ****   {
- 269              		.loc 1 506 0
- 270 0052 01A8     		add	r0, sp, #4
- 271 0054 FFF7FEFF 		bl	HAL_RCCEx_PeriphCLKConfig
- 272              	.LVL14:
- 273 0058 08B1     		cbz	r0, .L22
- 508:./Src/main.c  ****   }
- 274              		.loc 1 508 0
- 275 005a FFF7FEFF 		bl	Error_Handler
- 276              	.LVL15:
- 277              	.L22:
-ARM GAS  /tmp/ccEIq7ZR.s 			page 16
-
-
- 513:./Src/main.c  **** 
- 278              		.loc 1 513 0
- 279 005e FFF7FEFF 		bl	HAL_RCC_GetHCLKFreq
- 280              	.LVL16:
- 281 0062 094B     		ldr	r3, .L24
- 282 0064 A3FB0030 		umull	r3, r0, r3, r0
- 283 0068 8009     		lsrs	r0, r0, #6
- 284 006a FFF7FEFF 		bl	HAL_SYSTICK_Config
- 285              	.LVL17:
- 517:./Src/main.c  **** 
- 286              		.loc 1 517 0
- 287 006e 0420     		movs	r0, #4
- 288 0070 FFF7FEFF 		bl	HAL_SYSTICK_CLKSourceConfig
- 289              	.LVL18:
- 520:./Src/main.c  **** }
- 290              		.loc 1 520 0
- 291 0074 0022     		movs	r2, #0
- 292 0076 1146     		mov	r1, r2
- 293 0078 4FF0FF30 		mov	r0, #-1
- 294 007c FFF7FEFF 		bl	HAL_NVIC_SetPriority
- 295              	.LVL19:
- 521:./Src/main.c  **** 
- 296              		.loc 1 521 0
- 297 0080 17B0     		add	sp, sp, #92
- 298              	.LCFI8:
- 299              		.cfi_def_cfa_offset 4
- 300              		@ sp needed
- 301 0082 5DF804FB 		ldr	pc, [sp], #4
- 302              	.L25:
- 303 0086 00BF     		.align	2
- 304              	.L24:
- 305 0088 D34D6210 		.word	274877907
- 306              		.cfi_endproc
- 307              	.LFE66:
- 309              		.global	__aeabi_i2d
- 310              		.global	__aeabi_dmul
- 311              		.global	__aeabi_dcmplt
- 312              		.global	__aeabi_dcmpgt
- 313              		.global	__aeabi_fcmplt
- 314              		.section	.text.main,"ax",%progbits
- 315              		.align	2
- 316              		.global	main
- 317              		.thumb
- 318              		.thumb_func
- 320              	main:
- 321              	.LFB64:
- 105:./Src/main.c  ****   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
- 322              		.loc 1 105 0
- 323              		.cfi_startproc
- 324              		@ args = 0, pretend = 0, frame = 112
- 325              		@ frame_needed = 0, uses_anonymous_args = 0
- 326 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
- 327              	.LCFI9:
- 328              		.cfi_def_cfa_offset 24
- 329              		.cfi_offset 4, -24
- 330              		.cfi_offset 5, -20
- 331              		.cfi_offset 6, -16
-ARM GAS  /tmp/ccEIq7ZR.s 			page 17
-
-
- 332              		.cfi_offset 7, -12
- 333              		.cfi_offset 8, -8
- 334              		.cfi_offset 14, -4
- 335 0004 9EB0     		sub	sp, sp, #120
- 336              	.LCFI10:
- 337              		.cfi_def_cfa_offset 144
- 107:./Src/main.c  **** 
- 338              		.loc 1 107 0
- 339 0006 FFF7FEFF 		bl	HAL_Init
- 340              	.LVL20:
- 110:./Src/main.c  **** 
- 341              		.loc 1 110 0
- 342 000a FFF7FEFF 		bl	SystemClock_Config
- 343              	.LVL21:
- 112:./Src/main.c  **** 
- 344              		.loc 1 112 0
- 345 000e FFF7FEFF 		bl	Button_init
- 346              	.LVL22:
- 114:./Src/main.c  **** 
- 347              		.loc 1 114 0
- 348 0012 0120     		movs	r0, #1
- 349 0014 FFF7FEFF 		bl	Power_Set
- 350              	.LVL23:
- 118:./Src/main.c  **** 
- 351              		.loc 1 118 0
- 352 0018 FFF7FEFF 		bl	MX_I2C2_Init
- 353              	.LVL24:
- 121:./Src/main.c  **** 
- 354              		.loc 1 121 0
- 355 001c FFF7FEFF 		bl	HAL_FLASH_Unlock
- 356              	.LVL25:
- 124:./Src/main.c  **** 
- 357              		.loc 1 124 0
- 358 0020 FFF7FEFF 		bl	EE_Init
- 359              	.LVL26:
- 127:./Src/main.c  **** 	lcd.pcf8574.PCF_I2C_TIMEOUT = 1000;
- 360              		.loc 1 127 0
- 361 0024 AA4E     		ldr	r6, .L58+8
- 362 0026 2723     		movs	r3, #39
- 363 0028 86F84030 		strb	r3, [r6, #64]
- 128:./Src/main.c  **** 	lcd.pcf8574.i2c = hi2c2;
- 364              		.loc 1 128 0
- 365 002c 4FF47A73 		mov	r3, #1000
- 366 0030 7364     		str	r3, [r6, #68]
- 129:./Src/main.c  **** 	lcd.NUMBER_OF_LINES = NUMBER_OF_LINES_2;
- 367              		.loc 1 129 0
- 368 0032 A84F     		ldr	r7, .L58+12
- 369 0034 06F14804 		add	r4, r6, #72
- 370 0038 3D46     		mov	r5, r7
- 371 003a 0FCD     		ldmia	r5!, {r0, r1, r2, r3}
- 372 003c 0FC4     		stmia	r4!, {r0, r1, r2, r3}
- 373 003e 0FCD     		ldmia	r5!, {r0, r1, r2, r3}
- 374 0040 0FC4     		stmia	r4!, {r0, r1, r2, r3}
- 375 0042 0FCD     		ldmia	r5!, {r0, r1, r2, r3}
- 376 0044 0FC4     		stmia	r4!, {r0, r1, r2, r3}
- 377 0046 95E80700 		ldmia	r5, {r0, r1, r2}
- 378 004a 84E80700 		stmia	r4, {r0, r1, r2}
-ARM GAS  /tmp/ccEIq7ZR.s 			page 18
-
-
- 130:./Src/main.c  **** 	lcd.type = TYPE0;
- 379              		.loc 1 130 0
- 380 004e 0125     		movs	r5, #1
- 381 0050 3570     		strb	r5, [r6]
- 131:./Src/main.c  **** 
- 382              		.loc 1 131 0
- 383 0052 0024     		movs	r4, #0
- 384 0054 86F83C40 		strb	r4, [r6, #60]
- 133:./Src/main.c  **** 		// error occured
- 385              		.loc 1 133 0
- 386 0058 3046     		mov	r0, r6
- 387 005a FFF7FEFF 		bl	LCD_Init
- 388              	.LVL27:
- 139:./Src/main.c  ****   LCD_SetLocation(&lcd, 0, 0);
- 389              		.loc 1 139 0
- 390 005e 3046     		mov	r0, r6
- 391 0060 FFF7FEFF 		bl	LCD_ClearDisplay
- 392              	.LVL28:
- 140:./Src/main.c  **** 	LCD_WriteString(&lcd, "TranspOtter V1.3");
- 393              		.loc 1 140 0
- 394 0064 2246     		mov	r2, r4
- 395 0066 2146     		mov	r1, r4
- 396 0068 3046     		mov	r0, r6
- 397 006a FFF7FEFF 		bl	LCD_SetLocation
- 398              	.LVL29:
- 141:./Src/main.c  **** 
- 399              		.loc 1 141 0
- 400 006e 9A49     		ldr	r1, .L58+16
- 401 0070 3046     		mov	r0, r6
- 402 0072 FFF7FEFF 		bl	LCD_WriteString
- 403              	.LVL30:
- 144:./Src/main.c  ****     HAL_I2C_Master_Receive(&hi2c2, (42), &message, 6, HAL_MAX_DELAY);
- 404              		.loc 1 144 0
- 405 0076 994B     		ldr	r3, .L58+20
- 406 0078 93E80300 		ldmia	r3, {r0, r1}
- 407 007c 1C90     		str	r0, [sp, #112]
- 408 007e ADF87410 		strh	r1, [sp, #116]	@ movhi
- 145:./Src/main.c  ****   #endif
- 409              		.loc 1 145 0
- 410 0082 4FF0FF33 		mov	r3, #-1
- 411 0086 0093     		str	r3, [sp]
- 412 0088 0623     		movs	r3, #6
- 413 008a 1CAA     		add	r2, sp, #112
- 414 008c 2A21     		movs	r1, #42
- 415 008e 3846     		mov	r0, r7
- 416 0090 FFF7FEFF 		bl	HAL_I2C_Master_Receive
- 417              	.LVL31:
- 148:./Src/main.c  **** 	LCD_WriteString(&lcd, "Initializing...");
- 418              		.loc 1 148 0
- 419 0094 2A46     		mov	r2, r5
- 420 0096 2146     		mov	r1, r4
- 421 0098 3046     		mov	r0, r6
- 422 009a FFF7FEFF 		bl	LCD_SetLocation
- 423              	.LVL32:
- 149:./Src/main.c  ****   //LCD_WriteString(&lcd, message);
- 424              		.loc 1 149 0
- 425 009e 9049     		ldr	r1, .L58+24
-ARM GAS  /tmp/ccEIq7ZR.s 			page 19
-
-
- 426 00a0 3046     		mov	r0, r6
- 427 00a2 FFF7FEFF 		bl	LCD_WriteString
- 428              	.LVL33:
- 152:./Src/main.c  ****   Led_init();
- 429              		.loc 1 152 0
- 430 00a6 FFF7FEFF 		bl	Buzzer_init
- 431              	.LVL34:
- 153:./Src/main.c  ****   IS_Charge_init();
- 432              		.loc 1 153 0
- 433 00aa FFF7FEFF 		bl	Led_init
- 434              	.LVL35:
- 154:./Src/main.c  **** 
- 435              		.loc 1 154 0
- 436 00ae FFF7FEFF 		bl	IS_Charge_init
- 437              	.LVL36:
- 157:./Src/main.c  ****   int buttonTimeout = 0;
- 438              		.loc 1 157 0
- 439 00b2 40F22620 		movw	r0, #550
- 440 00b6 FFF7FEFF 		bl	HAL_Delay
- 441              	.LVL37:
- 442              	.LBB3:
- 159:./Src/main.c  ****     Led_Set(0);
- 443              		.loc 1 159 0
- 444 00ba 02E0     		b	.L27
- 445              	.L28:
- 160:./Src/main.c  ****   }
- 446              		.loc 1 160 0
- 447 00bc 0020     		movs	r0, #0
- 448 00be FFF7FEFF 		bl	Led_Set
- 449              	.LVL38:
- 450              	.L27:
- 159:./Src/main.c  ****     Led_Set(0);
- 451              		.loc 1 159 0
- 452 00c2 FFF7FEFF 		bl	IS_Button
- 453              	.LVL39:
- 454 00c6 0028     		cmp	r0, #0
- 455 00c8 F8D1     		bne	.L28
- 456              	.LBE3:
- 457              	.LBB4:
- 350:./Src/main.c  ****     ADC_R_init();
- 458              		.loc 1 350 0
- 459 00ca FFF7FEFF 		bl	ADC_L_init
- 460              	.LVL40:
- 351:./Src/main.c  ****     MotorL_init();
- 461              		.loc 1 351 0
- 462 00ce FFF7FEFF 		bl	ADC_R_init
- 463              	.LVL41:
- 352:./Src/main.c  ****     MotorR_init();
- 464              		.loc 1 352 0
- 465 00d2 FFF7FEFF 		bl	MotorL_init
- 466              	.LVL42:
- 353:./Src/main.c  **** 
- 467              		.loc 1 353 0
- 468 00d6 FFF7FEFF 		bl	MotorR_init
- 469              	.LVL43:
- 355:./Src/main.c  **** 
- 470              		.loc 1 355 0
-ARM GAS  /tmp/ccEIq7ZR.s 			page 20
-
-
- 471 00da 0C21     		movs	r1, #12
- 472 00dc 8148     		ldr	r0, .L58+28
- 473 00de FFF7FEFF 		bl	HAL_GPIO_DeInit
- 474              	.LVL44:
- 357:./Src/main.c  **** 
- 475              		.loc 1 357 0
- 476 00e2 FFF7FEFF 		bl	Telemetry_init
- 477              	.LVL45:
- 359:./Src/main.c  **** 
- 478              		.loc 1 359 0
- 479 00e6 8049     		ldr	r1, .L58+32
- 480 00e8 804B     		ldr	r3, .L58+36
- 481 00ea 1888     		ldrh	r0, [r3]
- 482 00ec FFF7FEFF 		bl	EE_ReadVariable
- 483              	.LVL46:
- 365:./Src/main.c  ****     Battery_TASK();
- 484              		.loc 1 365 0
- 485 00f0 FFF7FEFF 		bl	applcation_init
- 486              	.LVL47:
- 366:./Src/main.c  **** 
- 487              		.loc 1 366 0
- 488 00f4 FFF7FEFF 		bl	Battery_TASK
- 489              	.LVL48:
- 368:./Src/main.c  **** 
- 490              		.loc 1 368 0
- 491 00f8 FFF7FEFF 		bl	MX_IWDG_Init
- 492              	.LVL49:
- 370:./Src/main.c  ****     Buzzer_TwoBeep();
- 493              		.loc 1 370 0
- 494 00fc 0120     		movs	r0, #1
- 495 00fe FFF7FEFF 		bl	Led_Set
- 496              	.LVL50:
- 371:./Src/main.c  ****     HAL_Delay(250);
- 497              		.loc 1 371 0
- 498 0102 FFF7FEFF 		bl	Buzzer_TwoBeep
- 499              	.LVL51:
- 372:./Src/main.c  **** 
- 500              		.loc 1 372 0
- 501 0106 FA20     		movs	r0, #250
- 502 0108 FFF7FEFF 		bl	HAL_Delay
- 503              	.LVL52:
- 374:./Src/main.c  ****     MotorL_start();
- 504              		.loc 1 374 0
- 505 010c FFF7FEFF 		bl	MotorR_start
- 506              	.LVL53:
- 375:./Src/main.c  ****     //MotorR_pwm(80);
- 507              		.loc 1 375 0
- 508 0110 FFF7FEFF 		bl	MotorL_start
- 509              	.LVL54:
- 379:./Src/main.c  ****     HAL_Delay(5);
- 510              		.loc 1 379 0
- 511 0114 6E4C     		ldr	r4, .L58+8
- 512 0116 2046     		mov	r0, r4
- 513 0118 FFF7FEFF 		bl	LCD_ClearDisplay
- 514              	.LVL55:
- 380:./Src/main.c  ****     LCD_SetLocation(&lcd, 0, 1);
- 515              		.loc 1 380 0
-ARM GAS  /tmp/ccEIq7ZR.s 			page 21
-
-
- 516 011c 0520     		movs	r0, #5
- 517 011e FFF7FEFF 		bl	HAL_Delay
- 518              	.LVL56:
- 381:./Src/main.c  ****   	LCD_WriteString(&lcd, "Bat:");
- 519              		.loc 1 381 0
- 520 0122 0122     		movs	r2, #1
- 521 0124 0021     		movs	r1, #0
- 522 0126 2046     		mov	r0, r4
- 523 0128 FFF7FEFF 		bl	LCD_SetLocation
- 524              	.LVL57:
- 382:./Src/main.c  ****     LCD_SetLocation(&lcd, 8, 1);
- 525              		.loc 1 382 0
- 526 012c 7049     		ldr	r1, .L58+40
- 527 012e 2046     		mov	r0, r4
- 528 0130 FFF7FEFF 		bl	LCD_WriteString
- 529              	.LVL58:
- 383:./Src/main.c  ****     LCD_WriteString(&lcd, "V");
- 530              		.loc 1 383 0
- 531 0134 0122     		movs	r2, #1
- 532 0136 0821     		movs	r1, #8
- 533 0138 2046     		mov	r0, r4
- 534 013a FFF7FEFF 		bl	LCD_SetLocation
- 535              	.LVL59:
- 384:./Src/main.c  **** 
- 536              		.loc 1 384 0
- 537 013e 6D49     		ldr	r1, .L58+44
- 538 0140 2046     		mov	r0, r4
- 539 0142 FFF7FEFF 		bl	LCD_WriteString
- 540              	.LVL60:
- 386:./Src/main.c  ****     LCD_WriteString(&lcd, "A");
- 541              		.loc 1 386 0
- 542 0146 0122     		movs	r2, #1
- 543 0148 0F21     		movs	r1, #15
- 544 014a 2046     		mov	r0, r4
- 545 014c FFF7FEFF 		bl	LCD_SetLocation
- 546              	.LVL61:
- 387:./Src/main.c  **** 
- 547              		.loc 1 387 0
- 548 0150 6949     		ldr	r1, .L58+48
- 549 0152 2046     		mov	r0, r4
- 550 0154 FFF7FEFF 		bl	LCD_WriteString
- 551              	.LVL62:
- 389:./Src/main.c  ****   	LCD_WriteString(&lcd, "Controlled by UART");
- 552              		.loc 1 389 0
- 553 0158 0022     		movs	r2, #0
- 554 015a 1146     		mov	r1, r2
- 555 015c 2046     		mov	r0, r4
- 556 015e FFF7FEFF 		bl	LCD_SetLocation
- 557              	.LVL63:
- 390:./Src/main.c  **** 
- 558              		.loc 1 390 0
- 559 0162 6649     		ldr	r1, .L58+52
- 560 0164 2046     		mov	r0, r4
- 561 0166 FFF7FEFF 		bl	LCD_WriteString
- 562              	.LVL64:
- 394:./Src/main.c  ****     while(1){
- 563              		.loc 1 394 0
-ARM GAS  /tmp/ccEIq7ZR.s 			page 22
-
-
- 564 016a 0027     		movs	r7, #0
- 565 016c 3E46     		mov	r6, r7
- 393:./Src/main.c  ****     int lastSpeedL = 0, lastSpeedR = 0;
- 566              		.loc 1 393 0
- 567 016e 3D46     		mov	r5, r7
- 568              	.LVL65:
- 569              	.L47:
- 396:./Src/main.c  ****       if(IS_Button()) {
- 570              		.loc 1 396 0
- 571 0170 0135     		adds	r5, r5, #1
- 572              	.LVL66:
- 573              	.LBB5:
- 397:./Src/main.c  ****         while(IS_Button()) {
- 574              		.loc 1 397 0
- 575 0172 FFF7FEFF 		bl	IS_Button
- 576              	.LVL67:
- 577 0176 18B9     		cbnz	r0, .L29
- 578 0178 0FE0     		b	.L30
- 579              	.L31:
- 399:./Src/main.c  ****         }
- 580              		.loc 1 399 0
- 581 017a 6148     		ldr	r0, .L58+56
- 582 017c FFF7FEFF 		bl	HAL_IWDG_Refresh
- 583              	.LVL68:
- 584              	.L29:
- 398:./Src/main.c  ****           HAL_IWDG_Refresh(&hiwdg);
- 585              		.loc 1 398 0
- 586 0180 FFF7FEFF 		bl	IS_Button
- 587              	.LVL69:
- 588 0184 0028     		cmp	r0, #0
- 589 0186 F8D1     		bne	.L31
- 401:./Src/main.c  ****         HAL_Delay(350);
- 590              		.loc 1 401 0
- 591 0188 FFF7FEFF 		bl	Buzzer_OneLongBeep
- 592              	.LVL70:
- 402:./Src/main.c  ****         Power_Set(0);
- 593              		.loc 1 402 0
- 594 018c 4FF4AF70 		mov	r0, #350
- 595 0190 FFF7FEFF 		bl	HAL_Delay
- 596              	.LVL71:
- 403:./Src/main.c  ****       }
- 597              		.loc 1 403 0
- 598 0194 0020     		movs	r0, #0
- 599 0196 FFF7FEFF 		bl	Power_Set
- 600              	.LVL72:
- 601              	.L30:
- 602              	.LBE5:
- 406:./Src/main.c  ****         int speedL = -CLAMP(getMotorR(), -1000, 1000);
- 603              		.loc 1 406 0
- 604 019a 5A4B     		ldr	r3, .L58+60
- 605 019c A3FB0523 		umull	r2, r3, r3, r5
- 606 01a0 9B09     		lsrs	r3, r3, #6
- 607 01a2 C822     		movs	r2, #200
- 608 01a4 02FB1353 		mls	r3, r2, r3, r5
- 609 01a8 002B     		cmp	r3, #0
- 610 01aa 40D1     		bne	.L32
- 611              	.LBB6:
-ARM GAS  /tmp/ccEIq7ZR.s 			page 23
-
-
- 407:./Src/main.c  ****         int speedR = -CLAMP(getMotorL(), -1000, 1000);
- 612              		.loc 1 407 0
- 613 01ac FFF7FEFF 		bl	getMotorR
- 614              	.LVL73:
- 615 01b0 B0F57A7F 		cmp	r0, #1000
- 616 01b4 08DC     		bgt	.L48
- 407:./Src/main.c  ****         int speedR = -CLAMP(getMotorL(), -1000, 1000);
- 617              		.loc 1 407 0 is_stmt 0 discriminator 1
- 618 01b6 FFF7FEFF 		bl	getMotorR
- 619              	.LVL74:
- 620 01ba 10F57A7F 		cmn	r0, #1000
- 621 01be 05DB     		blt	.L49
- 407:./Src/main.c  ****         int speedR = -CLAMP(getMotorL(), -1000, 1000);
- 622              		.loc 1 407 0 discriminator 3
- 623 01c0 FFF7FEFF 		bl	getMotorR
- 624              	.LVL75:
- 625 01c4 4442     		negs	r4, r0
- 626 01c6 03E0     		b	.L33
- 627              	.L48:
- 407:./Src/main.c  ****         int speedR = -CLAMP(getMotorL(), -1000, 1000);
- 628              		.loc 1 407 0
- 629 01c8 4F4C     		ldr	r4, .L58+64
- 630 01ca 01E0     		b	.L33
- 631              	.L49:
- 632 01cc 4FF47A74 		mov	r4, #1000
- 633              	.L33:
- 634              	.LVL76:
- 408:./Src/main.c  ****         if (speedL != lastSpeedL || speedR != lastSpeedR) {
- 635              		.loc 1 408 0 is_stmt 1 discriminator 8
- 636 01d0 FFF7FEFF 		bl	getMotorL
- 637              	.LVL77:
- 638 01d4 B0F57A7F 		cmp	r0, #1000
- 639 01d8 09DC     		bgt	.L50
- 408:./Src/main.c  ****         if (speedL != lastSpeedL || speedR != lastSpeedR) {
- 640              		.loc 1 408 0 is_stmt 0 discriminator 1
- 641 01da FFF7FEFF 		bl	getMotorL
- 642              	.LVL78:
- 643 01de 10F57A7F 		cmn	r0, #1000
- 644 01e2 07DB     		blt	.L51
- 408:./Src/main.c  ****         if (speedL != lastSpeedL || speedR != lastSpeedR) {
- 645              		.loc 1 408 0 discriminator 3
- 646 01e4 FFF7FEFF 		bl	getMotorL
- 647              	.LVL79:
- 648 01e8 C0F10008 		rsb	r8, r0, #0
- 649 01ec 04E0     		b	.L34
- 650              	.L50:
- 408:./Src/main.c  ****         if (speedL != lastSpeedL || speedR != lastSpeedR) {
- 651              		.loc 1 408 0
- 652 01ee DFF81881 		ldr	r8, .L58+64
- 653 01f2 01E0     		b	.L34
- 654              	.L51:
- 655 01f4 4FF47A78 		mov	r8, #1000
- 656              	.L34:
- 657              	.LVL80:
- 409:./Src/main.c  ****           MotorL_pwm(speedL);
- 658              		.loc 1 409 0 is_stmt 1 discriminator 8
- 659 01f8 A642     		cmp	r6, r4
-ARM GAS  /tmp/ccEIq7ZR.s 			page 24
-
-
- 660 01fa 01D1     		bne	.L35
- 409:./Src/main.c  ****           MotorL_pwm(speedL);
- 661              		.loc 1 409 0 is_stmt 0 discriminator 1
- 662 01fc 4745     		cmp	r7, r8
- 663 01fe 08D0     		beq	.L36
- 664              	.L35:
- 410:./Src/main.c  ****           MotorR_pwm(speedR);
- 665              		.loc 1 410 0 is_stmt 1
- 666 0200 20B2     		sxth	r0, r4
- 667 0202 FFF7FEFF 		bl	MotorL_pwm
- 668              	.LVL81:
- 411:./Src/main.c  ****           lastSpeedL = speedL;
- 669              		.loc 1 411 0
- 670 0206 0FFA88F0 		sxth	r0, r8
- 671 020a FFF7FEFF 		bl	MotorR_pwm
- 672              	.LVL82:
- 413:./Src/main.c  ****         }
- 673              		.loc 1 413 0
- 674 020e 4746     		mov	r7, r8
- 412:./Src/main.c  ****           lastSpeedR = speedR;
- 675              		.loc 1 412 0
- 676 0210 2646     		mov	r6, r4
- 677              	.LVL83:
- 678              	.L36:
- 417:./Src/main.c  ****         sprintf(str, "%i;%i\n\r", speedL, speedR);
- 679              		.loc 1 417 0
- 680 0212 6422     		movs	r2, #100
- 681 0214 0021     		movs	r1, #0
- 682 0216 03A8     		add	r0, sp, #12
- 683 0218 FFF7FEFF 		bl	memset
- 684              	.LVL84:
- 418:./Src/main.c  ****         Console_Log(str);
- 685              		.loc 1 418 0
- 686 021c 4346     		mov	r3, r8
- 687 021e 2246     		mov	r2, r4
- 688 0220 3A49     		ldr	r1, .L58+68
- 689 0222 03A8     		add	r0, sp, #12
- 690 0224 FFF7FEFF 		bl	sprintf
- 691              	.LVL85:
- 419:./Src/main.c  ****       }
- 692              		.loc 1 419 0
- 693 0228 03A8     		add	r0, sp, #12
- 694 022a FFF7FEFF 		bl	Console_Log
- 695              	.LVL86:
- 696              	.L32:
- 697              	.LBE6:
- 422:./Src/main.c  **** 
- 698              		.loc 1 422 0
- 699 022e FFF7FEFF 		bl	Battery_TASK
- 700              	.LVL87:
- 701              	.LBB7:
- 424:./Src/main.c  ****         MotorL_pwm(0);
- 702              		.loc 1 424 0
- 703 0232 FFF7FEFF 		bl	getMotorCurrentR
- 704              	.LVL88:
- 705 0236 FFF7FEFF 		bl	__aeabi_i2d
- 706              	.LVL89:
-ARM GAS  /tmp/ccEIq7ZR.s 			page 25
-
-
- 707 023a 23A3     		adr	r3, .L58
- 708 023c D3E90023 		ldrd	r2, [r3]
- 709 0240 FFF7FEFF 		bl	__aeabi_dmul
- 710              	.LVL90:
- 711 0244 0022     		movs	r2, #0
- 712 0246 0023     		movs	r3, #0
- 713 0248 FFF7FEFF 		bl	__aeabi_dcmplt
- 714              	.LVL91:
- 715 024c 78B1     		cbz	r0, .L55
- 424:./Src/main.c  ****         MotorL_pwm(0);
- 716              		.loc 1 424 0 is_stmt 0 discriminator 1
- 717 024e FFF7FEFF 		bl	getMotorCurrentR
- 718              	.LVL92:
- 719 0252 FFF7FEFF 		bl	__aeabi_i2d
- 720              	.LVL93:
- 721 0256 1CA3     		adr	r3, .L58
- 722 0258 D3E90023 		ldrd	r2, [r3]
- 723 025c FFF7FEFF 		bl	__aeabi_dmul
- 724              	.LVL94:
- 725 0260 0022     		movs	r2, #0
- 726 0262 2B4B     		ldr	r3, .L58+72
- 727 0264 FFF7FEFF 		bl	__aeabi_dcmplt
- 728              	.LVL95:
- 729 0268 0028     		cmp	r0, #0
- 730 026a 63D1     		bne	.L39
- 731 026c 0EE0     		b	.L40
- 732              	.L55:
- 424:./Src/main.c  ****         MotorL_pwm(0);
- 733              		.loc 1 424 0 discriminator 2
- 734 026e FFF7FEFF 		bl	getMotorCurrentR
- 735              	.LVL96:
- 736 0272 FFF7FEFF 		bl	__aeabi_i2d
- 737              	.LVL97:
- 738 0276 14A3     		adr	r3, .L58
- 739 0278 D3E90023 		ldrd	r2, [r3]
- 740 027c FFF7FEFF 		bl	__aeabi_dmul
- 741              	.LVL98:
- 742 0280 0022     		movs	r2, #0
- 743 0282 244B     		ldr	r3, .L58+76
- 744 0284 FFF7FEFF 		bl	__aeabi_dcmpgt
- 745              	.LVL99:
- 746 0288 0028     		cmp	r0, #0
- 747 028a 53D1     		bne	.L39
- 748              	.L40:
- 424:./Src/main.c  ****         MotorL_pwm(0);
- 749              		.loc 1 424 0 discriminator 3
- 750 028c FFF7FEFF 		bl	getMotorCurrentL
- 751              	.LVL100:
- 752 0290 FFF7FEFF 		bl	__aeabi_i2d
- 753              	.LVL101:
- 754 0294 0CA3     		adr	r3, .L58
- 755 0296 D3E90023 		ldrd	r2, [r3]
- 756 029a FFF7FEFF 		bl	__aeabi_dmul
- 757              	.LVL102:
- 758 029e 0022     		movs	r2, #0
- 759 02a0 0023     		movs	r3, #0
- 760 02a2 FFF7FEFF 		bl	__aeabi_dcmplt
-ARM GAS  /tmp/ccEIq7ZR.s 			page 26
-
-
- 761              	.LVL103:
- 762 02a6 B8B3     		cbz	r0, .L56
- 424:./Src/main.c  ****         MotorL_pwm(0);
- 763              		.loc 1 424 0 discriminator 4
- 764 02a8 FFF7FEFF 		bl	getMotorCurrentL
- 765              	.LVL104:
- 766 02ac FFF7FEFF 		bl	__aeabi_i2d
- 767              	.LVL105:
- 768 02b0 05A3     		adr	r3, .L58
- 769 02b2 D3E90023 		ldrd	r2, [r3]
- 770 02b6 FFF7FEFF 		bl	__aeabi_dmul
- 771              	.LVL106:
- 772 02ba 0022     		movs	r2, #0
- 773 02bc 144B     		ldr	r3, .L58+72
- 774 02be FFF7FEFF 		bl	__aeabi_dcmplt
- 775              	.LVL107:
- 776 02c2 B8BB     		cbnz	r0, .L39
- 777 02c4 65E0     		b	.L43
- 778              	.L59:
- 779 02c6 00BF     		.align	3
- 780              	.L58:
- 781 02c8 7B14AE47 		.word	1202590843
- 782 02cc E17A943F 		.word	1066695393
- 783 02d0 00000000 		.word	lcd
- 784 02d4 00000000 		.word	hi2c2
- 785 02d8 00000000 		.word	.LC0
- 786 02dc 80000000 		.word	.LC1
- 787 02e0 14000000 		.word	.LC2
- 788 02e4 00080140 		.word	1073809408
- 789 02e8 00000000 		.word	.LANCHOR0
- 790 02ec 00000000 		.word	.LANCHOR1
- 791 02f0 24000000 		.word	.LC3
- 792 02f4 2C000000 		.word	.LC4
- 793 02f8 30000000 		.word	.LC5
- 794 02fc 34000000 		.word	.LC6
- 795 0300 00000000 		.word	hiwdg
- 796 0304 1F85EB51 		.word	1374389535
- 797 0308 18FCFFFF 		.word	-1000
- 798 030c 48000000 		.word	.LC7
- 799 0310 000034C0 		.word	-1070333952
- 800 0314 00003440 		.word	1077149696
- 801              	.L56:
- 424:./Src/main.c  ****         MotorL_pwm(0);
- 802              		.loc 1 424 0 discriminator 5
- 803 0318 FFF7FEFF 		bl	getMotorCurrentL
- 804              	.LVL108:
- 805 031c FFF7FEFF 		bl	__aeabi_i2d
- 806              	.LVL109:
- 807 0320 3DA3     		adr	r3, .L60
- 808 0322 D3E90023 		ldrd	r2, [r3]
- 809 0326 FFF7FEFF 		bl	__aeabi_dmul
- 810              	.LVL110:
- 811 032a 0022     		movs	r2, #0
- 812 032c 3C4B     		ldr	r3, .L60+8
- 813 032e FFF7FEFF 		bl	__aeabi_dcmpgt
- 814              	.LVL111:
- 815 0332 70B3     		cbz	r0, .L43
-ARM GAS  /tmp/ccEIq7ZR.s 			page 27
-
-
- 816              	.L39:
- 425:./Src/main.c  ****         MotorR_pwm(0);
- 817              		.loc 1 425 0 is_stmt 1
- 818 0334 0020     		movs	r0, #0
- 819 0336 FFF7FEFF 		bl	MotorL_pwm
- 820              	.LVL112:
- 426:./Src/main.c  ****         Buzzer_OneLongBeep();
- 821              		.loc 1 426 0
- 822 033a 0020     		movs	r0, #0
- 823 033c FFF7FEFF 		bl	MotorR_pwm
- 824              	.LVL113:
- 427:./Src/main.c  ****         LCD_ClearDisplay(&lcd);
- 825              		.loc 1 427 0
- 826 0340 FFF7FEFF 		bl	Buzzer_OneLongBeep
- 827              	.LVL114:
- 428:./Src/main.c  ****         HAL_Delay(5);
- 828              		.loc 1 428 0
- 829 0344 374C     		ldr	r4, .L60+12
- 830 0346 2046     		mov	r0, r4
- 831 0348 FFF7FEFF 		bl	LCD_ClearDisplay
- 832              	.LVL115:
- 429:./Src/main.c  ****         LCD_SetLocation(&lcd, 0, 0);
- 833              		.loc 1 429 0
- 834 034c 0520     		movs	r0, #5
- 835 034e FFF7FEFF 		bl	HAL_Delay
- 836              	.LVL116:
- 430:./Src/main.c  ****         LCD_WriteString(&lcd, "Emergency Off!");
- 837              		.loc 1 430 0
- 838 0352 0022     		movs	r2, #0
- 839 0354 1146     		mov	r1, r2
- 840 0356 2046     		mov	r0, r4
- 841 0358 FFF7FEFF 		bl	LCD_SetLocation
- 842              	.LVL117:
- 431:./Src/main.c  ****         LCD_SetLocation(&lcd, 0, 1);
- 843              		.loc 1 431 0
- 844 035c 3249     		ldr	r1, .L60+16
- 845 035e 2046     		mov	r0, r4
- 846 0360 FFF7FEFF 		bl	LCD_WriteString
- 847              	.LVL118:
- 432:./Src/main.c  ****         LCD_WriteString(&lcd, "Overcurrent.");
- 848              		.loc 1 432 0
- 849 0364 0122     		movs	r2, #1
- 850 0366 0021     		movs	r1, #0
- 851 0368 2046     		mov	r0, r4
- 852 036a FFF7FEFF 		bl	LCD_SetLocation
- 853              	.LVL119:
- 433:./Src/main.c  ****         HAL_Delay(500);
- 854              		.loc 1 433 0
- 855 036e 2F49     		ldr	r1, .L60+20
- 856 0370 2046     		mov	r0, r4
- 857 0372 FFF7FEFF 		bl	LCD_WriteString
- 858              	.LVL120:
- 434:./Src/main.c  ****         HAL_IWDG_Refresh(&hiwdg);
- 859              		.loc 1 434 0
- 860 0376 4FF4FA70 		mov	r0, #500
- 861 037a FFF7FEFF 		bl	HAL_Delay
- 862              	.LVL121:
-ARM GAS  /tmp/ccEIq7ZR.s 			page 28
-
-
- 435:./Src/main.c  ****         HAL_Delay(500);
- 863              		.loc 1 435 0
- 864 037e 2C48     		ldr	r0, .L60+24
- 865 0380 FFF7FEFF 		bl	HAL_IWDG_Refresh
- 866              	.LVL122:
- 436:./Src/main.c  ****         Power_Set(0);
- 867              		.loc 1 436 0
- 868 0384 4FF4FA70 		mov	r0, #500
- 869 0388 FFF7FEFF 		bl	HAL_Delay
- 870              	.LVL123:
- 437:./Src/main.c  ****       }
- 871              		.loc 1 437 0
- 872 038c 0020     		movs	r0, #0
- 873 038e FFF7FEFF 		bl	Power_Set
- 874              	.LVL124:
- 875              	.L43:
- 876              	.LBE7:
- 440:./Src/main.c  ****         MotorL_pwm(0);
- 877              		.loc 1 440 0
- 878 0392 FFF7FEFF 		bl	GET_BatteryAverage
- 879              	.LVL125:
- 880 0396 2749     		ldr	r1, .L60+28
- 881 0398 FFF7FEFF 		bl	__aeabi_fcmplt
- 882              	.LVL126:
- 883 039c 70B3     		cbz	r0, .L45
- 441:./Src/main.c  ****         MotorR_pwm(0);
- 884              		.loc 1 441 0
- 885 039e 0020     		movs	r0, #0
- 886 03a0 FFF7FEFF 		bl	MotorL_pwm
- 887              	.LVL127:
- 442:./Src/main.c  ****         Buzzer_OneLongBeep();
- 888              		.loc 1 442 0
- 889 03a4 0020     		movs	r0, #0
- 890 03a6 FFF7FEFF 		bl	MotorR_pwm
- 891              	.LVL128:
- 443:./Src/main.c  ****         LCD_ClearDisplay(&lcd);
- 892              		.loc 1 443 0
- 893 03aa FFF7FEFF 		bl	Buzzer_OneLongBeep
- 894              	.LVL129:
- 444:./Src/main.c  ****         HAL_Delay(5);
- 895              		.loc 1 444 0
- 896 03ae 1D4C     		ldr	r4, .L60+12
- 897 03b0 2046     		mov	r0, r4
- 898 03b2 FFF7FEFF 		bl	LCD_ClearDisplay
- 899              	.LVL130:
- 445:./Src/main.c  ****         LCD_SetLocation(&lcd, 0, 0);
- 900              		.loc 1 445 0
- 901 03b6 0520     		movs	r0, #5
- 902 03b8 FFF7FEFF 		bl	HAL_Delay
- 903              	.LVL131:
- 446:./Src/main.c  ****         LCD_WriteString(&lcd, "Emergency Off!");
- 904              		.loc 1 446 0
- 905 03bc 0022     		movs	r2, #0
- 906 03be 1146     		mov	r1, r2
- 907 03c0 2046     		mov	r0, r4
- 908 03c2 FFF7FEFF 		bl	LCD_SetLocation
- 909              	.LVL132:
-ARM GAS  /tmp/ccEIq7ZR.s 			page 29
-
-
- 447:./Src/main.c  ****         LCD_SetLocation(&lcd, 0, 1);
- 910              		.loc 1 447 0
- 911 03c6 1849     		ldr	r1, .L60+16
- 912 03c8 2046     		mov	r0, r4
- 913 03ca FFF7FEFF 		bl	LCD_WriteString
- 914              	.LVL133:
- 448:./Src/main.c  ****         LCD_WriteString(&lcd, "Battery low.");
- 915              		.loc 1 448 0
- 916 03ce 0122     		movs	r2, #1
- 917 03d0 0021     		movs	r1, #0
- 918 03d2 2046     		mov	r0, r4
- 919 03d4 FFF7FEFF 		bl	LCD_SetLocation
- 920              	.LVL134:
- 449:./Src/main.c  ****         HAL_Delay(500);
- 921              		.loc 1 449 0
- 922 03d8 1749     		ldr	r1, .L60+32
- 923 03da 2046     		mov	r0, r4
- 924 03dc FFF7FEFF 		bl	LCD_WriteString
- 925              	.LVL135:
- 450:./Src/main.c  ****         HAL_IWDG_Refresh(&hiwdg);
- 926              		.loc 1 450 0
- 927 03e0 4FF4FA70 		mov	r0, #500
- 928 03e4 FFF7FEFF 		bl	HAL_Delay
- 929              	.LVL136:
- 451:./Src/main.c  ****         HAL_Delay(500);
- 930              		.loc 1 451 0
- 931 03e8 1148     		ldr	r0, .L60+24
- 932 03ea FFF7FEFF 		bl	HAL_IWDG_Refresh
- 933              	.LVL137:
- 452:./Src/main.c  ****         Power_Set(0);
- 934              		.loc 1 452 0
- 935 03ee 4FF4FA70 		mov	r0, #500
- 936 03f2 FFF7FEFF 		bl	HAL_Delay
- 937              	.LVL138:
- 453:./Src/main.c  ****       }
- 938              		.loc 1 453 0
- 939 03f6 0020     		movs	r0, #0
- 940 03f8 FFF7FEFF 		bl	Power_Set
- 941              	.LVL139:
- 942              	.L45:
- 457:./Src/main.c  **** 
- 943              		.loc 1 457 0
- 944 03fc 0C48     		ldr	r0, .L60+24
- 945 03fe FFF7FEFF 		bl	HAL_IWDG_Refresh
- 946              	.LVL140:
- 459:./Src/main.c  ****     }
- 947              		.loc 1 459 0
- 948 0402 FFF7FEFF 		bl	HAL_GetTick
- 949              	.LVL141:
- 950 0406 0D4B     		ldr	r3, .L60+36
- 951 0408 1B68     		ldr	r3, [r3]
- 952 040a C01A     		subs	r0, r0, r3
- 953 040c 0C4B     		ldr	r3, .L60+40
- 954 040e 1860     		str	r0, [r3]
+ 286 010c 0020     		movs	r0, #0
+ 287 010e FFF7FEFF 		bl	Power_Set
+ 288              	.LVL43:
+ 289              	.L17:
+ 290              	.LBE4:
+ 291              	.LBE3:
  460:./Src/main.c  ****   }
- 955              		.loc 1 460 0
- 956 0410 AEE6     		b	.L47
-ARM GAS  /tmp/ccEIq7ZR.s 			page 30
+ 461:./Src/main.c  **** 
+ 462:./Src/main.c  ****   if(GET_BatteryAverage() < 31.0){
+ 292              		.loc 1 462 0
+ 293 0112 FFF7FEFF 		bl	GET_BatteryAverage
+ 294              	.LVL44:
+ 295 0116 2249     		ldr	r1, .L27+32
+ 296 0118 FFF7FEFF 		bl	__aeabi_fcmplt
+ 297              	.LVL45:
+ 298 011c 70B3     		cbz	r0, .L10
+ 299              	.LBB5:
+ 463:./Src/main.c  ****     MotorL_pwm(0);
+ 300              		.loc 1 463 0
+ 301 011e 0020     		movs	r0, #0
+ 302 0120 FFF7FEFF 		bl	MotorL_pwm
+ 303              	.LVL46:
+ 464:./Src/main.c  ****     MotorR_pwm(0);
+ 304              		.loc 1 464 0
+ 305 0124 0020     		movs	r0, #0
+ 306 0126 FFF7FEFF 		bl	MotorR_pwm
+ 307              	.LVL47:
+ 465:./Src/main.c  ****     Buzzer_OneLongBeep();
+ 308              		.loc 1 465 0
+ 309 012a FFF7FEFF 		bl	Buzzer_OneLongBeep
+ 310              	.LVL48:
+ 466:./Src/main.c  ****     LCD_ClearDisplay(&lcd);
+ 311              		.loc 1 466 0
+ 312 012e 184C     		ldr	r4, .L27+16
+ 313 0130 2046     		mov	r0, r4
+ 314 0132 FFF7FEFF 		bl	LCD_ClearDisplay
+ 315              	.LVL49:
+ 467:./Src/main.c  ****     HAL_Delay(5);
+ 316              		.loc 1 467 0
+ 317 0136 0520     		movs	r0, #5
+ 318 0138 FFF7FEFF 		bl	HAL_Delay
+ 319              	.LVL50:
+ 468:./Src/main.c  ****     LCD_SetLocation(&lcd, 0, 0);
+ 320              		.loc 1 468 0
+ 321 013c 0022     		movs	r2, #0
+ 322 013e 1146     		mov	r1, r2
+ 323 0140 2046     		mov	r0, r4
+ 324 0142 FFF7FEFF 		bl	LCD_SetLocation
+ 325              	.LVL51:
+ 469:./Src/main.c  ****     LCD_WriteString(&lcd, "Emergency Off!");
+ 326              		.loc 1 469 0
+ 327 0146 1349     		ldr	r1, .L27+20
+ 328 0148 2046     		mov	r0, r4
+ 329 014a FFF7FEFF 		bl	LCD_WriteString
+ 330              	.LVL52:
+ 470:./Src/main.c  ****     LCD_SetLocation(&lcd, 0, 1);
+ 331              		.loc 1 470 0
+ARM GAS  /tmp/cckqBGja.s 			page 15
 
 
- 957              	.L61:
- 958 0412 00BFAFF3 		.align	3
- 958      0080
- 959              	.L60:
- 960 0418 7B14AE47 		.word	1202590843
- 961 041c E17A943F 		.word	1066695393
- 962 0420 00003440 		.word	1077149696
- 963 0424 00000000 		.word	lcd
- 964 0428 50000000 		.word	.LC8
- 965 042c 60000000 		.word	.LC9
- 966 0430 00000000 		.word	hiwdg
- 967 0434 0000F841 		.word	1106771968
- 968 0438 70000000 		.word	.LC10
- 969 043c 00000000 		.word	counterTemp
- 970 0440 00000000 		.word	counterTempTT
- 971              	.LBE4:
- 972              		.cfi_endproc
- 973              	.LFE64:
- 975              		.global	saveValue
- 976              		.comm	lcd,140,4
- 977              		.comm	counterTempTT,4,4
- 978              		.comm	counterTemp,4,4
- 979              		.global	speed
- 980              		.comm	hiwdg,16,4
- 981              		.global	VarValue
- 982              		.global	VarDataTab
- 983              		.global	VirtAddVarTab
- 984              		.section	.bss.saveValue,"aw",%nobits
- 985              		.align	1
- 986              		.set	.LANCHOR0,. + 0
- 989              	saveValue:
- 990 0000 0000     		.space	2
- 991              		.section	.bss.VarValue,"aw",%nobits
- 992              		.align	1
- 995              	VarValue:
- 996 0000 0000     		.space	2
- 997              		.section	.rodata.str1.4,"aMS",%progbits,1
- 998              		.align	2
- 999              	.LC0:
- 1000 0000 5472616E 		.ascii	"TranspOtter V1.3\000"
- 1000      73704F74 
- 1000      74657220 
- 1000      56312E33 
- 1000      00
- 1001 0011 000000   		.space	3
- 1002              	.LC2:
- 1003 0014 496E6974 		.ascii	"Initializing...\000"
- 1003      69616C69 
- 1003      7A696E67 
- 1003      2E2E2E00 
- 1004              	.LC3:
- 1005 0024 4261743A 		.ascii	"Bat:\000"
- 1005      00
- 1006 0029 000000   		.space	3
- 1007              	.LC4:
- 1008 002c 5600     		.ascii	"V\000"
- 1009 002e 0000     		.space	2
-ARM GAS  /tmp/ccEIq7ZR.s 			page 31
+ 332 014e 0122     		movs	r2, #1
+ 333 0150 0021     		movs	r1, #0
+ 334 0152 2046     		mov	r0, r4
+ 335 0154 FFF7FEFF 		bl	LCD_SetLocation
+ 336              	.LVL53:
+ 471:./Src/main.c  ****     LCD_WriteString(&lcd, "Battery low.");
+ 337              		.loc 1 471 0
+ 338 0158 1249     		ldr	r1, .L27+36
+ 339 015a 2046     		mov	r0, r4
+ 340 015c FFF7FEFF 		bl	LCD_WriteString
+ 341              	.LVL54:
+ 472:./Src/main.c  ****     HAL_Delay(500);
+ 342              		.loc 1 472 0
+ 343 0160 4FF4FA70 		mov	r0, #500
+ 344 0164 FFF7FEFF 		bl	HAL_Delay
+ 345              	.LVL55:
+ 473:./Src/main.c  ****     HAL_IWDG_Refresh(&hiwdg);
+ 346              		.loc 1 473 0
+ 347 0168 0C48     		ldr	r0, .L27+28
+ 348 016a FFF7FEFF 		bl	HAL_IWDG_Refresh
+ 349              	.LVL56:
+ 474:./Src/main.c  ****     HAL_Delay(500);
+ 350              		.loc 1 474 0
+ 351 016e 4FF4FA70 		mov	r0, #500
+ 352 0172 FFF7FEFF 		bl	HAL_Delay
+ 353              	.LVL57:
+ 475:./Src/main.c  ****     Power_Set(0);
+ 354              		.loc 1 475 0
+ 355 0176 0020     		movs	r0, #0
+ 356 0178 FFF7FEFF 		bl	Power_Set
+ 357              	.LVL58:
+ 358              	.L10:
+ 359 017c 10BD     		pop	{r4, pc}
+ 360              	.L28:
+ 361 017e 00BF     		.align	3
+ 362              	.L27:
+ 363 0180 7B14AE47 		.word	1202590843
+ 364 0184 E17A943F 		.word	1066695393
+ 365 0188 000034C0 		.word	-1070333952
+ 366 018c 00003440 		.word	1077149696
+ 367 0190 00000000 		.word	lcd
+ 368 0194 00000000 		.word	.LC0
+ 369 0198 10000000 		.word	.LC1
+ 370 019c 00000000 		.word	hiwdg
+ 371 01a0 0000F841 		.word	1106771968
+ 372 01a4 20000000 		.word	.LC2
+ 373              	.LBE5:
+ 374              		.cfi_endproc
+ 375              	.LFE66:
+ 377              		.section	.text.saveConfig,"ax",%progbits
+ 378              		.align	2
+ 379              		.global	saveConfig
+ 380              		.thumb
+ 381              		.thumb_func
+ 383              	saveConfig:
+ 384              	.LFB67:
+ 476:./Src/main.c  ****   }
+ARM GAS  /tmp/cckqBGja.s 			page 16
 
 
- 1010              	.LC5:
- 1011 0030 4100     		.ascii	"A\000"
- 1012 0032 0000     		.space	2
- 1013              	.LC6:
- 1014 0034 436F6E74 		.ascii	"Controlled by UART\000"
- 1014      726F6C6C 
- 1014      65642062 
- 1014      79205541 
- 1014      525400
- 1015 0047 00       		.space	1
- 1016              	.LC7:
- 1017 0048 25693B25 		.ascii	"%i;%i\012\015\000"
- 1017      690A0D00 
- 1018              	.LC8:
- 1019 0050 456D6572 		.ascii	"Emergency Off!\000"
- 1019      67656E63 
- 1019      79204F66 
- 1019      662100
- 1020 005f 00       		.space	1
- 1021              	.LC9:
- 1022 0060 4F766572 		.ascii	"Overcurrent.\000"
- 1022      63757272 
- 1022      656E742E 
- 1022      00
- 1023 006d 000000   		.space	3
- 1024              	.LC10:
- 1025 0070 42617474 		.ascii	"Battery low.\000"
- 1025      65727920 
- 1025      6C6F772E 
- 1025      00
- 1026 007d 000000   		.space	3
- 1027              	.LC1:
- 1028 0080 20202020 		.ascii	"     \000"
- 1028      2000
- 1029              		.section	.data.VirtAddVarTab,"aw",%progbits
- 1030              		.align	2
- 1031              		.set	.LANCHOR1,. + 0
- 1034              	VirtAddVarTab:
- 1035 0000 3713     		.short	4919
- 1036 0002 00000000 		.space	4
- 1037              		.section	.bss.VarDataTab,"aw",%nobits
- 1038              		.align	2
- 1041              	VarDataTab:
- 1042 0000 00000000 		.space	6
- 1042      0000
- 1043              		.section	.bss.speed,"aw",%nobits
- 1044              		.align	1
- 1047              	speed:
- 1048 0000 0000     		.space	2
- 1049              		.text
- 1050              	.Letext0:
- 1051              		.file 2 "/home/niklas/gcc-arm-none-eabi-5_4-2016q3/arm-none-eabi/include/machine/_default_types.h"
- 1052              		.file 3 "/home/niklas/gcc-arm-none-eabi-5_4-2016q3/arm-none-eabi/include/sys/_stdint.h"
- 1053              		.file 4 "./Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xe.h"
- 1054              		.file 5 "./Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h"
- 1055              		.file 6 "./Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h"
- 1056              		.file 7 "./Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc_ex.h"
-ARM GAS  /tmp/ccEIq7ZR.s 			page 32
+ 477:./Src/main.c  ****   //In Carica?
+ 478:./Src/main.c  ****   /*if(IS_Charge()==0){
+ 479:./Src/main.c  ****     WAIT_CHARGE_FINISH();
+ 480:./Src/main.c  ****   }*/
+ 481:./Src/main.c  **** }
+ 482:./Src/main.c  **** 
+ 483:./Src/main.c  **** void saveConfig() {
+ 385              		.loc 1 483 0
+ 386              		.cfi_startproc
+ 387              		@ args = 0, pretend = 0, frame = 0
+ 388              		@ frame_needed = 0, uses_anonymous_args = 0
+ 389 0000 08B5     		push	{r3, lr}
+ 390              	.LCFI4:
+ 391              		.cfi_def_cfa_offset 8
+ 392              		.cfi_offset 3, -8
+ 393              		.cfi_offset 14, -4
+ 484:./Src/main.c  ****   EE_WriteVariable(VirtAddVarTab[0], saveValue);
+ 394              		.loc 1 484 0
+ 395 0002 034B     		ldr	r3, .L31
+ 396 0004 1988     		ldrh	r1, [r3]
+ 397 0006 034B     		ldr	r3, .L31+4
+ 398 0008 1888     		ldrh	r0, [r3]
+ 399 000a FFF7FEFF 		bl	EE_WriteVariable
+ 400              	.LVL59:
+ 401 000e 08BD     		pop	{r3, pc}
+ 402              	.L32:
+ 403              		.align	2
+ 404              	.L31:
+ 405 0010 00000000 		.word	.LANCHOR1
+ 406 0014 00000000 		.word	.LANCHOR2
+ 407              		.cfi_endproc
+ 408              	.LFE67:
+ 410              		.section	.text.HAL_ADC_ConvCpltCallback,"ax",%progbits
+ 411              		.align	2
+ 412              		.global	HAL_ADC_ConvCpltCallback
+ 413              		.thumb
+ 414              		.thumb_func
+ 416              	HAL_ADC_ConvCpltCallback:
+ 417              	.LFB70:
+ 485:./Src/main.c  **** }
+ 486:./Src/main.c  **** 
+ 487:./Src/main.c  **** /** System Clock Configuration
+ 488:./Src/main.c  **** */
+ 489:./Src/main.c  **** void SystemClock_Config(void)
+ 490:./Src/main.c  **** {
+ 491:./Src/main.c  **** 
+ 492:./Src/main.c  ****   RCC_OscInitTypeDef RCC_OscInitStruct;
+ 493:./Src/main.c  ****   RCC_ClkInitTypeDef RCC_ClkInitStruct;
+ 494:./Src/main.c  ****   RCC_PeriphCLKInitTypeDef PeriphClkInit;
+ 495:./Src/main.c  **** 
+ 496:./Src/main.c  ****     /**Initializes the CPU, AHB and APB busses clocks
+ 497:./Src/main.c  ****     */
+ 498:./Src/main.c  ****   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+ 499:./Src/main.c  ****   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+ 500:./Src/main.c  ****   RCC_OscInitStruct.HSICalibrationValue = 16;
+ 501:./Src/main.c  ****   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+ 502:./Src/main.c  ****   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI_DIV2;
+ARM GAS  /tmp/cckqBGja.s 			page 17
 
 
- 1057              		.file 8 "./Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_dma.h"
- 1058              		.file 9 "./Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_adc.h"
- 1059              		.file 10 "./Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_i2c.h"
- 1060              		.file 11 "./Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_iwdg.h"
- 1061              		.file 12 "./Inc/pcf8574.h"
- 1062              		.file 13 "./Inc/hd44780.h"
- 1063              		.file 14 "./Drivers/CMSIS/Include/core_cm3.h"
- 1064              		.file 15 "./Inc/eeprom.h"
- 1065              		.file 16 "./Inc/ADC_R.h"
- 1066              		.file 17 "./Inc/ADC_L.h"
- 1067              		.file 18 "./Inc/motor_R.h"
- 1068              		.file 19 "./Inc/motor_L.h"
- 1069              		.file 20 "./Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_cortex.h"
- 1070              		.file 21 "./Inc/varie.h"
- 1071              		.file 22 "./Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h"
- 1072              		.file 23 "/home/niklas/gcc-arm-none-eabi-5_4-2016q3/arm-none-eabi/include/stdio.h"
- 1073              		.file 24 "./Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio.h"
- 1074              		.file 25 "./Inc/telemetry.h"
- 1075              		.file 26 "./Inc/application.h"
- 1076              		.file 27 "./Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash.h"
- 1077              		.file 28 "<built-in>"
-ARM GAS  /tmp/ccEIq7ZR.s 			page 33
+ 503:./Src/main.c  ****   RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL16;
+ 504:./Src/main.c  ****   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+ 505:./Src/main.c  ****   {
+ 506:./Src/main.c  ****     Error_Handler();
+ 507:./Src/main.c  ****   }
+ 508:./Src/main.c  **** 
+ 509:./Src/main.c  ****     /**Initializes the CPU, AHB and APB busses clocks
+ 510:./Src/main.c  ****     */
+ 511:./Src/main.c  ****   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+ 512:./Src/main.c  ****                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+ 513:./Src/main.c  ****   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+ 514:./Src/main.c  ****   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+ 515:./Src/main.c  ****   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
+ 516:./Src/main.c  ****   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+ 517:./Src/main.c  **** 
+ 518:./Src/main.c  ****   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
+ 519:./Src/main.c  ****   {
+ 520:./Src/main.c  ****     Error_Handler();
+ 521:./Src/main.c  ****   }
+ 522:./Src/main.c  **** 
+ 523:./Src/main.c  ****   PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC;
+ 524:./Src/main.c  ****   PeriphClkInit.AdcClockSelection = RCC_ADCPCLK2_DIV8;
+ 525:./Src/main.c  ****   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+ 526:./Src/main.c  ****   {
+ 527:./Src/main.c  ****     Error_Handler();
+ 528:./Src/main.c  ****   }
+ 529:./Src/main.c  **** 
+ 530:./Src/main.c  ****     /**Configure the Systick interrupt time
+ 531:./Src/main.c  ****     */
+ 532:./Src/main.c  ****   HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);
+ 533:./Src/main.c  **** 
+ 534:./Src/main.c  ****     /**Configure the Systick
+ 535:./Src/main.c  ****     */
+ 536:./Src/main.c  ****   HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
+ 537:./Src/main.c  **** 
+ 538:./Src/main.c  ****   /* SysTick_IRQn interrupt configuration */
+ 539:./Src/main.c  ****   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
+ 540:./Src/main.c  **** }
+ 541:./Src/main.c  **** 
+ 542:./Src/main.c  **** /* IWDG init function */
+ 543:./Src/main.c  **** static void MX_IWDG_Init(void)
+ 544:./Src/main.c  **** {
+ 545:./Src/main.c  ****   __HAL_RCC_WWDG_CLK_ENABLE();
+ 546:./Src/main.c  ****   hiwdg.Instance = IWDG;
+ 547:./Src/main.c  ****   hiwdg.Init.Prescaler = IWDG_PRESCALER_8;
+ 548:./Src/main.c  ****   hiwdg.Init.Reload = 4095;
+ 549:./Src/main.c  ****   if (HAL_IWDG_Init(&hiwdg) != HAL_OK)
+ 550:./Src/main.c  ****   {
+ 551:./Src/main.c  ****     Error_Handler();
+ 552:./Src/main.c  ****   }
+ 553:./Src/main.c  ****   HAL_IWDG_Start(&hiwdg);
+ 554:./Src/main.c  **** }
+ 555:./Src/main.c  **** 
+ 556:./Src/main.c  **** 
+ 557:./Src/main.c  **** void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc){
+ 418              		.loc 1 557 0
+ 419              		.cfi_startproc
+ARM GAS  /tmp/cckqBGja.s 			page 18
+
+
+ 420              		@ args = 0, pretend = 0, frame = 0
+ 421              		@ frame_needed = 0, uses_anonymous_args = 0
+ 422              	.LVL60:
+ 423 0000 10B5     		push	{r4, lr}
+ 424              	.LCFI5:
+ 425              		.cfi_def_cfa_offset 8
+ 426              		.cfi_offset 4, -8
+ 427              		.cfi_offset 14, -4
+ 428 0002 0446     		mov	r4, r0
+ 558:./Src/main.c  ****   if(hadc->Instance == ADC1){
+ 429              		.loc 1 558 0
+ 430 0004 0268     		ldr	r2, [r0]
+ 431 0006 064B     		ldr	r3, .L37
+ 432 0008 9A42     		cmp	r2, r3
+ 433 000a 01D1     		bne	.L34
+ 559:./Src/main.c  ****     ADC_R_callback();
+ 434              		.loc 1 559 0
+ 435 000c FFF7FEFF 		bl	ADC_R_callback
+ 436              	.LVL61:
+ 437              	.L34:
+ 560:./Src/main.c  ****   }
+ 561:./Src/main.c  ****   if(hadc->Instance == ADC3){
+ 438              		.loc 1 561 0
+ 439 0010 2268     		ldr	r2, [r4]
+ 440 0012 044B     		ldr	r3, .L37+4
+ 441 0014 9A42     		cmp	r2, r3
+ 442 0016 01D1     		bne	.L33
+ 562:./Src/main.c  ****     ADC_L_callback();
+ 443              		.loc 1 562 0
+ 444 0018 FFF7FEFF 		bl	ADC_L_callback
+ 445              	.LVL62:
+ 446              	.L33:
+ 447 001c 10BD     		pop	{r4, pc}
+ 448              	.LVL63:
+ 449              	.L38:
+ 450 001e 00BF     		.align	2
+ 451              	.L37:
+ 452 0020 00240140 		.word	1073816576
+ 453 0024 003C0140 		.word	1073822720
+ 454              		.cfi_endproc
+ 455              	.LFE70:
+ 457              		.section	.text.Error_Handler,"ax",%progbits
+ 458              		.align	2
+ 459              		.global	Error_Handler
+ 460              		.thumb
+ 461              		.thumb_func
+ 463              	Error_Handler:
+ 464              	.LFB71:
+ 563:./Src/main.c  ****   }
+ 564:./Src/main.c  **** }
+ 565:./Src/main.c  **** 
+ 566:./Src/main.c  **** 
+ 567:./Src/main.c  **** /**
+ 568:./Src/main.c  ****   * @brief  This function is executed in case of error occurrence.
+ 569:./Src/main.c  ****   * @param  None
+ 570:./Src/main.c  ****   * @retval None
+ 571:./Src/main.c  ****   */
+ARM GAS  /tmp/cckqBGja.s 			page 19
+
+
+ 572:./Src/main.c  **** void Error_Handler(void)
+ 573:./Src/main.c  **** {
+ 465              		.loc 1 573 0
+ 466              		.cfi_startproc
+ 467              		@ Volatile: function does not return.
+ 468              		@ args = 0, pretend = 0, frame = 0
+ 469              		@ frame_needed = 0, uses_anonymous_args = 0
+ 470 0000 08B5     		push	{r3, lr}
+ 471              	.LCFI6:
+ 472              		.cfi_def_cfa_offset 8
+ 473              		.cfi_offset 3, -8
+ 474              		.cfi_offset 14, -4
+ 574:./Src/main.c  ****   /* USER CODE BEGIN Error_Handler */
+ 575:./Src/main.c  ****   /* User can add his own implementation to report the HAL error return state */
+ 576:./Src/main.c  ****   MotorR_stop();
+ 475              		.loc 1 576 0
+ 476 0002 FFF7FEFF 		bl	MotorR_stop
+ 477              	.LVL64:
+ 577:./Src/main.c  ****   MotorL_stop();
+ 478              		.loc 1 577 0
+ 479 0006 FFF7FEFF 		bl	MotorL_stop
+ 480              	.LVL65:
+ 481              	.L40:
+ 482 000a FEE7     		b	.L40
+ 483              		.cfi_endproc
+ 484              	.LFE71:
+ 486              		.section	.text.MX_IWDG_Init,"ax",%progbits
+ 487              		.align	2
+ 488              		.thumb
+ 489              		.thumb_func
+ 491              	MX_IWDG_Init:
+ 492              	.LFB69:
+ 544:./Src/main.c  ****   __HAL_RCC_WWDG_CLK_ENABLE();
+ 493              		.loc 1 544 0
+ 494              		.cfi_startproc
+ 495              		@ args = 0, pretend = 0, frame = 8
+ 496              		@ frame_needed = 0, uses_anonymous_args = 0
+ 497 0000 00B5     		push	{lr}
+ 498              	.LCFI7:
+ 499              		.cfi_def_cfa_offset 4
+ 500              		.cfi_offset 14, -4
+ 501 0002 83B0     		sub	sp, sp, #12
+ 502              	.LCFI8:
+ 503              		.cfi_def_cfa_offset 16
+ 504              	.LBB6:
+ 545:./Src/main.c  ****   hiwdg.Instance = IWDG;
+ 505              		.loc 1 545 0
+ 506 0004 0E4B     		ldr	r3, .L45
+ 507 0006 DA69     		ldr	r2, [r3, #28]
+ 508 0008 42F40062 		orr	r2, r2, #2048
+ 509 000c DA61     		str	r2, [r3, #28]
+ 510 000e DB69     		ldr	r3, [r3, #28]
+ 511 0010 03F40063 		and	r3, r3, #2048
+ 512 0014 0193     		str	r3, [sp, #4]
+ 513 0016 019B     		ldr	r3, [sp, #4]
+ 514              	.LBE6:
+ 546:./Src/main.c  ****   hiwdg.Init.Prescaler = IWDG_PRESCALER_8;
+ARM GAS  /tmp/cckqBGja.s 			page 20
+
+
+ 515              		.loc 1 546 0
+ 516 0018 0A48     		ldr	r0, .L45+4
+ 517 001a 0B4B     		ldr	r3, .L45+8
+ 518 001c 0360     		str	r3, [r0]
+ 547:./Src/main.c  ****   hiwdg.Init.Reload = 4095;
+ 519              		.loc 1 547 0
+ 520 001e 0123     		movs	r3, #1
+ 521 0020 4360     		str	r3, [r0, #4]
+ 548:./Src/main.c  ****   if (HAL_IWDG_Init(&hiwdg) != HAL_OK)
+ 522              		.loc 1 548 0
+ 523 0022 40F6FF73 		movw	r3, #4095
+ 524 0026 8360     		str	r3, [r0, #8]
+ 549:./Src/main.c  ****   {
+ 525              		.loc 1 549 0
+ 526 0028 FFF7FEFF 		bl	HAL_IWDG_Init
+ 527              	.LVL66:
+ 528 002c 08B1     		cbz	r0, .L43
+ 551:./Src/main.c  ****   }
+ 529              		.loc 1 551 0
+ 530 002e FFF7FEFF 		bl	Error_Handler
+ 531              	.LVL67:
+ 532              	.L43:
+ 553:./Src/main.c  **** }
+ 533              		.loc 1 553 0
+ 534 0032 0448     		ldr	r0, .L45+4
+ 535 0034 FFF7FEFF 		bl	HAL_IWDG_Start
+ 536              	.LVL68:
+ 554:./Src/main.c  **** 
+ 537              		.loc 1 554 0
+ 538 0038 03B0     		add	sp, sp, #12
+ 539              	.LCFI9:
+ 540              		.cfi_def_cfa_offset 4
+ 541              		@ sp needed
+ 542 003a 5DF804FB 		ldr	pc, [sp], #4
+ 543              	.L46:
+ 544 003e 00BF     		.align	2
+ 545              	.L45:
+ 546 0040 00100240 		.word	1073876992
+ 547 0044 00000000 		.word	hiwdg
+ 548 0048 00300040 		.word	1073754112
+ 549              		.cfi_endproc
+ 550              	.LFE69:
+ 552              		.section	.text.SystemClock_Config,"ax",%progbits
+ 553              		.align	2
+ 554              		.global	SystemClock_Config
+ 555              		.thumb
+ 556              		.thumb_func
+ 558              	SystemClock_Config:
+ 559              	.LFB68:
+ 490:./Src/main.c  **** 
+ 560              		.loc 1 490 0
+ 561              		.cfi_startproc
+ 562              		@ args = 0, pretend = 0, frame = 88
+ 563              		@ frame_needed = 0, uses_anonymous_args = 0
+ 564 0000 00B5     		push	{lr}
+ 565              	.LCFI10:
+ 566              		.cfi_def_cfa_offset 4
+ARM GAS  /tmp/cckqBGja.s 			page 21
+
+
+ 567              		.cfi_offset 14, -4
+ 568 0002 97B0     		sub	sp, sp, #92
+ 569              	.LCFI11:
+ 570              		.cfi_def_cfa_offset 96
+ 498:./Src/main.c  ****   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+ 571              		.loc 1 498 0
+ 572 0004 0223     		movs	r3, #2
+ 573 0006 0C93     		str	r3, [sp, #48]
+ 499:./Src/main.c  ****   RCC_OscInitStruct.HSICalibrationValue = 16;
+ 574              		.loc 1 499 0
+ 575 0008 0122     		movs	r2, #1
+ 576 000a 1092     		str	r2, [sp, #64]
+ 500:./Src/main.c  ****   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+ 577              		.loc 1 500 0
+ 578 000c 1022     		movs	r2, #16
+ 579 000e 1192     		str	r2, [sp, #68]
+ 501:./Src/main.c  ****   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI_DIV2;
+ 580              		.loc 1 501 0
+ 581 0010 1393     		str	r3, [sp, #76]
+ 502:./Src/main.c  ****   RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL16;
+ 582              		.loc 1 502 0
+ 583 0012 0023     		movs	r3, #0
+ 584 0014 1493     		str	r3, [sp, #80]
+ 503:./Src/main.c  ****   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+ 585              		.loc 1 503 0
+ 586 0016 4FF46013 		mov	r3, #3670016
+ 587 001a 1593     		str	r3, [sp, #84]
+ 504:./Src/main.c  ****   {
+ 588              		.loc 1 504 0
+ 589 001c 0CA8     		add	r0, sp, #48
+ 590 001e FFF7FEFF 		bl	HAL_RCC_OscConfig
+ 591              	.LVL69:
+ 592 0022 08B1     		cbz	r0, .L48
+ 506:./Src/main.c  ****   }
+ 593              		.loc 1 506 0
+ 594 0024 FFF7FEFF 		bl	Error_Handler
+ 595              	.LVL70:
+ 596              	.L48:
+ 511:./Src/main.c  ****                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+ 597              		.loc 1 511 0
+ 598 0028 0F23     		movs	r3, #15
+ 599 002a 0793     		str	r3, [sp, #28]
+ 513:./Src/main.c  ****   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+ 600              		.loc 1 513 0
+ 601 002c 0221     		movs	r1, #2
+ 602 002e 0891     		str	r1, [sp, #32]
+ 514:./Src/main.c  ****   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
+ 603              		.loc 1 514 0
+ 604 0030 0023     		movs	r3, #0
+ 605 0032 0993     		str	r3, [sp, #36]
+ 515:./Src/main.c  ****   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+ 606              		.loc 1 515 0
+ 607 0034 4FF48062 		mov	r2, #1024
+ 608 0038 0A92     		str	r2, [sp, #40]
+ 516:./Src/main.c  **** 
+ 609              		.loc 1 516 0
+ 610 003a 0B93     		str	r3, [sp, #44]
+ARM GAS  /tmp/cckqBGja.s 			page 22
+
+
+ 518:./Src/main.c  ****   {
+ 611              		.loc 1 518 0
+ 612 003c 07A8     		add	r0, sp, #28
+ 613 003e FFF7FEFF 		bl	HAL_RCC_ClockConfig
+ 614              	.LVL71:
+ 615 0042 08B1     		cbz	r0, .L49
+ 520:./Src/main.c  ****   }
+ 616              		.loc 1 520 0
+ 617 0044 FFF7FEFF 		bl	Error_Handler
+ 618              	.LVL72:
+ 619              	.L49:
+ 523:./Src/main.c  ****   PeriphClkInit.AdcClockSelection = RCC_ADCPCLK2_DIV8;
+ 620              		.loc 1 523 0
+ 621 0048 0223     		movs	r3, #2
+ 622 004a 0193     		str	r3, [sp, #4]
+ 524:./Src/main.c  ****   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+ 623              		.loc 1 524 0
+ 624 004c 4FF44043 		mov	r3, #49152
+ 625 0050 0393     		str	r3, [sp, #12]
+ 525:./Src/main.c  ****   {
+ 626              		.loc 1 525 0
+ 627 0052 01A8     		add	r0, sp, #4
+ 628 0054 FFF7FEFF 		bl	HAL_RCCEx_PeriphCLKConfig
+ 629              	.LVL73:
+ 630 0058 08B1     		cbz	r0, .L50
+ 527:./Src/main.c  ****   }
+ 631              		.loc 1 527 0
+ 632 005a FFF7FEFF 		bl	Error_Handler
+ 633              	.LVL74:
+ 634              	.L50:
+ 532:./Src/main.c  **** 
+ 635              		.loc 1 532 0
+ 636 005e FFF7FEFF 		bl	HAL_RCC_GetHCLKFreq
+ 637              	.LVL75:
+ 638 0062 094B     		ldr	r3, .L52
+ 639 0064 A3FB0030 		umull	r3, r0, r3, r0
+ 640 0068 8009     		lsrs	r0, r0, #6
+ 641 006a FFF7FEFF 		bl	HAL_SYSTICK_Config
+ 642              	.LVL76:
+ 536:./Src/main.c  **** 
+ 643              		.loc 1 536 0
+ 644 006e 0420     		movs	r0, #4
+ 645 0070 FFF7FEFF 		bl	HAL_SYSTICK_CLKSourceConfig
+ 646              	.LVL77:
+ 539:./Src/main.c  **** }
+ 647              		.loc 1 539 0
+ 648 0074 0022     		movs	r2, #0
+ 649 0076 1146     		mov	r1, r2
+ 650 0078 4FF0FF30 		mov	r0, #-1
+ 651 007c FFF7FEFF 		bl	HAL_NVIC_SetPriority
+ 652              	.LVL78:
+ 540:./Src/main.c  **** 
+ 653              		.loc 1 540 0
+ 654 0080 17B0     		add	sp, sp, #92
+ 655              	.LCFI12:
+ 656              		.cfi_def_cfa_offset 4
+ 657              		@ sp needed
+ARM GAS  /tmp/cckqBGja.s 			page 23
+
+
+ 658 0082 5DF804FB 		ldr	pc, [sp], #4
+ 659              	.L53:
+ 660 0086 00BF     		.align	2
+ 661              	.L52:
+ 662 0088 D34D6210 		.word	274877907
+ 663              		.cfi_endproc
+ 664              	.LFE68:
+ 666              		.global	__aeabi_f2d
+ 667              		.section	.text.main,"ax",%progbits
+ 668              		.align	2
+ 669              		.global	main
+ 670              		.thumb
+ 671              		.thumb_func
+ 673              	main:
+ 674              	.LFB64:
+ 106:./Src/main.c  ****   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+ 675              		.loc 1 106 0
+ 676              		.cfi_startproc
+ 677              		@ args = 0, pretend = 0, frame = 104
+ 678              		@ frame_needed = 0, uses_anonymous_args = 0
+ 679 0000 2DE9F047 		push	{r4, r5, r6, r7, r8, r9, r10, lr}
+ 680              	.LCFI13:
+ 681              		.cfi_def_cfa_offset 32
+ 682              		.cfi_offset 4, -32
+ 683              		.cfi_offset 5, -28
+ 684              		.cfi_offset 6, -24
+ 685              		.cfi_offset 7, -20
+ 686              		.cfi_offset 8, -16
+ 687              		.cfi_offset 9, -12
+ 688              		.cfi_offset 10, -8
+ 689              		.cfi_offset 14, -4
+ 690 0004 9CB0     		sub	sp, sp, #112
+ 691              	.LCFI14:
+ 692              		.cfi_def_cfa_offset 144
+ 108:./Src/main.c  **** 
+ 693              		.loc 1 108 0
+ 694 0006 FFF7FEFF 		bl	HAL_Init
+ 695              	.LVL79:
+ 111:./Src/main.c  **** 
+ 696              		.loc 1 111 0
+ 697 000a FFF7FEFF 		bl	SystemClock_Config
+ 698              	.LVL80:
+ 113:./Src/main.c  **** 
+ 699              		.loc 1 113 0
+ 700 000e FFF7FEFF 		bl	Button_init
+ 701              	.LVL81:
+ 115:./Src/main.c  **** 
+ 702              		.loc 1 115 0
+ 703 0012 0120     		movs	r0, #1
+ 704 0014 FFF7FEFF 		bl	Power_Set
+ 705              	.LVL82:
+ 119:./Src/main.c  **** 
+ 706              		.loc 1 119 0
+ 707 0018 FFF7FEFF 		bl	MX_I2C2_Init
+ 708              	.LVL83:
+ 122:./Src/main.c  **** 
+ 709              		.loc 1 122 0
+ARM GAS  /tmp/cckqBGja.s 			page 24
+
+
+ 710 001c FFF7FEFF 		bl	HAL_FLASH_Unlock
+ 711              	.LVL84:
+ 125:./Src/main.c  **** 
+ 712              		.loc 1 125 0
+ 713 0020 FFF7FEFF 		bl	EE_Init
+ 714              	.LVL85:
+ 128:./Src/main.c  **** 	lcd.pcf8574.PCF_I2C_TIMEOUT = 1000;
+ 715              		.loc 1 128 0
+ 716 0024 C24F     		ldr	r7, .L98+8
+ 717 0026 2723     		movs	r3, #39
+ 718 0028 87F84030 		strb	r3, [r7, #64]
+ 129:./Src/main.c  **** 	lcd.pcf8574.i2c = hi2c2;
+ 719              		.loc 1 129 0
+ 720 002c 4FF47A73 		mov	r3, #1000
+ 721 0030 7B64     		str	r3, [r7, #68]
+ 130:./Src/main.c  **** 	lcd.NUMBER_OF_LINES = NUMBER_OF_LINES_2;
+ 722              		.loc 1 130 0
+ 723 0032 07F14804 		add	r4, r7, #72
+ 724 0036 BF4D     		ldr	r5, .L98+12
+ 725 0038 0FCD     		ldmia	r5!, {r0, r1, r2, r3}
+ 726 003a 0FC4     		stmia	r4!, {r0, r1, r2, r3}
+ 727 003c 0FCD     		ldmia	r5!, {r0, r1, r2, r3}
+ 728 003e 0FC4     		stmia	r4!, {r0, r1, r2, r3}
+ 729 0040 0FCD     		ldmia	r5!, {r0, r1, r2, r3}
+ 730 0042 0FC4     		stmia	r4!, {r0, r1, r2, r3}
+ 731 0044 95E80700 		ldmia	r5, {r0, r1, r2}
+ 732 0048 84E80700 		stmia	r4, {r0, r1, r2}
+ 131:./Src/main.c  **** 	lcd.type = TYPE0;
+ 733              		.loc 1 131 0
+ 734 004c 0126     		movs	r6, #1
+ 735 004e 3E70     		strb	r6, [r7]
+ 132:./Src/main.c  **** 
+ 736              		.loc 1 132 0
+ 737 0050 0024     		movs	r4, #0
+ 738 0052 87F83C40 		strb	r4, [r7, #60]
+ 134:./Src/main.c  **** 		// error occured
+ 739              		.loc 1 134 0
+ 740 0056 3846     		mov	r0, r7
+ 741 0058 FFF7FEFF 		bl	LCD_Init
+ 742              	.LVL86:
+ 140:./Src/main.c  ****   LCD_SetLocation(&lcd, 0, 0);
+ 743              		.loc 1 140 0
+ 744 005c 3846     		mov	r0, r7
+ 745 005e FFF7FEFF 		bl	LCD_ClearDisplay
+ 746              	.LVL87:
+ 141:./Src/main.c  **** 	LCD_WriteString(&lcd, "TranspOtter V1.3");
+ 747              		.loc 1 141 0
+ 748 0062 2246     		mov	r2, r4
+ 749 0064 2146     		mov	r1, r4
+ 750 0066 3846     		mov	r0, r7
+ 751 0068 FFF7FEFF 		bl	LCD_SetLocation
+ 752              	.LVL88:
+ 142:./Src/main.c  **** 
+ 753              		.loc 1 142 0
+ 754 006c B249     		ldr	r1, .L98+16
+ 755 006e 3846     		mov	r0, r7
+ 756 0070 FFF7FEFF 		bl	LCD_WriteString
+ARM GAS  /tmp/cckqBGja.s 			page 25
+
+
+ 757              	.LVL89:
+ 146:./Src/main.c  **** 	LCD_WriteString(&lcd, "Initializing...");
+ 758              		.loc 1 146 0
+ 759 0074 3246     		mov	r2, r6
+ 760 0076 2146     		mov	r1, r4
+ 761 0078 3846     		mov	r0, r7
+ 762 007a FFF7FEFF 		bl	LCD_SetLocation
+ 763              	.LVL90:
+ 147:./Src/main.c  ****   //LCD_WriteString(&lcd, message);
+ 764              		.loc 1 147 0
+ 765 007e AF49     		ldr	r1, .L98+20
+ 766 0080 3846     		mov	r0, r7
+ 767 0082 FFF7FEFF 		bl	LCD_WriteString
+ 768              	.LVL91:
+ 150:./Src/main.c  ****   Led_init();
+ 769              		.loc 1 150 0
+ 770 0086 FFF7FEFF 		bl	Buzzer_init
+ 771              	.LVL92:
+ 151:./Src/main.c  ****   IS_Charge_init();
+ 772              		.loc 1 151 0
+ 773 008a FFF7FEFF 		bl	Led_init
+ 774              	.LVL93:
+ 152:./Src/main.c  **** 
+ 775              		.loc 1 152 0
+ 776 008e FFF7FEFF 		bl	IS_Charge_init
+ 777              	.LVL94:
+ 155:./Src/main.c  ****   int buttonTimeout = 0;
+ 778              		.loc 1 155 0
+ 779 0092 40F22620 		movw	r0, #550
+ 780 0096 FFF7FEFF 		bl	HAL_Delay
+ 781              	.LVL95:
+ 782              	.LBB7:
+ 158:./Src/main.c  ****     buttonTimeout++;
+ 783              		.loc 1 158 0
+ 784 009a 23E0     		b	.L55
+ 785              	.LVL96:
+ 786              	.L57:
+ 159:./Src/main.c  ****     HAL_Delay(100);
+ 787              		.loc 1 159 0
+ 788 009c 0134     		adds	r4, r4, #1
+ 789              	.LVL97:
+ 160:./Src/main.c  ****     if(buttonTimeout > 20) {
+ 790              		.loc 1 160 0
+ 791 009e 6420     		movs	r0, #100
+ 792 00a0 FFF7FEFF 		bl	HAL_Delay
+ 793              	.LVL98:
+ 161:./Src/main.c  ****       LCD_ClearDisplay(&lcd);
+ 794              		.loc 1 161 0
+ 795 00a4 142C     		cmp	r4, #20
+ 796 00a6 1DDD     		ble	.L55
+ 162:./Src/main.c  ****       HAL_Delay(5);
+ 797              		.loc 1 162 0
+ 798 00a8 A14D     		ldr	r5, .L98+8
+ 799 00aa 2846     		mov	r0, r5
+ 800 00ac FFF7FEFF 		bl	LCD_ClearDisplay
+ 801              	.LVL99:
+ 163:./Src/main.c  ****       LCD_SetLocation(&lcd, 0, 0);
+ARM GAS  /tmp/cckqBGja.s 			page 26
+
+
+ 802              		.loc 1 163 0
+ 803 00b0 0520     		movs	r0, #5
+ 804 00b2 FFF7FEFF 		bl	HAL_Delay
+ 805              	.LVL100:
+ 164:./Src/main.c  ****     	LCD_WriteString(&lcd, "Starting without");
+ 806              		.loc 1 164 0
+ 807 00b6 0022     		movs	r2, #0
+ 808 00b8 1146     		mov	r1, r2
+ 809 00ba 2846     		mov	r0, r5
+ 810 00bc FFF7FEFF 		bl	LCD_SetLocation
+ 811              	.LVL101:
+ 165:./Src/main.c  ****       LCD_SetLocation(&lcd, 0, 1);
+ 812              		.loc 1 165 0
+ 813 00c0 9F49     		ldr	r1, .L98+24
+ 814 00c2 2846     		mov	r0, r5
+ 815 00c4 FFF7FEFF 		bl	LCD_WriteString
+ 816              	.LVL102:
+ 166:./Src/main.c  ****     	LCD_WriteString(&lcd, "remote E-off!");
+ 817              		.loc 1 166 0
+ 818 00c8 0122     		movs	r2, #1
+ 819 00ca 0021     		movs	r1, #0
+ 820 00cc 2846     		mov	r0, r5
+ 821 00ce FFF7FEFF 		bl	LCD_SetLocation
+ 822              	.LVL103:
+ 167:./Src/main.c  ****       checkRemote = 0;
+ 823              		.loc 1 167 0
+ 824 00d2 9C49     		ldr	r1, .L98+28
+ 825 00d4 2846     		mov	r0, r5
+ 826 00d6 FFF7FEFF 		bl	LCD_WriteString
+ 827              	.LVL104:
+ 169:./Src/main.c  ****     }
+ 828              		.loc 1 169 0
+ 829 00da 4FF4FA60 		mov	r0, #2000
+ 830 00de FFF7FEFF 		bl	HAL_Delay
+ 831              	.LVL105:
+ 168:./Src/main.c  ****       HAL_Delay(2000);
+ 832              		.loc 1 168 0
+ 833 00e2 0026     		movs	r6, #0
+ 834              	.LVL106:
+ 835              	.L55:
+ 158:./Src/main.c  ****     buttonTimeout++;
+ 836              		.loc 1 158 0
+ 837 00e4 FFF7FEFF 		bl	IS_Button
+ 838              	.LVL107:
+ 839 00e8 0028     		cmp	r0, #0
+ 840 00ea D7D1     		bne	.L57
+ 841              	.LBE7:
+ 842              	.LBB8:
+ 325:./Src/main.c  ****     ADC_R_init();
+ 843              		.loc 1 325 0
+ 844 00ec FFF7FEFF 		bl	ADC_L_init
+ 845              	.LVL108:
+ 326:./Src/main.c  ****     MotorL_init();
+ 846              		.loc 1 326 0
+ 847 00f0 FFF7FEFF 		bl	ADC_R_init
+ 848              	.LVL109:
+ 327:./Src/main.c  ****     MotorR_init();
+ARM GAS  /tmp/cckqBGja.s 			page 27
+
+
+ 849              		.loc 1 327 0
+ 850 00f4 FFF7FEFF 		bl	MotorL_init
+ 851              	.LVL110:
+ 328:./Src/main.c  **** 
+ 852              		.loc 1 328 0
+ 853 00f8 FFF7FEFF 		bl	MotorR_init
+ 854              	.LVL111:
+ 330:./Src/main.c  **** 
+ 855              		.loc 1 330 0
+ 856 00fc 0C21     		movs	r1, #12
+ 857 00fe 9248     		ldr	r0, .L98+32
+ 858 0100 FFF7FEFF 		bl	HAL_GPIO_DeInit
+ 859              	.LVL112:
+ 332:./Src/main.c  **** 
+ 860              		.loc 1 332 0
+ 861 0104 FFF7FEFF 		bl	Telemetry_init
+ 862              	.LVL113:
+ 334:./Src/main.c  **** 
+ 863              		.loc 1 334 0
+ 864 0108 9049     		ldr	r1, .L98+36
+ 865 010a 914B     		ldr	r3, .L98+40
+ 866 010c 1888     		ldrh	r0, [r3]
+ 867 010e FFF7FEFF 		bl	EE_ReadVariable
+ 868              	.LVL114:
+ 340:./Src/main.c  ****     Battery_TASK();
+ 869              		.loc 1 340 0
+ 870 0112 FFF7FEFF 		bl	applcation_init
+ 871              	.LVL115:
+ 341:./Src/main.c  **** 
+ 872              		.loc 1 341 0
+ 873 0116 FFF7FEFF 		bl	Battery_TASK
+ 874              	.LVL116:
+ 343:./Src/main.c  **** 
+ 875              		.loc 1 343 0
+ 876 011a FFF7FEFF 		bl	MX_IWDG_Init
+ 877              	.LVL117:
+ 345:./Src/main.c  ****     Buzzer_TwoBeep();
+ 878              		.loc 1 345 0
+ 879 011e 0120     		movs	r0, #1
+ 880 0120 FFF7FEFF 		bl	Led_Set
+ 881              	.LVL118:
+ 346:./Src/main.c  ****     HAL_Delay(250);
+ 882              		.loc 1 346 0
+ 883 0124 FFF7FEFF 		bl	Buzzer_TwoBeep
+ 884              	.LVL119:
+ 347:./Src/main.c  **** 
+ 885              		.loc 1 347 0
+ 886 0128 FA20     		movs	r0, #250
+ 887 012a FFF7FEFF 		bl	HAL_Delay
+ 888              	.LVL120:
+ 349:./Src/main.c  ****     MotorL_start();
+ 889              		.loc 1 349 0
+ 890 012e FFF7FEFF 		bl	MotorR_start
+ 891              	.LVL121:
+ 350:./Src/main.c  ****     //MotorR_pwm(80);
+ 892              		.loc 1 350 0
+ 893 0132 FFF7FEFF 		bl	MotorL_start
+ARM GAS  /tmp/cckqBGja.s 			page 28
+
+
+ 894              	.LVL122:
+ 354:./Src/main.c  ****     HAL_Delay(5);
+ 895              		.loc 1 354 0
+ 896 0136 7E4C     		ldr	r4, .L98+8
+ 897              	.LVL123:
+ 898 0138 2046     		mov	r0, r4
+ 899 013a FFF7FEFF 		bl	LCD_ClearDisplay
+ 900              	.LVL124:
+ 355:./Src/main.c  ****     LCD_SetLocation(&lcd, 0, 1);
+ 901              		.loc 1 355 0
+ 902 013e 0520     		movs	r0, #5
+ 903 0140 FFF7FEFF 		bl	HAL_Delay
+ 904              	.LVL125:
+ 356:./Src/main.c  ****   	LCD_WriteString(&lcd, "Bat:");
+ 905              		.loc 1 356 0
+ 906 0144 0122     		movs	r2, #1
+ 907 0146 0021     		movs	r1, #0
+ 908 0148 2046     		mov	r0, r4
+ 909 014a FFF7FEFF 		bl	LCD_SetLocation
+ 910              	.LVL126:
+ 357:./Src/main.c  ****     LCD_SetLocation(&lcd, 8, 1);
+ 911              		.loc 1 357 0
+ 912 014e 8149     		ldr	r1, .L98+44
+ 913 0150 2046     		mov	r0, r4
+ 914 0152 FFF7FEFF 		bl	LCD_WriteString
+ 915              	.LVL127:
+ 358:./Src/main.c  ****     LCD_WriteString(&lcd, "V");
+ 916              		.loc 1 358 0
+ 917 0156 0122     		movs	r2, #1
+ 918 0158 0821     		movs	r1, #8
+ 919 015a 2046     		mov	r0, r4
+ 920 015c FFF7FEFF 		bl	LCD_SetLocation
+ 921              	.LVL128:
+ 359:./Src/main.c  **** 
+ 922              		.loc 1 359 0
+ 923 0160 7D49     		ldr	r1, .L98+48
+ 924 0162 2046     		mov	r0, r4
+ 925 0164 FFF7FEFF 		bl	LCD_WriteString
+ 926              	.LVL129:
+ 361:./Src/main.c  ****     LCD_WriteString(&lcd, "A");
+ 927              		.loc 1 361 0
+ 928 0168 0122     		movs	r2, #1
+ 929 016a 0F21     		movs	r1, #15
+ 930 016c 2046     		mov	r0, r4
+ 931 016e FFF7FEFF 		bl	LCD_SetLocation
+ 932              	.LVL130:
+ 362:./Src/main.c  **** 
+ 933              		.loc 1 362 0
+ 934 0172 7A49     		ldr	r1, .L98+52
+ 935 0174 2046     		mov	r0, r4
+ 936 0176 FFF7FEFF 		bl	LCD_WriteString
+ 937              	.LVL131:
+ 364:./Src/main.c  ****   	LCD_WriteString(&lcd, "Controlled by UART");
+ 938              		.loc 1 364 0
+ 939 017a 0022     		movs	r2, #0
+ 940 017c 1146     		mov	r1, r2
+ 941 017e 2046     		mov	r0, r4
+ARM GAS  /tmp/cckqBGja.s 			page 29
+
+
+ 942 0180 FFF7FEFF 		bl	LCD_SetLocation
+ 943              	.LVL132:
+ 365:./Src/main.c  **** 
+ 944              		.loc 1 365 0
+ 945 0184 7649     		ldr	r1, .L98+56
+ 946 0186 2046     		mov	r0, r4
+ 947 0188 FFF7FEFF 		bl	LCD_WriteString
+ 948              	.LVL133:
+ 369:./Src/main.c  ****     while(1){
+ 949              		.loc 1 369 0
+ 950 018c 4FF00008 		mov	r8, #0
+ 951 0190 4746     		mov	r7, r8
+ 368:./Src/main.c  ****     int lastSpeedL = 0, lastSpeedR = 0;
+ 952              		.loc 1 368 0
+ 953 0192 4546     		mov	r5, r8
+ 954              	.LVL134:
+ 955              	.L82:
+ 956              	.LBB9:
+ 371:./Src/main.c  ****       if(IS_Button()) {
+ 957              		.loc 1 371 0
+ 958 0194 0135     		adds	r5, r5, #1
+ 959              	.LVL135:
+ 960              	.LBB10:
+ 372:./Src/main.c  ****         while(IS_Button()) {
+ 961              		.loc 1 372 0
+ 962 0196 FFF7FEFF 		bl	IS_Button
+ 963              	.LVL136:
+ 964 019a 18B9     		cbnz	r0, .L58
+ 965 019c 0FE0     		b	.L59
+ 966              	.L60:
+ 374:./Src/main.c  ****         }
+ 967              		.loc 1 374 0
+ 968 019e 7148     		ldr	r0, .L98+60
+ 969 01a0 FFF7FEFF 		bl	HAL_IWDG_Refresh
+ 970              	.LVL137:
+ 971              	.L58:
+ 373:./Src/main.c  ****           HAL_IWDG_Refresh(&hiwdg);
+ 972              		.loc 1 373 0
+ 973 01a4 FFF7FEFF 		bl	IS_Button
+ 974              	.LVL138:
+ 975 01a8 0028     		cmp	r0, #0
+ 976 01aa F8D1     		bne	.L60
+ 376:./Src/main.c  ****         HAL_Delay(350);
+ 977              		.loc 1 376 0
+ 978 01ac FFF7FEFF 		bl	Buzzer_OneLongBeep
+ 979              	.LVL139:
+ 377:./Src/main.c  ****         Power_Set(0);
+ 980              		.loc 1 377 0
+ 981 01b0 4FF4AF70 		mov	r0, #350
+ 982 01b4 FFF7FEFF 		bl	HAL_Delay
+ 983              	.LVL140:
+ 378:./Src/main.c  ****       }
+ 984              		.loc 1 378 0
+ 985 01b8 0020     		movs	r0, #0
+ 986 01ba FFF7FEFF 		bl	Power_Set
+ 987              	.LVL141:
+ 988              	.L59:
+ARM GAS  /tmp/cckqBGja.s 			page 30
+
+
+ 989              	.LBE10:
+ 381:./Src/main.c  ****         int speedL = -CLAMP(getMotorR(), -1000, 1000);
+ 990              		.loc 1 381 0
+ 991 01be 6A4B     		ldr	r3, .L98+64
+ 992 01c0 A3FB0523 		umull	r2, r3, r3, r5
+ 993 01c4 9B09     		lsrs	r3, r3, #6
+ 994 01c6 C822     		movs	r2, #200
+ 995 01c8 02FB1353 		mls	r3, r2, r3, r5
+ 996 01cc 002B     		cmp	r3, #0
+ 997 01ce 43D1     		bne	.L61
+ 998              	.LBB11:
+ 382:./Src/main.c  ****         int speedR = -CLAMP(getMotorL(), -1000, 1000);
+ 999              		.loc 1 382 0
+ 1000 01d0 FFF7FEFF 		bl	getMotorR
+ 1001              	.LVL142:
+ 1002 01d4 B0F57A7F 		cmp	r0, #1000
+ 1003 01d8 08DC     		bgt	.L83
+ 382:./Src/main.c  ****         int speedR = -CLAMP(getMotorL(), -1000, 1000);
+ 1004              		.loc 1 382 0 is_stmt 0 discriminator 1
+ 1005 01da FFF7FEFF 		bl	getMotorR
+ 1006              	.LVL143:
+ 1007 01de 10F57A7F 		cmn	r0, #1000
+ 1008 01e2 05DB     		blt	.L84
+ 382:./Src/main.c  ****         int speedR = -CLAMP(getMotorL(), -1000, 1000);
+ 1009              		.loc 1 382 0 discriminator 3
+ 1010 01e4 FFF7FEFF 		bl	getMotorR
+ 1011              	.LVL144:
+ 1012 01e8 4442     		negs	r4, r0
+ 1013 01ea 03E0     		b	.L62
+ 1014              	.L83:
+ 382:./Src/main.c  ****         int speedR = -CLAMP(getMotorL(), -1000, 1000);
+ 1015              		.loc 1 382 0
+ 1016 01ec 5F4C     		ldr	r4, .L98+68
+ 1017 01ee 01E0     		b	.L62
+ 1018              	.L84:
+ 1019 01f0 4FF47A74 		mov	r4, #1000
+ 1020              	.L62:
+ 1021              	.LVL145:
+ 383:./Src/main.c  ****         if ((speedL != lastSpeedL || speedR != lastSpeedR) && motorsArmed) {
+ 1022              		.loc 1 383 0 is_stmt 1 discriminator 8
+ 1023 01f4 FFF7FEFF 		bl	getMotorL
+ 1024              	.LVL146:
+ 1025 01f8 B0F57A7F 		cmp	r0, #1000
+ 1026 01fc 09DC     		bgt	.L85
+ 383:./Src/main.c  ****         if ((speedL != lastSpeedL || speedR != lastSpeedR) && motorsArmed) {
+ 1027              		.loc 1 383 0 is_stmt 0 discriminator 1
+ 1028 01fe FFF7FEFF 		bl	getMotorL
+ 1029              	.LVL147:
+ 1030 0202 10F57A7F 		cmn	r0, #1000
+ 1031 0206 07DB     		blt	.L86
+ 383:./Src/main.c  ****         if ((speedL != lastSpeedL || speedR != lastSpeedR) && motorsArmed) {
+ 1032              		.loc 1 383 0 discriminator 3
+ 1033 0208 FFF7FEFF 		bl	getMotorL
+ 1034              	.LVL148:
+ 1035 020c C0F10009 		rsb	r9, r0, #0
+ 1036 0210 04E0     		b	.L63
+ 1037              	.L85:
+ARM GAS  /tmp/cckqBGja.s 			page 31
+
+
+ 383:./Src/main.c  ****         if ((speedL != lastSpeedL || speedR != lastSpeedR) && motorsArmed) {
+ 1038              		.loc 1 383 0
+ 1039 0212 DFF85891 		ldr	r9, .L98+68
+ 1040 0216 01E0     		b	.L63
+ 1041              	.L86:
+ 1042 0218 4FF47A79 		mov	r9, #1000
+ 1043              	.L63:
+ 1044              	.LVL149:
+ 384:./Src/main.c  ****           MotorL_pwm(speedL);
+ 1045              		.loc 1 384 0 is_stmt 1 discriminator 8
+ 1046 021c A742     		cmp	r7, r4
+ 1047 021e 01D1     		bne	.L64
+ 384:./Src/main.c  ****           MotorL_pwm(speedL);
+ 1048              		.loc 1 384 0 is_stmt 0 discriminator 2
+ 1049 0220 C845     		cmp	r8, r9
+ 1050 0222 0BD0     		beq	.L65
+ 1051              	.L64:
+ 384:./Src/main.c  ****           MotorL_pwm(speedL);
+ 1052              		.loc 1 384 0 discriminator 3
+ 1053 0224 524B     		ldr	r3, .L98+72
+ 1054 0226 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 1055 0228 43B1     		cbz	r3, .L65
+ 385:./Src/main.c  ****           MotorR_pwm(speedR);
+ 1056              		.loc 1 385 0 is_stmt 1
+ 1057 022a 20B2     		sxth	r0, r4
+ 1058 022c FFF7FEFF 		bl	MotorL_pwm
+ 1059              	.LVL150:
+ 386:./Src/main.c  ****           lastSpeedL = speedL;
+ 1060              		.loc 1 386 0
+ 1061 0230 0FFA89F0 		sxth	r0, r9
+ 1062 0234 FFF7FEFF 		bl	MotorR_pwm
+ 1063              	.LVL151:
+ 388:./Src/main.c  ****         }
+ 1064              		.loc 1 388 0
+ 1065 0238 C846     		mov	r8, r9
+ 387:./Src/main.c  ****           lastSpeedR = speedR;
+ 1066              		.loc 1 387 0
+ 1067 023a 2746     		mov	r7, r4
+ 1068              	.LVL152:
+ 1069              	.L65:
+ 392:./Src/main.c  ****         sprintf(str, "%i;%i\n\r", speedL, speedR);
+ 1070              		.loc 1 392 0
+ 1071 023c 6422     		movs	r2, #100
+ 1072 023e 0021     		movs	r1, #0
+ 1073 0240 03A8     		add	r0, sp, #12
+ 1074 0242 FFF7FEFF 		bl	memset
+ 1075              	.LVL153:
+ 393:./Src/main.c  ****         Console_Log(str);
+ 1076              		.loc 1 393 0
+ 1077 0246 4B46     		mov	r3, r9
+ 1078 0248 2246     		mov	r2, r4
+ 1079 024a 4A49     		ldr	r1, .L98+76
+ 1080 024c 03A8     		add	r0, sp, #12
+ 1081 024e FFF7FEFF 		bl	sprintf
+ 1082              	.LVL154:
+ 394:./Src/main.c  ****       }
+ 1083              		.loc 1 394 0
+ARM GAS  /tmp/cckqBGja.s 			page 32
+
+
+ 1084 0252 03A8     		add	r0, sp, #12
+ 1085 0254 FFF7FEFF 		bl	Console_Log
+ 1086              	.LVL155:
+ 1087              	.L61:
+ 1088              	.LBE11:
+ 397:./Src/main.c  **** 
+ 1089              		.loc 1 397 0
+ 1090 0258 FFF7FEFF 		bl	safetyChecks
+ 1091              	.LVL156:
+ 399:./Src/main.c  ****         LCD_SetLocation(&lcd, 4, 1);
+ 1092              		.loc 1 399 0
+ 1093 025c 464C     		ldr	r4, .L98+80
+ 1094 025e A4FB0534 		umull	r3, r4, r4, r5
+ 1095 0262 E409     		lsrs	r4, r4, #7
+ 1096 0264 4FF4FA63 		mov	r3, #2000
+ 1097 0268 03FB1454 		mls	r4, r3, r4, r5
+ 1098 026c 002C     		cmp	r4, #0
+ 1099 026e 40F0E380 		bne	.L66
+ 1100              	.LBB12:
+ 400:./Src/main.c  ****         LCD_WriteFloat(&lcd,GET_BatteryAverage(),1);
+ 1101              		.loc 1 400 0
+ 1102 0272 DFF8BC90 		ldr	r9, .L98+8
+ 1103 0276 0122     		movs	r2, #1
+ 1104 0278 0421     		movs	r1, #4
+ 1105 027a 4846     		mov	r0, r9
+ 1106 027c FFF7FEFF 		bl	LCD_SetLocation
+ 1107              	.LVL157:
+ 401:./Src/main.c  ****         LCD_SetLocation(&lcd, 11, 1);
+ 1108              		.loc 1 401 0
+ 1109 0280 FFF7FEFF 		bl	GET_BatteryAverage
+ 1110              	.LVL158:
+ 1111 0284 FFF7FEFF 		bl	__aeabi_f2d
+ 1112              	.LVL159:
+ 1113 0288 4FF0010A 		mov	r10, #1
+ 1114 028c CDF800A0 		str	r10, [sp]
+ 1115 0290 0246     		mov	r2, r0
+ 1116 0292 0B46     		mov	r3, r1
+ 1117 0294 4846     		mov	r0, r9
+ 1118 0296 FFF7FEFF 		bl	LCD_WriteFloat
+ 1119              	.LVL160:
+ 402:./Src/main.c  ****         LCD_WriteFloat(&lcd,MAX(ABS(getMotorCurrentR() * 0.02), ABS(getMotorCurrentL() * 0.02)),2);
+ 1120              		.loc 1 402 0
+ 1121 029a 5246     		mov	r2, r10
+ 1122 029c 0B21     		movs	r1, #11
+ 1123 029e 4846     		mov	r0, r9
+ 1124 02a0 FFF7FEFF 		bl	LCD_SetLocation
+ 1125              	.LVL161:
+ 403:./Src/main.c  ****       }
+ 1126              		.loc 1 403 0
+ 1127 02a4 FFF7FEFF 		bl	getMotorCurrentR
+ 1128              	.LVL162:
+ 1129 02a8 FFF7FEFF 		bl	__aeabi_i2d
+ 1130              	.LVL163:
+ 1131 02ac 1EA3     		adr	r3, .L98
+ 1132 02ae D3E90023 		ldrd	r2, [r3]
+ 1133 02b2 FFF7FEFF 		bl	__aeabi_dmul
+ 1134              	.LVL164:
+ARM GAS  /tmp/cckqBGja.s 			page 33
+
+
+ 1135 02b6 0022     		movs	r2, #0
+ 1136 02b8 0023     		movs	r3, #0
+ 1137 02ba FFF7FEFF 		bl	__aeabi_dcmplt
+ 1138              	.LVL165:
+ 1139 02be 60B1     		cbz	r0, .L92
+ 403:./Src/main.c  ****       }
+ 1140              		.loc 1 403 0 is_stmt 0 discriminator 1
+ 1141 02c0 FFF7FEFF 		bl	getMotorCurrentR
+ 1142              	.LVL166:
+ 1143 02c4 FFF7FEFF 		bl	__aeabi_i2d
+ 1144              	.LVL167:
+ 1145 02c8 17A3     		adr	r3, .L98
+ 1146 02ca D3E90023 		ldrd	r2, [r3]
+ 1147 02ce FFF7FEFF 		bl	__aeabi_dmul
+ 1148              	.LVL168:
+ 1149 02d2 8246     		mov	r10, r0
+ 1150 02d4 01F10049 		add	r9, r1, #-2147483648
+ 1151 02d8 0AE0     		b	.L69
+ 1152              	.L92:
+ 403:./Src/main.c  ****       }
+ 1153              		.loc 1 403 0 discriminator 2
+ 1154 02da FFF7FEFF 		bl	getMotorCurrentR
+ 1155              	.LVL169:
+ 1156 02de FFF7FEFF 		bl	__aeabi_i2d
+ 1157              	.LVL170:
+ 1158 02e2 11A3     		adr	r3, .L98
+ 1159 02e4 D3E90023 		ldrd	r2, [r3]
+ 1160 02e8 FFF7FEFF 		bl	__aeabi_dmul
+ 1161              	.LVL171:
+ 1162 02ec 8246     		mov	r10, r0
+ 1163 02ee 8946     		mov	r9, r1
+ 1164              	.L69:
+ 403:./Src/main.c  ****       }
+ 1165              		.loc 1 403 0 discriminator 4
+ 1166 02f0 FFF7FEFF 		bl	getMotorCurrentL
+ 1167              	.LVL172:
+ 1168 02f4 FFF7FEFF 		bl	__aeabi_i2d
+ 1169              	.LVL173:
+ 1170 02f8 0BA3     		adr	r3, .L98
+ 1171 02fa D3E90023 		ldrd	r2, [r3]
+ 1172 02fe FFF7FEFF 		bl	__aeabi_dmul
+ 1173              	.LVL174:
+ 1174 0302 0022     		movs	r2, #0
+ 1175 0304 0023     		movs	r3, #0
+ 1176 0306 FFF7FEFF 		bl	__aeabi_dcmplt
+ 1177              	.LVL175:
+ 1178 030a B8B3     		cbz	r0, .L93
+ 403:./Src/main.c  ****       }
+ 1179              		.loc 1 403 0 discriminator 5
+ 1180 030c FFF7FEFF 		bl	getMotorCurrentL
+ 1181              	.LVL176:
+ 1182 0310 FFF7FEFF 		bl	__aeabi_i2d
+ 1183              	.LVL177:
+ 1184 0314 04A3     		adr	r3, .L98
+ 1185 0316 D3E90023 		ldrd	r2, [r3]
+ 1186 031a FFF7FEFF 		bl	__aeabi_dmul
+ 1187              	.LVL178:
+ARM GAS  /tmp/cckqBGja.s 			page 34
+
+
+ 1188 031e 01F10041 		add	r1, r1, #-2147483648
+ 1189 0322 34E0     		b	.L72
+ 1190              	.L99:
+ 1191 0324 AFF30080 		.align	3
+ 1192              	.L98:
+ 1193 0328 7B14AE47 		.word	1202590843
+ 1194 032c E17A943F 		.word	1066695393
+ 1195 0330 00000000 		.word	lcd
+ 1196 0334 00000000 		.word	hi2c2
+ 1197 0338 30000000 		.word	.LC3
+ 1198 033c 44000000 		.word	.LC4
+ 1199 0340 54000000 		.word	.LC5
+ 1200 0344 68000000 		.word	.LC6
+ 1201 0348 00080140 		.word	1073809408
+ 1202 034c 00000000 		.word	.LANCHOR1
+ 1203 0350 00000000 		.word	.LANCHOR2
+ 1204 0354 78000000 		.word	.LC7
+ 1205 0358 80000000 		.word	.LC8
+ 1206 035c 84000000 		.word	.LC9
+ 1207 0360 88000000 		.word	.LC10
+ 1208 0364 00000000 		.word	hiwdg
+ 1209 0368 1F85EB51 		.word	1374389535
+ 1210 036c 18FCFFFF 		.word	-1000
+ 1211 0370 00000000 		.word	.LANCHOR0
+ 1212 0374 9C000000 		.word	.LC11
+ 1213 0378 D34D6210 		.word	274877907
+ 1214              	.L93:
+ 403:./Src/main.c  ****       }
+ 1215              		.loc 1 403 0 discriminator 6
+ 1216 037c FFF7FEFF 		bl	getMotorCurrentL
+ 1217              	.LVL179:
+ 1218 0380 FFF7FEFF 		bl	__aeabi_i2d
+ 1219              	.LVL180:
+ 1220 0384 3CA3     		adr	r3, .L100
+ 1221 0386 D3E90023 		ldrd	r2, [r3]
+ 1222 038a FFF7FEFF 		bl	__aeabi_dmul
+ 1223              	.LVL181:
+ 1224              	.L72:
+ 403:./Src/main.c  ****       }
+ 1225              		.loc 1 403 0 discriminator 8
+ 1226 038e 0246     		mov	r2, r0
+ 1227 0390 0B46     		mov	r3, r1
+ 1228 0392 5046     		mov	r0, r10
+ 1229 0394 4946     		mov	r1, r9
+ 1230 0396 FFF7FEFF 		bl	__aeabi_dcmpgt
+ 1231              	.LVL182:
+ 1232 039a 18B3     		cbz	r0, .L94
+ 403:./Src/main.c  ****       }
+ 1233              		.loc 1 403 0 discriminator 9
+ 1234 039c FFF7FEFF 		bl	getMotorCurrentR
+ 1235              	.LVL183:
+ 1236 03a0 FFF7FEFF 		bl	__aeabi_i2d
+ 1237              	.LVL184:
+ 1238 03a4 34A3     		adr	r3, .L100
+ 1239 03a6 D3E90023 		ldrd	r2, [r3]
+ 1240 03aa FFF7FEFF 		bl	__aeabi_dmul
+ 1241              	.LVL185:
+ARM GAS  /tmp/cckqBGja.s 			page 35
+
+
+ 1242 03ae 0022     		movs	r2, #0
+ 1243 03b0 0023     		movs	r3, #0
+ 1244 03b2 FFF7FEFF 		bl	__aeabi_dcmplt
+ 1245              	.LVL186:
+ 1246 03b6 58B1     		cbz	r0, .L95
+ 403:./Src/main.c  ****       }
+ 1247              		.loc 1 403 0 discriminator 11
+ 1248 03b8 FFF7FEFF 		bl	getMotorCurrentR
+ 1249              	.LVL187:
+ 1250 03bc FFF7FEFF 		bl	__aeabi_i2d
+ 1251              	.LVL188:
+ 1252 03c0 2DA3     		adr	r3, .L100
+ 1253 03c2 D3E90023 		ldrd	r2, [r3]
+ 1254 03c6 FFF7FEFF 		bl	__aeabi_dmul
+ 1255              	.LVL189:
+ 1256 03ca 01F10041 		add	r1, r1, #-2147483648
+ 1257 03ce 2CE0     		b	.L77
+ 1258              	.L95:
+ 403:./Src/main.c  ****       }
+ 1259              		.loc 1 403 0 discriminator 12
+ 1260 03d0 FFF7FEFF 		bl	getMotorCurrentR
+ 1261              	.LVL190:
+ 1262 03d4 FFF7FEFF 		bl	__aeabi_i2d
+ 1263              	.LVL191:
+ 1264 03d8 27A3     		adr	r3, .L100
+ 1265 03da D3E90023 		ldrd	r2, [r3]
+ 1266 03de FFF7FEFF 		bl	__aeabi_dmul
+ 1267              	.LVL192:
+ 1268 03e2 22E0     		b	.L77
+ 1269              	.L94:
+ 403:./Src/main.c  ****       }
+ 1270              		.loc 1 403 0 discriminator 10
+ 1271 03e4 FFF7FEFF 		bl	getMotorCurrentL
+ 1272              	.LVL193:
+ 1273 03e8 FFF7FEFF 		bl	__aeabi_i2d
+ 1274              	.LVL194:
+ 1275 03ec 22A3     		adr	r3, .L100
+ 1276 03ee D3E90023 		ldrd	r2, [r3]
+ 1277 03f2 FFF7FEFF 		bl	__aeabi_dmul
+ 1278              	.LVL195:
+ 1279 03f6 0022     		movs	r2, #0
+ 1280 03f8 0023     		movs	r3, #0
+ 1281 03fa FFF7FEFF 		bl	__aeabi_dcmplt
+ 1282              	.LVL196:
+ 1283 03fe 58B1     		cbz	r0, .L96
+ 403:./Src/main.c  ****       }
+ 1284              		.loc 1 403 0 discriminator 16
+ 1285 0400 FFF7FEFF 		bl	getMotorCurrentL
+ 1286              	.LVL197:
+ 1287 0404 FFF7FEFF 		bl	__aeabi_i2d
+ 1288              	.LVL198:
+ 1289 0408 1BA3     		adr	r3, .L100
+ 1290 040a D3E90023 		ldrd	r2, [r3]
+ 1291 040e FFF7FEFF 		bl	__aeabi_dmul
+ 1292              	.LVL199:
+ 1293 0412 01F10041 		add	r1, r1, #-2147483648
+ 1294 0416 08E0     		b	.L77
+ARM GAS  /tmp/cckqBGja.s 			page 36
+
+
+ 1295              	.L96:
+ 403:./Src/main.c  ****       }
+ 1296              		.loc 1 403 0 discriminator 17
+ 1297 0418 FFF7FEFF 		bl	getMotorCurrentL
+ 1298              	.LVL200:
+ 1299 041c FFF7FEFF 		bl	__aeabi_i2d
+ 1300              	.LVL201:
+ 1301 0420 15A3     		adr	r3, .L100
+ 1302 0422 D3E90023 		ldrd	r2, [r3]
+ 1303 0426 FFF7FEFF 		bl	__aeabi_dmul
+ 1304              	.LVL202:
+ 1305              	.L77:
+ 403:./Src/main.c  ****       }
+ 1306              		.loc 1 403 0 discriminator 20
+ 1307 042a 0223     		movs	r3, #2
+ 1308 042c 0093     		str	r3, [sp]
+ 1309 042e 0246     		mov	r2, r0
+ 1310 0430 0B46     		mov	r3, r1
+ 1311 0432 1348     		ldr	r0, .L100+8
+ 1312 0434 FFF7FEFF 		bl	LCD_WriteFloat
+ 1313              	.LVL203:
+ 1314              	.L66:
+ 1315              	.LBE12:
+ 406:./Src/main.c  ****         if ((sinValue) % (20000) == 0) {
+ 1316              		.loc 1 406 0 is_stmt 1
+ 1317 0438 9CB9     		cbnz	r4, .L80
+ 406:./Src/main.c  ****         if ((sinValue) % (20000) == 0) {
+ 1318              		.loc 1 406 0 is_stmt 0 discriminator 1
+ 1319 043a 96B1     		cbz	r6, .L80
+ 407:./Src/main.c  ****           checkRemoteStatus(GET_BatteryAverage());
+ 1320              		.loc 1 407 0 is_stmt 1
+ 1321 043c 114B     		ldr	r3, .L100+12
+ 1322 043e A3FB0523 		umull	r2, r3, r3, r5
+ 1323 0442 9B0B     		lsrs	r3, r3, #14
+ 1324 0444 44F62062 		movw	r2, #20000
+ 1325 0448 02FB1353 		mls	r3, r2, r3, r5
+ 1326 044c 33B9     		cbnz	r3, .L81
+ 1327              	.LBB13:
+ 408:./Src/main.c  ****         } else {
+ 1328              		.loc 1 408 0
+ 1329 044e FFF7FEFF 		bl	GET_BatteryAverage
+ 1330              	.LVL204:
+ 1331 0452 FFF7FEFF 		bl	__aeabi_f2d
+ 1332              	.LVL205:
+ 1333 0456 FFF7FEFF 		bl	checkRemoteStatus
+ 1334              	.LVL206:
+ 1335              	.LBE13:
+ 1336 045a 02E0     		b	.L80
+ 1337              	.L81:
+ 1338              	.LBB14:
+ 410:./Src/main.c  ****         }
+ 1339              		.loc 1 410 0
+ 1340 045c 0020     		movs	r0, #0
+ 1341 045e FFF7FEFF 		bl	checkRemoteStatus
+ 1342              	.LVL207:
+ 1343              	.L80:
+ 1344              	.LBE14:
+ARM GAS  /tmp/cckqBGja.s 			page 37
+
+
+ 415:./Src/main.c  **** 
+ 1345              		.loc 1 415 0
+ 1346 0462 0948     		ldr	r0, .L100+16
+ 1347 0464 FFF7FEFF 		bl	HAL_IWDG_Refresh
+ 1348              	.LVL208:
+ 417:./Src/main.c  ****     }
+ 1349              		.loc 1 417 0
+ 1350 0468 FFF7FEFF 		bl	HAL_GetTick
+ 1351              	.LVL209:
+ 1352 046c 074B     		ldr	r3, .L100+20
+ 1353 046e 1B68     		ldr	r3, [r3]
+ 1354 0470 C01A     		subs	r0, r0, r3
+ 1355 0472 074B     		ldr	r3, .L100+24
+ 1356 0474 1860     		str	r0, [r3]
+ 1357              	.LBE9:
+ 418:./Src/main.c  ****   }
+ 1358              		.loc 1 418 0
+ 1359 0476 8DE6     		b	.L82
+ 1360              	.L101:
+ 1361              		.align	3
+ 1362              	.L100:
+ 1363 0478 7B14AE47 		.word	1202590843
+ 1364 047c E17A943F 		.word	1066695393
+ 1365 0480 00000000 		.word	lcd
+ 1366 0484 5917B7D1 		.word	-776530087
+ 1367 0488 00000000 		.word	hiwdg
+ 1368 048c 00000000 		.word	counterTemp
+ 1369 0490 00000000 		.word	counterTempTT
+ 1370              	.LBE8:
+ 1371              		.cfi_endproc
+ 1372              	.LFE64:
+ 1374              		.global	motorsArmed
+ 1375              		.global	saveValue
+ 1376              		.comm	lcd,140,4
+ 1377              		.comm	counterTempTT,4,4
+ 1378              		.comm	counterTemp,4,4
+ 1379              		.global	speed
+ 1380              		.comm	hiwdg,16,4
+ 1381              		.global	VarValue
+ 1382              		.global	VarDataTab
+ 1383              		.global	VirtAddVarTab
+ 1384              		.section	.bss.saveValue,"aw",%nobits
+ 1385              		.align	1
+ 1386              		.set	.LANCHOR1,. + 0
+ 1389              	saveValue:
+ 1390 0000 0000     		.space	2
+ 1391              		.section	.bss.VarValue,"aw",%nobits
+ 1392              		.align	1
+ 1395              	VarValue:
+ 1396 0000 0000     		.space	2
+ 1397              		.section	.rodata.str1.4,"aMS",%progbits,1
+ 1398              		.align	2
+ 1399              	.LC0:
+ 1400 0000 456D6572 		.ascii	"Emergency Off!\000"
+ 1400      67656E63 
+ 1400      79204F66 
+ 1400      662100
+ARM GAS  /tmp/cckqBGja.s 			page 38
+
+
+ 1401 000f 00       		.space	1
+ 1402              	.LC1:
+ 1403 0010 4F766572 		.ascii	"Overcurrent.\000"
+ 1403      63757272 
+ 1403      656E742E 
+ 1403      00
+ 1404 001d 000000   		.space	3
+ 1405              	.LC2:
+ 1406 0020 42617474 		.ascii	"Battery low.\000"
+ 1406      65727920 
+ 1406      6C6F772E 
+ 1406      00
+ 1407 002d 000000   		.space	3
+ 1408              	.LC3:
+ 1409 0030 5472616E 		.ascii	"TranspOtter V1.3\000"
+ 1409      73704F74 
+ 1409      74657220 
+ 1409      56312E33 
+ 1409      00
+ 1410 0041 000000   		.space	3
+ 1411              	.LC4:
+ 1412 0044 496E6974 		.ascii	"Initializing...\000"
+ 1412      69616C69 
+ 1412      7A696E67 
+ 1412      2E2E2E00 
+ 1413              	.LC5:
+ 1414 0054 53746172 		.ascii	"Starting without\000"
+ 1414      74696E67 
+ 1414      20776974 
+ 1414      686F7574 
+ 1414      00
+ 1415 0065 000000   		.space	3
+ 1416              	.LC6:
+ 1417 0068 72656D6F 		.ascii	"remote E-off!\000"
+ 1417      74652045 
+ 1417      2D6F6666 
+ 1417      2100
+ 1418 0076 0000     		.space	2
+ 1419              	.LC7:
+ 1420 0078 4261743A 		.ascii	"Bat:\000"
+ 1420      00
+ 1421 007d 000000   		.space	3
+ 1422              	.LC8:
+ 1423 0080 5600     		.ascii	"V\000"
+ 1424 0082 0000     		.space	2
+ 1425              	.LC9:
+ 1426 0084 4100     		.ascii	"A\000"
+ 1427 0086 0000     		.space	2
+ 1428              	.LC10:
+ 1429 0088 436F6E74 		.ascii	"Controlled by UART\000"
+ 1429      726F6C6C 
+ 1429      65642062 
+ 1429      79205541 
+ 1429      525400
+ 1430 009b 00       		.space	1
+ 1431              	.LC11:
+ 1432 009c 25693B25 		.ascii	"%i;%i\012\015\000"
+ARM GAS  /tmp/cckqBGja.s 			page 39
+
+
+ 1432      690A0D00 
+ 1433              		.section	.data.VirtAddVarTab,"aw",%progbits
+ 1434              		.align	2
+ 1435              		.set	.LANCHOR2,. + 0
+ 1438              	VirtAddVarTab:
+ 1439 0000 3713     		.short	4919
+ 1440 0002 00000000 		.space	4
+ 1441              		.section	.data.motorsArmed,"aw",%progbits
+ 1442              		.set	.LANCHOR0,. + 0
+ 1445              	motorsArmed:
+ 1446 0000 01       		.byte	1
+ 1447              		.section	.bss.VarDataTab,"aw",%nobits
+ 1448              		.align	2
+ 1451              	VarDataTab:
+ 1452 0000 00000000 		.space	6
+ 1452      0000
+ 1453              		.section	.bss.speed,"aw",%nobits
+ 1454              		.align	1
+ 1457              	speed:
+ 1458 0000 0000     		.space	2
+ 1459              		.text
+ 1460              	.Letext0:
+ 1461              		.file 2 "/home/niklas/gcc-arm-none-eabi-5_4-2016q3/arm-none-eabi/include/machine/_default_types.h"
+ 1462              		.file 3 "/home/niklas/gcc-arm-none-eabi-5_4-2016q3/arm-none-eabi/include/sys/_stdint.h"
+ 1463              		.file 4 "./Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xe.h"
+ 1464              		.file 5 "./Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h"
+ 1465              		.file 6 "./Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h"
+ 1466              		.file 7 "./Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc_ex.h"
+ 1467              		.file 8 "./Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_dma.h"
+ 1468              		.file 9 "./Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_adc.h"
+ 1469              		.file 10 "./Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_i2c.h"
+ 1470              		.file 11 "./Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_iwdg.h"
+ 1471              		.file 12 "./Inc/pcf8574.h"
+ 1472              		.file 13 "./Inc/hd44780.h"
+ 1473              		.file 14 "./Drivers/CMSIS/Include/core_cm3.h"
+ 1474              		.file 15 "./Inc/motor_L.h"
+ 1475              		.file 16 "./Inc/motor_R.h"
+ 1476              		.file 17 "./Inc/varie.h"
+ 1477              		.file 18 "./Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h"
+ 1478              		.file 19 "./Inc/application.h"
+ 1479              		.file 20 "./Inc/eeprom.h"
+ 1480              		.file 21 "./Inc/ADC_R.h"
+ 1481              		.file 22 "./Inc/ADC_L.h"
+ 1482              		.file 23 "./Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_cortex.h"
+ 1483              		.file 24 "/home/niklas/gcc-arm-none-eabi-5_4-2016q3/arm-none-eabi/include/stdio.h"
+ 1484              		.file 25 "./Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio.h"
+ 1485              		.file 26 "./Inc/telemetry.h"
+ 1486              		.file 27 "./Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash.h"
+ 1487              		.file 28 "<built-in>"
+ARM GAS  /tmp/cckqBGja.s 			page 40
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 main.c
-     /tmp/ccEIq7ZR.s:20     .text.saveConfig:00000000 $t
-     /tmp/ccEIq7ZR.s:25     .text.saveConfig:00000000 saveConfig
-     /tmp/ccEIq7ZR.s:48     .text.saveConfig:00000010 $d
-     /tmp/ccEIq7ZR.s:54     .text.HAL_ADC_ConvCpltCallback:00000000 $t
-     /tmp/ccEIq7ZR.s:59     .text.HAL_ADC_ConvCpltCallback:00000000 HAL_ADC_ConvCpltCallback
-     /tmp/ccEIq7ZR.s:95     .text.HAL_ADC_ConvCpltCallback:00000020 $d
-     /tmp/ccEIq7ZR.s:101    .text.Error_Handler:00000000 $t
-     /tmp/ccEIq7ZR.s:106    .text.Error_Handler:00000000 Error_Handler
-     /tmp/ccEIq7ZR.s:130    .text.MX_IWDG_Init:00000000 $t
-     /tmp/ccEIq7ZR.s:134    .text.MX_IWDG_Init:00000000 MX_IWDG_Init
-     /tmp/ccEIq7ZR.s:189    .text.MX_IWDG_Init:00000040 $d
-                            *COM*:00000010 hiwdg
-     /tmp/ccEIq7ZR.s:196    .text.SystemClock_Config:00000000 $t
-     /tmp/ccEIq7ZR.s:201    .text.SystemClock_Config:00000000 SystemClock_Config
-     /tmp/ccEIq7ZR.s:305    .text.SystemClock_Config:00000088 $d
-     /tmp/ccEIq7ZR.s:315    .text.main:00000000 $t
-     /tmp/ccEIq7ZR.s:320    .text.main:00000000 main
-     /tmp/ccEIq7ZR.s:781    .text.main:000002c8 $d
+     /tmp/cckqBGja.s:21     .text.checkRemoteStatus:00000000 $t
+     /tmp/cckqBGja.s:26     .text.checkRemoteStatus:00000000 checkRemoteStatus
+     /tmp/cckqBGja.s:109    .text.checkRemoteStatus:0000006c $d
+     /tmp/cckqBGja.s:119    .text.safetyChecks:00000000 $t
+     /tmp/cckqBGja.s:124    .text.safetyChecks:00000000 safetyChecks
+     /tmp/cckqBGja.s:363    .text.safetyChecks:00000180 $d
                             *COM*:0000008c lcd
-     /tmp/ccEIq7ZR.s:803    .text.main:00000318 $t
-     /tmp/ccEIq7ZR.s:960    .text.main:00000418 $d
+                            *COM*:00000010 hiwdg
+     /tmp/cckqBGja.s:378    .text.saveConfig:00000000 $t
+     /tmp/cckqBGja.s:383    .text.saveConfig:00000000 saveConfig
+     /tmp/cckqBGja.s:405    .text.saveConfig:00000010 $d
+     /tmp/cckqBGja.s:411    .text.HAL_ADC_ConvCpltCallback:00000000 $t
+     /tmp/cckqBGja.s:416    .text.HAL_ADC_ConvCpltCallback:00000000 HAL_ADC_ConvCpltCallback
+     /tmp/cckqBGja.s:452    .text.HAL_ADC_ConvCpltCallback:00000020 $d
+     /tmp/cckqBGja.s:458    .text.Error_Handler:00000000 $t
+     /tmp/cckqBGja.s:463    .text.Error_Handler:00000000 Error_Handler
+     /tmp/cckqBGja.s:487    .text.MX_IWDG_Init:00000000 $t
+     /tmp/cckqBGja.s:491    .text.MX_IWDG_Init:00000000 MX_IWDG_Init
+     /tmp/cckqBGja.s:546    .text.MX_IWDG_Init:00000040 $d
+     /tmp/cckqBGja.s:553    .text.SystemClock_Config:00000000 $t
+     /tmp/cckqBGja.s:558    .text.SystemClock_Config:00000000 SystemClock_Config
+     /tmp/cckqBGja.s:662    .text.SystemClock_Config:00000088 $d
+     /tmp/cckqBGja.s:668    .text.main:00000000 $t
+     /tmp/cckqBGja.s:673    .text.main:00000000 main
+     /tmp/cckqBGja.s:1193   .text.main:00000328 $d
+     /tmp/cckqBGja.s:1216   .text.main:0000037c $t
+     /tmp/cckqBGja.s:1363   .text.main:00000478 $d
                             *COM*:00000004 counterTemp
                             *COM*:00000004 counterTempTT
-     /tmp/ccEIq7ZR.s:989    .bss.saveValue:00000000 saveValue
-     /tmp/ccEIq7ZR.s:1047   .bss.speed:00000000 speed
-     /tmp/ccEIq7ZR.s:995    .bss.VarValue:00000000 VarValue
-     /tmp/ccEIq7ZR.s:1041   .bss.VarDataTab:00000000 VarDataTab
-     /tmp/ccEIq7ZR.s:1034   .data.VirtAddVarTab:00000000 VirtAddVarTab
-     /tmp/ccEIq7ZR.s:985    .bss.saveValue:00000000 $d
-     /tmp/ccEIq7ZR.s:992    .bss.VarValue:00000000 $d
-     /tmp/ccEIq7ZR.s:998    .rodata.str1.4:00000000 $d
-     /tmp/ccEIq7ZR.s:1030   .data.VirtAddVarTab:00000000 $d
-     /tmp/ccEIq7ZR.s:1038   .bss.VarDataTab:00000000 $d
-     /tmp/ccEIq7ZR.s:1044   .bss.speed:00000000 $d
+     /tmp/cckqBGja.s:1445   .data.motorsArmed:00000000 motorsArmed
+     /tmp/cckqBGja.s:1389   .bss.saveValue:00000000 saveValue
+     /tmp/cckqBGja.s:1457   .bss.speed:00000000 speed
+     /tmp/cckqBGja.s:1395   .bss.VarValue:00000000 VarValue
+     /tmp/cckqBGja.s:1451   .bss.VarDataTab:00000000 VarDataTab
+     /tmp/cckqBGja.s:1438   .data.VirtAddVarTab:00000000 VirtAddVarTab
+     /tmp/cckqBGja.s:1385   .bss.saveValue:00000000 $d
+     /tmp/cckqBGja.s:1392   .bss.VarValue:00000000 $d
+     /tmp/cckqBGja.s:1398   .rodata.str1.4:00000000 $d
+     /tmp/cckqBGja.s:1434   .data.VirtAddVarTab:00000000 $d
+     /tmp/cckqBGja.s:1448   .bss.VarDataTab:00000000 $d
+     /tmp/cckqBGja.s:1454   .bss.speed:00000000 $d
                      .debug_frame:00000010 $d
 
 UNDEFINED SYMBOLS
+__aeabi_fcmplt
+HAL_I2C_Master_Receive
+MotorL_pwm
+MotorR_pwm
+hi2c2
+__aeabi_i2d
+__aeabi_dmul
+__aeabi_dcmplt
+__aeabi_dcmpgt
+Battery_TASK
+getMotorCurrentR
+ARM GAS  /tmp/cckqBGja.s 			page 41
+
+
+getMotorCurrentL
+Buzzer_OneLongBeep
+LCD_ClearDisplay
+HAL_Delay
+LCD_SetLocation
+LCD_WriteString
+HAL_IWDG_Refresh
+Power_Set
+GET_BatteryAverage
 EE_WriteVariable
 ADC_R_callback
 ADC_L_callback
@@ -1938,30 +2416,16 @@ HAL_RCC_GetHCLKFreq
 HAL_SYSTICK_Config
 HAL_SYSTICK_CLKSourceConfig
 HAL_NVIC_SetPriority
-__aeabi_i2d
-__aeabi_dmul
-__aeabi_dcmplt
-__aeabi_dcmpgt
-ARM GAS  /tmp/ccEIq7ZR.s 			page 34
-
-
-__aeabi_fcmplt
+__aeabi_f2d
 HAL_Init
 Button_init
-Power_Set
 MX_I2C2_Init
 HAL_FLASH_Unlock
 EE_Init
 LCD_Init
-LCD_ClearDisplay
-LCD_SetLocation
-LCD_WriteString
-HAL_I2C_Master_Receive
 Buzzer_init
 Led_init
 IS_Charge_init
-HAL_Delay
-Led_Set
 IS_Button
 ADC_L_init
 ADC_R_init
@@ -1971,21 +2435,14 @@ HAL_GPIO_DeInit
 Telemetry_init
 EE_ReadVariable
 applcation_init
-Battery_TASK
+Led_Set
 Buzzer_TwoBeep
 MotorR_start
 MotorL_start
-HAL_IWDG_Refresh
-Buzzer_OneLongBeep
 getMotorR
 getMotorL
-MotorL_pwm
-MotorR_pwm
 memset
 sprintf
 Console_Log
-getMotorCurrentR
-getMotorCurrentL
-hi2c2
-GET_BatteryAverage
+LCD_WriteFloat
 HAL_GetTick

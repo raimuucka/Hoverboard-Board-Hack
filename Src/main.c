@@ -98,6 +98,7 @@ volatile __IO uint32_t counterTemp,counterTempTT;
 LCD_PCF8574_HandleTypeDef lcd;
 extern I2C_HandleTypeDef hi2c2;
 uint16_t saveValue = 0;
+uint8_t motorsArmed = 1;
 
 #define SAFETYREMOTE
 
@@ -140,10 +141,7 @@ int main(void)
   LCD_SetLocation(&lcd, 0, 0);
 	LCD_WriteString(&lcd, "TranspOtter V1.3");
 
-  #ifdef SAFETYREMOTE
-    char message[6] = "     ";
-    HAL_I2C_Master_Receive(&hi2c2, (42), &message, 6, HAL_MAX_DELAY);
-  #endif
+
 
   LCD_SetLocation(&lcd, 0, 1);
 	LCD_WriteString(&lcd, "Initializing...");
@@ -156,8 +154,20 @@ int main(void)
   //DebugPin_init();
   HAL_Delay(550);
   int buttonTimeout = 0;
+  uint8_t checkRemote = 1;
   while(IS_Button()) {
-    Led_Set(0);
+    buttonTimeout++;
+    HAL_Delay(100);
+    if(buttonTimeout > 20) {
+      LCD_ClearDisplay(&lcd);
+      HAL_Delay(5);
+      LCD_SetLocation(&lcd, 0, 0);
+    	LCD_WriteString(&lcd, "Starting without");
+      LCD_SetLocation(&lcd, 0, 1);
+    	LCD_WriteString(&lcd, "remote E-off!");
+      checkRemote = 0;
+      HAL_Delay(2000);
+    }
   }
 
   if (0) {
@@ -250,7 +260,7 @@ int main(void)
         speedR = -CLAMP(((distance - (int)(setDistance * 1345)) * vel_scale) -  CLAMP((steering / 10.0), -50, 50), -800, 800);
 
         if ((speedL < lastSpeedL + 50 && speedL > lastSpeedL - 50) && (speedR < lastSpeedR + 50 && speedR > lastSpeedR - 50)) {
-          if (distance - (int)(setDistance * 1345) > -200) {
+          if (distance - (int)(setDistance * 1345) > -200 && motorsArmed) {
             MotorL_pwm(speedL);
             MotorR_pwm(speedR);
           } else {
@@ -285,6 +295,14 @@ int main(void)
           LCD_WriteFloat(&lcd,MAX(ABS(getMotorCurrentR() * 0.02), ABS(getMotorCurrentL() * 0.02)),2);
         }
 
+        if ((sinValue) % (2000) == 0 && checkRemote) {
+          if ((sinValue) % (20000) == 0) {
+            checkRemoteStatus(GET_BatteryAverage());
+          } else {
+            checkRemoteStatus(0);
+          }
+        }
+
 
         //char str[100];
         //memset(&str[0], 0, sizeof(str));
@@ -297,50 +315,7 @@ int main(void)
         lastDistance = distance;
       }
 
-
-
-      Battery_TASK();
-      //Current_Motor_TASK();
-      //sWiiNunchuck_TASK();
-      //applcation_TASK();
-      //Telemetry_TASK();
-
-      //Batteria Scarica?
-      if(ABS(getMotorCurrentR() * 0.02) > 20.0 || ABS(getMotorCurrentL() * 0.02) > 20.0){
-        MotorL_pwm(0);
-        MotorR_pwm(0);
-        Buzzer_OneLongBeep();
-        LCD_ClearDisplay(&lcd);
-        HAL_Delay(5);
-        LCD_SetLocation(&lcd, 0, 0);
-        LCD_WriteString(&lcd, "Emergency Off!");
-        LCD_SetLocation(&lcd, 0, 1);
-        LCD_WriteString(&lcd, "Overcurrent.");
-        HAL_Delay(500);
-        HAL_IWDG_Refresh(&hiwdg);
-        HAL_Delay(500);
-        Power_Set(0);
-      }
-
-      if(GET_BatteryAverage() < 31.0){
-        MotorL_pwm(0);
-        MotorR_pwm(0);
-        Buzzer_OneLongBeep();
-        LCD_ClearDisplay(&lcd);
-        HAL_Delay(5);
-        LCD_SetLocation(&lcd, 0, 0);
-        LCD_WriteString(&lcd, "Emergency Off!");
-        LCD_SetLocation(&lcd, 0, 1);
-        LCD_WriteString(&lcd, "Battery low.");
-        HAL_Delay(500);
-        HAL_IWDG_Refresh(&hiwdg);
-        HAL_Delay(500);
-        Power_Set(0);
-      }
-      //In Carica?
-      /*if(IS_Charge()==0){
-        WAIT_CHARGE_FINISH();
-      }*/
+      safetyChecks();
 
       HAL_IWDG_Refresh(&hiwdg);   //819mS
 
@@ -406,7 +381,7 @@ int main(void)
       if ((sinValue) % (200) == 0) {
         int speedL = -CLAMP(getMotorR(), -1000, 1000);
         int speedR = -CLAMP(getMotorL(), -1000, 1000);
-        if (speedL != lastSpeedL || speedR != lastSpeedR) {
+        if ((speedL != lastSpeedL || speedR != lastSpeedR) && motorsArmed) {
           MotorL_pwm(speedL);
           MotorR_pwm(speedR);
           lastSpeedL = speedL;
@@ -419,38 +394,21 @@ int main(void)
         Console_Log(str);
       }
 
-      Battery_TASK();
+      safetyChecks();
 
-      if(ABS(getMotorCurrentR() * 0.02) > 20.0 || ABS(getMotorCurrentL() * 0.02) > 20.0){
-        MotorL_pwm(0);
-        MotorR_pwm(0);
-        Buzzer_OneLongBeep();
-        LCD_ClearDisplay(&lcd);
-        HAL_Delay(5);
-        LCD_SetLocation(&lcd, 0, 0);
-        LCD_WriteString(&lcd, "Emergency Off!");
-        LCD_SetLocation(&lcd, 0, 1);
-        LCD_WriteString(&lcd, "Overcurrent.");
-        HAL_Delay(500);
-        HAL_IWDG_Refresh(&hiwdg);
-        HAL_Delay(500);
-        Power_Set(0);
+      if ((sinValue) % (2000) == 0) {
+        LCD_SetLocation(&lcd, 4, 1);
+        LCD_WriteFloat(&lcd,GET_BatteryAverage(),1);
+        LCD_SetLocation(&lcd, 11, 1);
+        LCD_WriteFloat(&lcd,MAX(ABS(getMotorCurrentR() * 0.02), ABS(getMotorCurrentL() * 0.02)),2);
       }
 
-      if(GET_BatteryAverage() < 31.0){
-        MotorL_pwm(0);
-        MotorR_pwm(0);
-        Buzzer_OneLongBeep();
-        LCD_ClearDisplay(&lcd);
-        HAL_Delay(5);
-        LCD_SetLocation(&lcd, 0, 0);
-        LCD_WriteString(&lcd, "Emergency Off!");
-        LCD_SetLocation(&lcd, 0, 1);
-        LCD_WriteString(&lcd, "Battery low.");
-        HAL_Delay(500);
-        HAL_IWDG_Refresh(&hiwdg);
-        HAL_Delay(500);
-        Power_Set(0);
+      if ((sinValue) % (2000) == 0 && checkRemote) {
+        if ((sinValue) % (20000) == 0) {
+          checkRemoteStatus(GET_BatteryAverage());
+        } else {
+          checkRemoteStatus(0);
+        }
       }
 
 
@@ -459,6 +417,67 @@ int main(void)
       counterTempTT = HAL_GetTick() - counterTemp;
     }
   }
+}
+
+void checkRemoteStatus(float voltage) {
+  if (voltage < 1.0) {
+    uint8_t message[1] = {0xFF};
+    #ifdef SAFETYREMOTE
+      HAL_I2C_Master_Receive(&hi2c2, (42), &message, 1, HAL_MAX_DELAY);
+    #endif
+
+    if (message[0] == 123) {
+      motorsArmed = 1;
+    } else {
+      message[0] = 0xFF;
+      HAL_I2C_Master_Receive(&hi2c2, (42), &message, 1, HAL_MAX_DELAY);
+      if (message[0] != 123) {
+        motorsArmed = 0;
+        MotorL_pwm(0);
+        MotorR_pwm(0);
+      }
+    }
+  }
+}
+
+void safetyChecks() {
+  Battery_TASK();
+
+  if(ABS(getMotorCurrentR() * 0.02) > 20.0 || ABS(getMotorCurrentL() * 0.02) > 20.0){
+    MotorL_pwm(0);
+    MotorR_pwm(0);
+    Buzzer_OneLongBeep();
+    LCD_ClearDisplay(&lcd);
+    HAL_Delay(5);
+    LCD_SetLocation(&lcd, 0, 0);
+    LCD_WriteString(&lcd, "Emergency Off!");
+    LCD_SetLocation(&lcd, 0, 1);
+    LCD_WriteString(&lcd, "Overcurrent.");
+    HAL_Delay(500);
+    HAL_IWDG_Refresh(&hiwdg);
+    HAL_Delay(500);
+    Power_Set(0);
+  }
+
+  if(GET_BatteryAverage() < 31.0){
+    MotorL_pwm(0);
+    MotorR_pwm(0);
+    Buzzer_OneLongBeep();
+    LCD_ClearDisplay(&lcd);
+    HAL_Delay(5);
+    LCD_SetLocation(&lcd, 0, 0);
+    LCD_WriteString(&lcd, "Emergency Off!");
+    LCD_SetLocation(&lcd, 0, 1);
+    LCD_WriteString(&lcd, "Battery low.");
+    HAL_Delay(500);
+    HAL_IWDG_Refresh(&hiwdg);
+    HAL_Delay(500);
+    Power_Set(0);
+  }
+  //In Carica?
+  /*if(IS_Charge()==0){
+    WAIT_CHARGE_FINISH();
+  }*/
 }
 
 void saveConfig() {
