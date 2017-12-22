@@ -1,8 +1,4 @@
-build/
 *.o
 *.d
 *.lst
-*.bin
-*.elf
-*.hex
 *.map
