@@ -18,7 +18,25 @@ To build the firmware, just type "make". Make sure you have specified your gcc-a
 
 Make sure you hold the powerbutton or connect a jumper to the power button pins while flashing the firmware, as the STM might release the power latch and switches itself off during flashing.
 
+To flash the STM32, use the ST-Flash utility (https://github.com/texane/stlink)
+If you never flashed your mainboard before, the STM is probably locked. To unlock the flash, use the following OpenOCD command:
+
+```
+openocd -f interface/stlink-v2.cfg -f target/stm32f1x.cfg -c init -c "stm32f1x unlock 0"
+```
+Then you can simply flash the firmware:
+```
+st-flash write build/hoverboard.bin 0x8000000
+```
+
 ---
+#### Troubleshooting
+First, check that power is connected and voltage is > 36V.
+If the board draws more than 100mA in idle, it's probably broken.
+
+
+---
+
 
 #### Examples
 
