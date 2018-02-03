@@ -143,6 +143,9 @@ int main(void)
   MotorR_start();
   MotorL_start();
 
+  MotorR_pwm(70);
+  MotorL_pwm(-70);
+
   uint32_t sinValue = 0;
   int lastSpeedL = 0, lastSpeedR = 0;
   while(1){
@@ -156,7 +159,7 @@ int main(void)
       Power_Set(0);
     }
 
-    if ((sinValue) % (200) == 0) {
+    /*if ((sinValue) % (200) == 0) {
       int speedL = -CLAMP(getMotorR(), -1000, 1000);
       int speedR = -CLAMP(getMotorL(), -1000, 1000);
       if (speedL != lastSpeedL || speedR != lastSpeedR) {
@@ -170,7 +173,7 @@ int main(void)
       memset(&str[0], 0, sizeof(str));
       sprintf(str, "%i;%i\n\r", speedL, speedR);
       Console_Log(str);
-    }
+    }*/
 
 
 
@@ -181,7 +184,7 @@ int main(void)
     //Telemetry_TASK();
 
     //Batteria Scarica?
-    if(ABS(getMotorCurrentR() * 0.02) > 20.0 || ABS(getMotorCurrentL() * 0.02) > 20.0){
+    /*if(ABS(getMotorCurrentR() * 0.02) > 20.0 || ABS(getMotorCurrentL() * 0.02) > 20.0){
       Console_Log("overcurrent\r\n");
       MotorL_pwm(0);
       MotorR_pwm(0);
@@ -196,7 +199,7 @@ int main(void)
       Buzzer_OneLongBeep();
       HAL_Delay(350);
       Power_Set(0);
-    }
+    }*/
     //In Carica?
     /*if(IS_Charge()==0){
       WAIT_CHARGE_FINISH();
